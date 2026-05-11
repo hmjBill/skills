@@ -8,68 +8,68 @@ metadata:
   version: "1.0.0"
 ---
 
-# UI Styling Skill
+# UI 样式技能
 
-Comprehensive skill for creating beautiful, accessible user interfaces combining shadcn/ui components, Tailwind CSS utility styling, and canvas-based visual design systems.
+综合技能指南，用于创建美观、可访问的用户界面，结合使用 shadcn/ui 组件、 Tailwind CSS 工具类样式和基于 Canvas 的视觉设计系统。
 
-## Reference
+## 参考资料
 
 - shadcn/ui: https://ui.shadcn.com/llms.txt
 - Tailwind CSS: https://tailwindcss.com/docs
 
-## When to Use This Skill
+## 何时使用此技能
 
-Use when:
-- Building UI with React-based frameworks (Next.js, Vite, Remix, Astro)
-- Implementing accessible components (dialogs, forms, tables, navigation)
-- Styling with utility-first CSS approach
-- Creating responsive, mobile-first layouts
-- Implementing dark mode and theme customization
-- Building design systems with consistent tokens
-- Generating visual designs, posters, or brand materials
-- Rapid prototyping with immediate visual feedback
-- Adding complex UI patterns (data tables, charts, command palettes)
+适用于以下场景：
+- 使用 React 框架构建 UI（Next.js、Vite、Remix、Astro）
+- 实现可访问组件（对话框、表单、表格、导航）
+- 使用工具类优先的 CSS 方式样式设计
+- 创建响应式、移动端优先的布局
+- 实现深色模式和主题定制
+- 构建具有统一设计令牌的设计系统
+- 生成视觉设计、海报或品牌素材
+- 快速原型开发并获得即时视觉反馈
+- 添加复杂的 UI 模式（数据表格、图表、命令面板）
 
-## Core Stack
+## 核心技术栈
 
-### Component Layer: shadcn/ui
-- Pre-built accessible components via Radix UI primitives
-- Copy-paste distribution model (components live in your codebase)
-- TypeScript-first with full type safety
-- Composable primitives for complex UIs
-- CLI-based installation and management
+### 组件层：shadcn/ui
+- 通过 Radix UI 原语构建的预置可访问组件
+- 复制粘贴分发模式（组件位于你的代码库中）
+- TypeScript 优先，完全类型安全
+- 用于复杂 UI 的可组合原语
+- 基于 CLI 的安装和管理
 
-### Styling Layer: Tailwind CSS
-- Utility-first CSS framework
-- Build-time processing with zero runtime overhead
-- Mobile-first responsive design
-- Consistent design tokens (colors, spacing, typography)
-- Automatic dead code elimination
+### 样式层：Tailwind CSS
+- 工具类优先的 CSS 框架
+- 构建时处理，零运行时开销
+- 移动端优先的响应式设计
+- 统一的设计令牌（颜色、间距、排版）
+- 自动死代码消除
 
-### Visual Design Layer: Canvas
-- Museum-quality visual compositions
-- Philosophy-driven design approach
-- Sophisticated visual communication
-- Minimal text, maximum visual impact
-- Systematic patterns and refined aesthetics
+### 视觉设计层：Canvas
+- 博物馆级别的视觉构图
+- 哲学驱动的设计方法
+- 复杂的视觉传达
+- 文字最少化，视觉冲击最大化
+- 系统化的模式和精致的审美
 
-## Quick Start
+## 快速开始
 
-### Component + Styling Setup
+### 组件 + 样式配置
 
-**Install shadcn/ui with Tailwind:**
+**安装 shadcn/ui 和 Tailwind：**
 ```bash
 npx shadcn@latest init
 ```
 
-CLI prompts for framework, TypeScript, paths, and theme preferences. This configures both shadcn/ui and Tailwind CSS.
+CLI 会提示选择框架、TypeScript、路径和主题偏好。这将同时配置 shadcn/ui 和 Tailwind CSS。
 
-**Add components:**
+**添加组件：**
 ```bash
 npx shadcn@latest add button card dialog form
 ```
 
-**Use components with utility styling:**
+**使用组件和工具类样式：**
 ```tsx
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
@@ -93,9 +93,9 @@ export function Dashboard() {
 }
 ```
 
-### Alternative: Tailwind-Only Setup
+### 备选方案：仅使用 Tailwind
 
-**Vite projects:**
+**Vite 项目：**
 ```bash
 npm install -D tailwindcss @tailwindcss/vite
 ```
@@ -111,154 +111,154 @@ export default { plugins: [tailwindcss()] }
 @import "tailwindcss";
 ```
 
-## Component Library Guide
+## 组件库指南
 
-**Comprehensive component catalog with usage patterns, installation, and composition examples.**
+**全面的组件目录，包含使用模式、安装和组合示例。**
 
-See: `references/shadcn-components.md`
+参见：`references/shadcn-components.md`
 
-Covers:
-- Form & input components (Button, Input, Select, Checkbox, Date Picker, Form validation)
-- Layout & navigation (Card, Tabs, Accordion, Navigation Menu)
-- Overlays & dialogs (Dialog, Drawer, Popover, Toast, Command)
-- Feedback & status (Alert, Progress, Skeleton)
-- Display components (Table, Data Table, Avatar, Badge)
+涵盖内容：
+- 表单和输入组件（Button、Input、Select、Checkbox、Date Picker、表单验证）
+- 布局和导航（Card、Tabs、Accordion、Navigation Menu）
+- 覆盖层和对话框（Dialog、Drawer、Popover、Toast、Command）
+- 反馈和状态（Alert、Progress、Skeleton）
+- 展示组件（Table、Data Table、Avatar、Badge）
 
-## Theme & Customization
+## 主题和定制
 
-**Theme configuration, CSS variables, dark mode implementation, and component customization.**
+**主题配置、CSS 变量、深色模式实现和组件定制。**
 
-See: `references/shadcn-theming.md`
+参见：`references/shadcn-theming.md`
 
-Covers:
-- Dark mode setup with next-themes
-- CSS variable system
-- Color customization and palettes
-- Component variant customization
-- Theme toggle implementation
+涵盖内容：
+- 使用 next-themes 配置深色模式
+- CSS 变量系统
+- 颜色定制和调色板
+- 组件变体定制
+- 主题切换实现
 
-## Accessibility Patterns
+## 无障碍模式
 
-**ARIA patterns, keyboard navigation, screen reader support, and accessible component usage.**
+**ARIA 模式、键盘导航、屏幕阅读器支持和可访问组件使用。**
 
-See: `references/shadcn-accessibility.md`
+参见：`references/shadcn-accessibility.md`
 
-Covers:
-- Radix UI accessibility features
-- Keyboard navigation patterns
-- Focus management
-- Screen reader announcements
-- Form validation accessibility
+涵盖内容：
+- Radix UI 无障碍功能
+- 键盘导航模式
+- 焦点管理
+- 屏幕阅读器通知
+- 表单验证无障碍
 
-## Tailwind Utilities
+## Tailwind 工具类
 
-**Core utility classes for layout, spacing, typography, colors, borders, and shadows.**
+**用于布局、间距、排版、颜色、边框和阴影的核心工具类。**
 
-See: `references/tailwind-utilities.md`
+参见：`references/tailwind-utilities.md`
 
-Covers:
-- Layout utilities (Flexbox, Grid, positioning)
-- Spacing system (padding, margin, gap)
-- Typography (font sizes, weights, alignment, line height)
-- Colors and backgrounds
-- Borders and shadows
-- Arbitrary values for custom styling
+涵盖内容：
+- 布局工具类（Flexbox、Grid、定位）
+- 间距系统（padding、margin、gap）
+- 排版（字体大小、粗细、对齐、行高）
+- 颜色和背景
+- 边框和阴影
+- 自定义样式的任意值
 
-## Responsive Design
+## 响应式设计
 
-**Mobile-first breakpoints, responsive utilities, and adaptive layouts.**
+**移动端优先断点、响应式工具类和自适应布局。**
 
-See: `references/tailwind-responsive.md`
+参见：`references/tailwind-responsive.md`
 
-Covers:
-- Mobile-first approach
-- Breakpoint system (sm, md, lg, xl, 2xl)
-- Responsive utility patterns
-- Container queries
-- Max-width queries
-- Custom breakpoints
+涵盖内容：
+- 移动端优先方法
+- 断点系统（sm、md、lg、xl、2xl）
+- 响应式工具类模式
+- 容器查询
+- 最大宽度查询
+- 自定义断点
 
-## Tailwind Customization
+## Tailwind 定制
 
-**Config file structure, custom utilities, plugins, and theme extensions.**
+**配置文件结构、自定义工具类、插件和主题扩展。**
 
-See: `references/tailwind-customization.md`
+参见：`references/tailwind-customization.md`
 
-Covers:
-- @theme directive for custom tokens
-- Custom colors and fonts
-- Spacing and breakpoint extensions
-- Custom utility creation
-- Custom variants
-- Layer organization (@layer base, components, utilities)
-- Apply directive for component extraction
+涵盖内容：
+- @theme 指令用于自定义令牌
+- 自定义颜色和字体
+- 间距和断点扩展
+- 自定义工具类创建
+- 自定义变体
+- 层组织（@layer base、components、utilities）
+- 用于组件提取的 apply 指令
 
-## Visual Design System
+## 视觉设计系统
 
-**Canvas-based design philosophy, visual communication principles, and sophisticated compositions.**
+**基于 Canvas 的设计哲学、视觉传达原则和复杂的构图。**
 
-See: `references/canvas-design-system.md`
+参见：`references/canvas-design-system.md`
 
-Covers:
-- Design philosophy approach
-- Visual communication over text
-- Systematic patterns and composition
-- Color, form, and spatial design
-- Minimal text integration
-- Museum-quality execution
-- Multi-page design systems
+涵盖内容：
+- 设计哲学方法
+- 视觉传达优于文字
+- 系统化的模式和构图
+- 颜色、形态和空间设计
+- 文字最小化整合
+- 博物馆级别的执行
+- 多页面设计系统
 
-## Utility Scripts
+## 实用脚本
 
-**Python automation for component installation and configuration generation.**
+**用于组件安装和配置生成的 Python 自动化脚本。**
 
 ### shadcn_add.py
-Add shadcn/ui components with dependency handling:
+添加 shadcn/ui 组件并处理依赖：
 ```bash
 python scripts/shadcn_add.py button card dialog
 ```
 
 ### tailwind_config_gen.py
-Generate tailwind.config.js with custom theme:
+生成带有自定义主题的 tailwind.config.js：
 ```bash
 python scripts/tailwind_config_gen.py --colors brand:blue --fonts display:Inter
 ```
 
-## Best Practices
+## 最佳实践
 
-1. **Component Composition**: Build complex UIs from simple, composable primitives
-2. **Utility-First Styling**: Use Tailwind classes directly; extract components only for true repetition
-3. **Mobile-First Responsive**: Start with mobile styles, layer responsive variants
-4. **Accessibility-First**: Leverage Radix UI primitives, add focus states, use semantic HTML
-5. **Design Tokens**: Use consistent spacing scale, color palettes, typography system
-6. **Dark Mode Consistency**: Apply dark variants to all themed elements
-7. **Performance**: Leverage automatic CSS purging, avoid dynamic class names
-8. **TypeScript**: Use full type safety for better DX
-9. **Visual Hierarchy**: Let composition guide attention, use spacing and color intentionally
-10. **Expert Craftsmanship**: Every detail matters - treat UI as a craft
+1. **组件组合**：从简单、可组合的原语构建复杂的 UI
+2. **工具类优先样式**：直接使用 Tailwind 类；只有在真正重复使用时才提取为组件
+3. **移动端优先响应式**：从移动端样式开始，逐层添加响应式变体
+4. **无障碍优先**：利用 Radix UI 原语，添加焦点状态，使用语义化 HTML
+5. **设计令牌**：使用统一的间距比例、颜色调色板、排版系统
+6. **深色模式一致性**：将深色变体应用于所有主题化元素
+7. **性能**：利用自动 CSS 清理，避免动态类名
+8. **TypeScript**：使用完全类型安全以获得更好的开发者体验
+9. **视觉层次**：让组合引导注意力，有意识地使用间距和颜色
+10. **专业工艺**：每个细节都很重要——将 UI 视为一门手艺
 
-## Reference Navigation
+## 参考导航
 
-**Component Library**
-- `references/shadcn-components.md` - Complete component catalog
-- `references/shadcn-theming.md` - Theming and customization
-- `references/shadcn-accessibility.md` - Accessibility patterns
+**组件库**
+- `references/shadcn-components.md` - 完整组件目录
+- `references/shadcn-theming.md` - 主题和定制
+- `references/shadcn-accessibility.md` - 无障碍模式
 
-**Styling System**
-- `references/tailwind-utilities.md` - Core utility classes
-- `references/tailwind-responsive.md` - Responsive design
-- `references/tailwind-customization.md` - Configuration and extensions
+**样式系统**
+- `references/tailwind-utilities.md` - 核心工具类
+- `references/tailwind-responsive.md` - 响应式设计
+- `references/tailwind-customization.md` - 配置和扩展
 
-**Visual Design**
-- `references/canvas-design-system.md` - Design philosophy and canvas workflows
+**视觉设计**
+- `references/canvas-design-system.md` - 设计哲学和 Canvas 工作流程
 
-**Automation**
-- `scripts/shadcn_add.py` - Component installation
-- `scripts/tailwind_config_gen.py` - Config generation
+**自动化**
+- `scripts/shadcn_add.py` - 组件安装
+- `scripts/tailwind_config_gen.py` - 配置生成
 
-## Common Patterns
+## 常见模式
 
-**Form with validation:**
+**带验证的表单：**
 ```tsx
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -297,7 +297,7 @@ export function LoginForm() {
 }
 ```
 
-**Responsive layout with dark mode:**
+**带深色模式的响应式布局：**
 ```tsx
 <div className="min-h-screen bg-white dark:bg-gray-900">
   <div className="container mx-auto px-4 py-8">
@@ -314,11 +314,11 @@ export function LoginForm() {
 </div>
 ```
 
-## Resources
+## 资源
 
-- shadcn/ui Docs: https://ui.shadcn.com
-- Tailwind CSS Docs: https://tailwindcss.com
-- Radix UI: https://radix-ui.com
-- Tailwind UI: https://tailwindui.com
-- Headless UI: https://headlessui.com
-- v0 (AI UI Generator): https://v0.dev
+- shadcn/ui 文档：https://ui.shadcn.com
+- Tailwind CSS 文档：https://tailwindcss.com
+- Radix UI：https://radix-ui.com
+- Tailwind UI：https://tailwindui.com
+- Headless UI：https://headlessui.com
+- v0（AI UI 生成器）：https://v0.dev

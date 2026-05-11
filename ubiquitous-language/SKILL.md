@@ -4,24 +4,24 @@ description: Extract a DDD-style ubiquitous language glossary from the current c
 disable-model-invocation: true
 ---
 
-# Ubiquitous Language
+# Ubiquitous Language（通用语言）
 
-Extract and formalize domain terminology from the current conversation into a consistent glossary, saved to a local file.
+从当前对话中提取并形式化领域术语为一致的词汇表，保存到本地文件。
 
-## Process
+## 流程
 
-1. **Scan the conversation** for domain-relevant nouns, verbs, and concepts
-2. **Identify problems**:
-   - Same word used for different concepts (ambiguity)
-   - Different words used for the same concept (synonyms)
-   - Vague or overloaded terms
-3. **Propose a canonical glossary** with opinionated term choices
-4. **Write to `UBIQUITOUS_LANGUAGE.md`** in the working directory using the format below
-5. **Output a summary** inline in the conversation
+1. **扫描对话** 寻找领域相关的名词、动词和概念
+2. **识别问题**：
+   - 同一词用于不同概念（歧义）
+   - 不同词用于同一概念（同义词）
+   - 模糊或重载的术语
+3. **提出规范词汇表** 并带有明确的选择
+4. **写入 `UBIQUITOUS_LANGUAGE.md`** 到工作目录，使用以下格式
+5. **在对话中输出摘要**
 
-## Output Format
+## 输出格式
 
-Write a `UBIQUITOUS_LANGUAGE.md` file with this structure:
+使用此结构写入 `UBIQUITOUS_LANGUAGE.md` 文件：
 
 ```md
 # Ubiquitous Language
@@ -57,16 +57,16 @@ Write a `UBIQUITOUS_LANGUAGE.md` file with this structure:
 - "account" was used to mean both **Customer** and **User** — these are distinct concepts: a **Customer** places orders, while a **User** is an authentication identity that may or may not represent a **Customer**.
 ```
 
-## Rules
+## 规则
 
-- **Be opinionated.** When multiple words exist for the same concept, pick the best one and list the others as aliases to avoid.
-- **Flag conflicts explicitly.** If a term is used ambiguously in the conversation, call it out in the "Flagged ambiguities" section with a clear recommendation.
-- **Only include terms relevant for domain experts.** Skip the names of modules or classes unless they have meaning in the domain language.
-- **Keep definitions tight.** One sentence max. Define what it IS, not what it does.
-- **Show relationships.** Use bold term names and express cardinality where obvious.
-- **Only include domain terms.** Skip generic programming concepts (array, function, endpoint) unless they have domain-specific meaning.
-- **Group terms into multiple tables** when natural clusters emerge (e.g. by subdomain, lifecycle, or actor). Each group gets its own heading and table. If all terms belong to a single cohesive domain, one table is fine — don't force groupings.
-- **Write an example dialogue.** A short conversation (3-5 exchanges) between a dev and a domain expert that demonstrates how the terms interact naturally. The dialogue should clarify boundaries between related concepts and show terms being used precisely.
+- **要明确。** 当同一概念存在多个词时，选择最好的一个并列出其他作为应避免的别名。
+- **明确标记冲突。** 如果术语在对话中被歧义使用，在"Flagged ambiguities"部分指出它并提供明确的建议。
+- **只包括领域专家相关的术语。** 跳过模块或类的名称，除非它们在领域语言中有意义。
+- **保持定义紧密。** 最多一句话。定义它*是什么*，而不是它*做什么*。
+- **展示关系。** 使用粗体术语名称并在明显的地方表达基数。
+- **只包括领域术语。** 跳过通用编程概念（array、function、endpoint），除非它们有领域特定含义。
+- **将术语分组到多个表** 当自然集群出现时（例如按子域、生命周期或参与者）。每个组获得自己的标题和表。如果所有术语属于一个内聚领域，一张表即可 — 不要强制分组。
+- **写一个示例对话。** 一个开发者和领域专家之间的简短对话（3-5 个来回），展示术语如何自然交互。对话应澄清相关概念之间的边界并展示术语被精确使用。
 
 <example>
 
@@ -82,12 +82,12 @@ Write a `UBIQUITOUS_LANGUAGE.md` file with this structure:
 
 </example>
 
-## Re-running
+## 重新运行
 
-When invoked again in the same conversation:
+在同一对话中再次调用时：
 
-1. Read the existing `UBIQUITOUS_LANGUAGE.md`
-2. Incorporate any new terms from subsequent discussion
-3. Update definitions if understanding has evolved
-4. Re-flag any new ambiguities
-5. Rewrite the example dialogue to incorporate new terms
+1. 阅读现有的 `UBIQUITOUS_LANGUAGE.md`
+2. 合并后续讨论中的任何新术语
+3. 如果理解有演变，更新定义
+4. 重新标记任何新的歧义
+5. 重写示例对话以合并新术语

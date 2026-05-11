@@ -3,41 +3,41 @@ name: codemap
 description: Generate comprehensive hierarchical codemaps for UNFAMILIAR repositories. Expensive operation - only use when explicitly asked for codebase documentation or initial repository mapping
 ---
 
-# Codemap Skill
+# Codemap 技能
 
-You help users understand and map repositories by creating hierarchical codemaps.
+帮助用户通过创建分层代码地图来理解和映射仓库。
 
-## When to Use
+## 使用场景
 
-- User asks to understand/map a repository
-- User wants codebase documentation
-- Starting work on an unfamiliar codebase
+- 用户要求理解/映射仓库
+- 用户需要代码库文档
+- 开始处理不熟悉的代码库
 
-## Workflow
+## 工作流程
 
-### Step 1: Check for Existing State
+### 步骤 1：检查现有状态
 
-**First, check if `.slim/codemap.json` exists in the repo root.**
+**首先，检查仓库根目录是否存在 `.slim/codemap.json`。**
 
-If it does not exist, check for legacy state at `.slim/cartography.json`.
+如果不存在，检查旧状态 `.slim/cartography.json`。
 
-If legacy state exists: move `.slim/cartography.json` to `.slim/codemap.json`, then continue with change detection.
+如果存在旧状态：将 `.slim/cartography.json` 移动到 `.slim/codemap.json`，然后继续进行变更检测。
 
-If `.slim/codemap.json` exists: Skip to Step 3 (Detect Changes) - no need to re-initialize.
+如果 `.slim/codemap.json` 存在：跳到步骤 3（检测变更）— 无需重新初始化。
 
-If neither file exists: Continue to Step 2 (Initialize).
+如果两个文件都不存在：继续步骤 2（初始化）。
 
-### Step 2: Initialize (Only if no state exists)
+### 步骤 2：初始化（仅在无状态时执行）
 
-1. **Analyze the repository structure** - List files, understand directories
-2. **Infer patterns** for **core code/config files ONLY** to include:
-   - **Include**: `src/**/*.ts`, `package.json`, etc.
-   - **Exclude (MANDATORY)**: Do NOT include tests, documentation, or translations.
-     - Tests: `**/*.test.ts`, `**/*.spec.ts`, `tests/**`, `__tests__/**`
-     - Docs: `docs/**`, `*.md` (except root `README.md` if needed), `LICENSE`
-     - Build/Deps: `node_modules/**`, `dist/**`, `build/**`, `*.min.js`
-   - Respect `.gitignore` automatically
-3. **Run codemap.mjs init**:
+1. **分析仓库结构** — 列出文件，理解目录
+2. **推断模式** 仅针对**核心代码/配置文件**：
+   - **包含**：`src/**/*.ts`、`package.json` 等
+   - **排除（强制）**：不包含测试、文档或翻译
+     - 测试：`**/*.test.ts`、`**/*.spec.ts`、`tests/**`、`__tests__/**`
+     - 文档：`docs/**`、`*.md`（需要的根 `README.md` 除外）、`LICENSE`
+     - 构建/依赖：`node_modules/**`、`dist/**`、`build/**`、`*.min.js`
+   - 自动尊重 `.gitignore`
+3. **运行 codemap.mjs init**：
 
 ```bash
 node ~/.config/opencode/skills/codemap/scripts/codemap.mjs init \
@@ -46,118 +46,118 @@ node ~/.config/opencode/skills/codemap/scripts/codemap.mjs init \
   --exclude "**/*.test.ts" --exclude "dist/**" --exclude "node_modules/**"
 ```
 
-This creates:
-- `.slim/codemap.json` - File and folder hashes for change detection
-- Empty `codemap.md` files in all relevant subdirectories
+这会创建：
+- `.slim/codemap.json` — 用于变更检测的文件和文件夹哈希
+- 所有相关子目录中的空 `codemap.md` 文件
 
-4. **Delegate codemap writing to Fixer agents** - Spawn one fixer per folder to read code and create or update its specific `codemap.md` file.
+4. **将代码地图编写委托给 Fixer 代理** — 每个文件夹生成一个 fixer 来阅读代码并创建或更新其特定的 `codemap.md` 文件。
 
-### Step 3: Detect Changes (If state already exists)
+### 步骤 3：检测变更（如果状态已存在）
 
-1. **Run codemap.mjs changes** to see what changed:
+1. **运行 codemap.mjs changes** 查看变化：
 
 ```bash
 node ~/.config/opencode/skills/codemap/scripts/codemap.mjs changes \
   --root ./
 ```
 
-2. **Review the output** - It shows:
-   - Added files
-   - Removed files
-   - Modified files
-   - Affected folders
+2. **审查输出** — 显示：
+   - 新增文件
+   - 删除文件
+   - 修改文件
+   - 受影响的文件夹
 
-3. **Only update affected codemaps** - Spawn one fixer per affected folder to update its `codemap.md`.
-4. **Run update** to save new state:
+3. **仅更新受影响的代码地图** — 为每个受影响的文件夹生成一个 fixer 来更新其 `codemap.md`。
+4. **运行 update 保存新状态**：
 
 ```bash
 node ~/.config/opencode/skills/codemap/scripts/codemap.mjs update \
   --root ./
 ```
 
-### Step 4: Finalize Repository Atlas (Root Codemap)
+### 步骤 4：完成仓库地图集（根代码地图）
 
-Once all specific directories are mapped, the Orchestrator must create or update the root `codemap.md`. This file serves as the **Master Entry Point** for any agent or human entering the repository.
+所有特定目录映射完成后，协调器必须创建或更新根 `codemap.md`。此文件作为任何进入仓库的代理或人类的**主入口点**。
 
-1.  **Map Root Assets**: Document the root-level files (e.g., `package.json`, `index.ts`, `plugin.json`) and the project's overall purpose.
-2.  **Aggregate Sub-Maps**: Create a "Repository Directory Map" section. For every folder that has a `codemap.md`, extract its **Responsibility** summary and include it in a table or list in the root map.
-3.  **Cross-Reference**: Ensure that the root map contains the absolute or relative paths to the sub-maps so agents can jump directly to the relevant details.
+1. **映射根资源**：记录根级文件（如 `package.json`、`index.ts`、`plugin.json`）和项目的整体目的。
+2. **聚合子地图**：创建"仓库目录地图"部分。对于每个有 `codemap.md` 的文件夹，提取其**职责**摘要并将其包含在根地图的表格或列表中。
+3. **交叉引用**：确保根地图包含子地图的绝对或相对路径，以便代理可以直接跳转到相关详情。
 
-### Step 5: Register Codemap in AGENTS.md
+### 步骤 5：在 AGENTS.md 中注册代码地图
 
-**OpenCode auto-loads `AGENTS.md` into agent context on every session.** To ensure agents automatically discover and use the codemap, update (or create) `AGENTS.md` at the repo root:
+**OpenCode 在每个会话中自动将 `AGENTS.md` 加载到代理上下文中。** 为确保代理自动发现和使用代码地图，请在仓库根目录更新（或创建）`AGENTS.md`：
 
-1. If `AGENTS.md` already exists and already contains a `## Repository Map` section, **skip this step** — the reference is already set up.
-2. If `AGENTS.md` exists but has no `## Repository Map` section, **append** the section below.
-3. If `AGENTS.md` doesn't exist, **create** it with the section below.
+1. 如果 `AGENTS.md` 已存在且已包含 `## Repository Map` 部分，**跳过此步骤** — 引用已设置。
+2. 如果 `AGENTS.md` 存在但没有 `## Repository Map` 部分，**附加**以下部分。
+3. 如果 `AGENTS.md` 不存在，**使用以下部分创建**。
 
 ```markdown
 ## Repository Map
 
-A full codemap is available at `codemap.md` in the project root.
+完整的代码地图位于项目根目录的 `codemap.md`。
 
-Before working on any task, read `codemap.md` to understand:
-- Project architecture and entry points
-- Directory responsibilities and design patterns
-- Data flow and integration points between modules
+在处理任何任务之前，请阅读 `codemap.md` 以了解：
+- 项目架构和入口点
+- 目录职责和设计模式
+- 模块之间的数据流和集成点
 
-For deep work on a specific folder, also read that folder's `codemap.md`.
+对于特定文件夹的深入工作，也请阅读该文件夹的 `codemap.md`。
 ```
 
-This is idempotent — repeated codemap runs will detect the existing section and skip. No duplication.
+这是幂等的 — 重复的代码地图运行将检测到现有部分并跳过。不会重复。
 
-## Codemap Content
+## 代码地图内容
 
-Fixers are responsible for writing `codemap.md` files during this workflow. Use precise technical terminology to document the implementation:
+Fixer 负责在此工作流程中编写 `codemap.md` 文件。使用精确的技术术语记录实现：
 
-- **Responsibility** - Define the specific role of this directory using standard software engineering terms (e.g., "Service Layer", "Data Access Object", "Middleware").
-- **Design Patterns** - Identify and name specific patterns used (e.g., "Observer", "Singleton", "Factory", "Strategy"). Detail the abstractions and interfaces.
-- **Data & Control Flow** - Explicitly trace how data enters and leaves the module. Mention specific function call sequences and state transitions.
-- **Integration Points** - List dependencies and consumer modules. Use technical names for hooks, events, or API endpoints.
+- **职责** — 使用标准软件工程术语定义此目录的特定角色（如"服务层"、"数据访问对象"、"中间件"）。
+- **设计模式** — 识别并命名使用的特定模式（如"观察者"、"单例"、"工厂"、"策略"）。详细说明抽象和接口。
+- **数据和控制流** — 显式追踪数据如何进入和离开模块。提及特定的函数调用序列和状态转换。
+- **集成点** — 列出依赖项和消费模块。使用技术名称表示钩子、事件或 API 端点。
 
-Example codemap:
+代码地图示例：
 
 ```markdown
 # src/agents/
 
-## Responsibility
-Defines agent personalities and manages their configuration lifecycle.
+## 职责
+定义代理个性并管理其配置生命周期。
 
-## Design
-Each agent is a prompt + permission set. Config system uses:
-- Default prompts (orchestrator.ts, explorer.ts, etc.)
-- User overrides from ~/.config/opencode/oh-my-opencode-slim.json
-- Permission wildcards for skill/MCP access control
+## 设计
+每个代理是一个提示 + 权限集。配置系统使用：
+- 默认提示（orchestrator.ts、explorer.ts 等）
+- 来自 ~/.config/opencode/oh-my-opencode-slim.json 的用户覆盖
+- 技能/MCP 访问控制的权限通配符
 
-## Flow
-1. Plugin loads → calls getAgentConfigs()
-2. Reads user config preset
-3. Merges defaults with overrides
-4. Applies permission rules (wildcard expansion)
-5. Returns agent configs to OpenCode
+## 流程
+1. 插件加载 → 调用 getAgentConfigs()
+2. 读取用户配置预设
+3. 合并默认值与覆盖
+4. 应用权限规则（通配符扩展）
+5. 返回代理配置给 OpenCode
 
-## Integration
-- Consumed by: Main plugin (src/index.ts)
-- Depends on: Config loader, skills registry
+## 集成
+- 被消费：主插件（src/index.ts）
+- 依赖：配置加载器、技能注册表
 ```
 
-Example **Root Codemap (Atlas)**:
+示例**根代码地图（地图集）**：
 
 ```markdown
-# Repository Atlas: oh-my-opencode-slim
+# 仓库地图集：oh-my-opencode-slim
 
-## Project Responsibility
-A high-performance, low-latency agent orchestration plugin for OpenCode, focusing on specialized sub-agent delegation and multiplexer-assisted child sessions.
+## 项目职责
+面向 OpenCode 的高性能、低延迟代理编排插件，专注于专业子代理委托和多路复用器辅助的子会话。
 
-## System Entry Points
-- `src/index.ts`: Plugin initialization and OpenCode integration.
-- `package.json`: Dependency manifest and build scripts.
-- `oh-my-opencode-slim.json`: User configuration schema.
+## 系统入口点
+- `src/index.ts`：插件初始化和 OpenCode 集成。
+- `package.json`：依赖清单和构建脚本。
+- `oh-my-opencode-slim.json`：用户配置模式。
 
-## Directory Map (Aggregated)
-| Directory | Responsibility Summary | Detailed Map |
+## 目录地图（聚合）
+| 目录 | 职责摘要 | 详细地图 |
 |-----------|------------------------|--------------|
-| `src/agents/` | Defines agent personalities (Orchestrator, Explorer) and manages model routing. | [View Map](src/agents/codemap.md) |
-| `src/features/` | Core logic for tmux integration and session state. | [View Map](src/features/codemap.md) |
-| `src/config/` | Implements the configuration loading pipeline and environment variable injection. | [View Map](src/config/codemap.md) |
+| `src/agents/` | 定义代理个性（协调器、探索者）并管理模型路由。 | [查看地图](src/agents/codemap.md) |
+| `src/features/` | tmux 集成和会话状态的核心逻辑。 | [查看地图](src/features/codemap.md) |
+| `src/config/` | 实现配置加载管道和环境变量注入。 | [查看地图](src/config/codemap.md) |
 ```

@@ -5,91 +5,90 @@ description: Grilling session that mines the user for fragments — heterogeneou
 
 <what-to-do>
 
-Run a grilling session that produces fragments. Interview the user relentlessly about whatever they want to write about. Do not impose phases, outlines, or structure — that is explicitly out of scope.
+运行一个挖掘片段的审讯环节。 relentless 地向用户询问他们想写的任何东西。不要强加阶段、大纲或结构——这明确在范围之外。
 
-As fragments emerge from either side of the conversation, append them to a single markdown file. The user will be editing this file during the session; always re-read it before writing so their edits are preserved.
+当片段从对话的任何一侧出现时，将它们追加到单个 markdown 文件中。用户将在会话期间编辑此文件；写之前总是重新读取它以保留他们的编辑。
 
-If the user did not pass a path, ask once where to save the document, then remember it for the rest of the session.
+如果用户没有传递路径，询问一次文档保存位置，然后在会话的其余部分记住它。
 
-On first write, put a single H1 at the top with a working title (it can change later) and nothing else — no metadata, no TOC, no date.
+第一次写时，在顶部放一个单一的 H1 包含一个工作标题（稍后可以更改），什么都没有——无元数据、无目录、无日期。
 
 </what-to-do>
 
 <supporting-info>
 
-## What is a fragment
+## 什么是片段
 
-A fragment is any piece of text that might survive into the final article. It must be _readable by the author_ — the author can tell what it means — but it does not need to define its terms or be comprehensible to a cold reader. The bar is "is this a piece of good writing?", not "is this a self-contained argument?"
+片段是任何可能存活到最终文章的文本。它必须_对作者可读_——作者能说出它的意思——但它不需要定义其术语或对冷读者可理解。标准是"这是一段好文字吗？"，而非"这是一个自成一体的论点？"
 
-Fragments are deliberately heterogeneous. Examples of what could be a fragment:
+片段是故意异质的。可能成为片段的例子：
 
-- A sharp sentence you'd want to deploy somewhere but don't yet know where.
-- A claim with a one-line justification.
-- A vignette: a thing that happened, a code snippet, a scenario, an analogy.
-- A half-thought: "something about how X feels like Y, work this out later."
-- A quote, a piece of dialogue, an overheard line.
-- A list of related observations that hang together by feel.
-- A complaint, a confession, a punchline.
+- 一句你想在某个地方使用但还不知道用在哪里的犀利句子。
+- 带有单行理由的声明。
+- 一个 vignettes：发生的事情、代码片段、场景、类比。
+- 一个半想法："关于 X 如何感觉像 Y 的事情，稍后完善。"
+- 一段引语、一段对话、一句听到的话。
+- 一组相关的观察，因感觉而聚集在一起。
+- 一个抱怨、一个坦白、一个笑点。
 
-The novelist's diary is the model: years of unstructured noticings that later get mined for raw material. Fragments are noticings.
+小说家的日记是模型：多年无结构的观察，后来被挖掘为原材料。片段就是观察。
 
-## How the session feels
+## 会话的感觉
 
-Like a grilling session, with fragments as a by-product. The shape:
+像审讯环节一样，片段是副产品。形状如下：
 
-- Start by asking what the user is circling around. Let them ramble.
-- Catch fragments from their words. When they say something quotable, capture it verbatim or slightly sharpened.
-- Generate candidate fragments back at them. Try things on. Offer two or three versions of the same idea and let them pick or reject.
-- When something lands, append it. When it doesn't, drop it.
-- Press for more. Excavate. "You said X — say it three different ways." "What's the version of that you wouldn't say in public?" "What's the example that made you believe this in the first place?"
-- Push on quality. The article will only be as good as its fragments. If a fragment is mushy, propose a sharper rewrite before appending.
+- 首先询问用户正在绕什么。让他们漫谈。
+- 从他们的话中捕捉片段。当他们说出值得引用的话时，原样捕获或稍微提炼。
+- 反向生成候选片段。尝试things。提供同一想法的两个或三个版本让他们选择或拒绝。
+- 当东西落地时，追加它。当没有时，放弃它。
+- 施加更多压力。挖掘。"你说 X——用三种不同方式说。" "你不会公开说的版本是什么？" "让你相信这个的第一个例子是什么？"
+- 推动质量。文章只会和它的片段一样好。如果片段是糊状的，在追加前提出更犀利的重写。
 
-Blue-sky generously, but apply pressure to deepen and tighten. Do not rush to outline. Do not group. Do not propose a structure. If the user starts asking about structure, redirect: "We're still mining. Structure comes later."
+Blue-sky 慷慨，但要施加压力深化和收紧。不要急着列大纲。不要分组。不要提出结构。如果用户开始询问结构，重定向："我们还在挖掘。结构稍后。"
 
-## File format
+## 文件格式
 
 ```markdown
 # Working title
 
-A first fragment lives here.
+第一个片段在这里。
 
-It can be multiple paragraphs. It can include lists, code, quotes — whatever
-shape the fragment naturally takes.
-
----
-
-A second fragment.
+它可以是多段。它可以包括列表、代码、引语——无论片段自然采取什么形状。
 
 ---
 
-> A quoted line that the user wants to keep around.
-
-A reaction to it.
+第二个片段。
 
 ---
 
-- A cluster of related observations
-- That hang together by feel
-- And want to be near each other
+> 用户想保留的一段引语。
+
+对它的反应。
+
+---
+
+- 一组相关的观察
+- 因感觉而聚集在一起
+- 想要靠近彼此
 ```
 
-Fragments are separated by a horizontal rule (`\n---\n`). No headings inside the body. No tags. No order beyond the order they were added.
+片段用水平线分隔（`\n---\n`）。体内无标题。无标签。除了添加顺序外无顺序。
 
-## Writing rhythm
+## 写作节奏
 
-Append silently. Don't ask permission for each fragment. Mention what you added in passing ("adding that"), but don't interrupt the conversation with save dialogs.
+静默追加。不要为每个片段请求许可。在 passing 中提及你添加了什么（"adding that"），但不要用保存对话框打断对话。
 
-Before every write: re-read the file from disk. The user may have edited, reordered, or deleted fragments between turns — preserve their changes. Never overwrite the file; only append (or, if the user asks, edit a specific fragment in place).
+每次写之前：从磁盘重新读取文件。用户可能在回合之间编辑、重新排序或删除了片段——保留他们的更改。永远不要覆盖文件；只追加（或者，如果用户要求，就地编辑特定片段）。
 
-The user can say "cut the last one", "rewrite that one sharper", "merge those two" at any time. Treat those as first-class instructions.
+用户可以随时说"cut the last one"、"rewrite that one sharper"、"merge those two"。将这些作为一流指令。
 
-## Out of scope
+## 范围之外
 
-- Outlines, section plans, paragraph structure, transitions.
-- Deciding the article's thesis, argument, or audience.
-- Producing prose that reads as finished writing.
-- Linking fragments together with connective tissue.
+- 大纲、段落计划、段落结构、转场。
+- 确定文章的主题、论点或受众。
+- 生成作为成品写作的散文。
+- 用连接组织片段。
 
-If the user is ready for any of that, the session is over and a different tool takes over. Do not name or recommend that tool — just stop.
+如果用户准备好任何这些，会话结束，另一个工具接手。不要命名或推荐那个工具——停止。
 
 </supporting-info>
