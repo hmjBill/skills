@@ -3,136 +3,136 @@ name: simplify
 description: Simplifies code for clarity without changing behavior. Use for readability, maintainability, and complexity reduction after behavior is understood.
 ---
 
-# Code Simplification
+# 代码简化
 
-## Overview
+## 概述
 
-Simplify code by reducing complexity while preserving exact behavior. The goal is not fewer lines — it's code that is easier to read, understand, modify, and debug. Every simplification must pass a simple test: "Would a new team member understand this faster than the original?"
+通过降低复杂度来简化代码，同时保持行为完全一致。目标不是更少的代码行 — 而是更容易阅读、理解、修改和调试的代码。每个简化必须通过一个简单的测试："新的团队成员是否比理解原始代码更快理解这个？"
 
-## When to Use
+## 何时使用
 
-- After a feature is working and tests pass, but the implementation feels heavier than it needs to be
-- During code review when readability or complexity issues are flagged
-- When you encounter deeply nested logic, long functions, or unclear names
-- When refactoring code written under time pressure
-- When consolidating related logic scattered across files
-- After merging changes that introduced duplication or inconsistency
+- 功能工作且测试通过后，但实现感觉比需要的更重
+- 代码审查中标记了可读性或复杂度问题
+- 遇到深度嵌套逻辑、长函数或不清晰的命名
+- 重构在时间压力下编写的代码
+- 整合分散在多个文件中的相关逻辑
+- 合并引入重复或不一致的更改后
 
-**When NOT to use:**
+**何时不使用：**
 
-- Code is already clean and readable — don't simplify for the sake of it
-- You don't understand what the code does yet — comprehend before you simplify
-- The code is performance-critical and the "simpler" version would be measurably slower
-- You're about to rewrite the module entirely — simplifying throwaway code wastes effort
+- 代码已经干净可读 — 不要为了简化而简化
+- 你还不理解代码的作用 — 先理解再简化
+- 代码是性能关键的，"更简单"的版本会明显更慢
+- 你即将完全重写模块 — 简化临时代码是浪费精力
 
-## The Five Principles
+## 五项原则
 
-### 1. Preserve Behavior Exactly
+### 1. 完全保持行为不变
 
-Don't change what the code does — only how it expresses it. All inputs, outputs, side effects, error behavior, and edge cases must remain identical. If you're not sure a simplification preserves behavior, don't make it.
+不要改变代码做什么 — 只改变它如何表达。所有输入、输出、副作用、错误行为和边界情况必须保持完全相同。如果你不确定简化是否保持行为，不要做。
 
-Before every change, ask:
+每次更改前问自己：
 
-- Does this produce the same output for every input?
-- Does this maintain the same error behavior?
-- Does this preserve the same side effects and ordering?
-- Do all existing tests still pass without modification?
+- 这对每个输入产生相同的输出吗？
+- 这保持了相同的错误行为吗？
+- 这保留了相同的副作用和顺序吗？
+- 所有现有测试仍然通过而不需要修改吗？
 
-### 2. Follow Project Conventions
+### 2. 遵循项目惯例
 
-Simplification means making code more consistent with the codebase, not imposing external preferences.
+简化意味着使代码与代码库更加一致，而不是施加外部偏好。
 
-Before simplifying:
+简化前：
 
-1. Read `AGENTS.md` / project conventions
-2. Study how neighboring code handles similar patterns
-3. Match the project's style for imports, naming, function style, error handling, and type annotations
+1. 阅读 `AGENTS.md` / 项目惯例
+2. 研究相邻代码如何处理类似模式
+3. 匹配项目的导入、命名、函数风格、错误处理和类型注解风格
 
-Simplification that breaks project consistency is not simplification — it's churn.
+破坏项目一致性的简化不是简化 — 是 churn。
 
-### 3. Prefer Clarity Over Cleverness
+### 3. 清晰优于巧妙
 
-Explicit code is better than compact code when the compact version requires a mental pause to parse.
+当紧凑版本需要停顿来解析时，显式代码优于紧凑代码。
 
-- Replace nested ternaries with readable control flow
-- Replace dense inline transforms with named intermediate steps when they clarify intent
-- Keep helpful names even if they cost a few extra lines
+- 用可读的控制流替换嵌套三元表达式
+- 当能澄清意图时，用命名的中间步骤替换密集的内联转换
+- 保留有用的名称，即使它们多几行
 
-### 4. Maintain Balance
+### 4. 保持平衡
 
-Watch for over-simplification:
+警惕过度简化：
 
-- Don't inline away names that carry meaning
-- Don't merge unrelated logic into one larger function
-- Don't remove abstractions that serve testability or extensibility
-- Don't optimize for line count over comprehension
+- 不要内联掉承载意义的名称
+- 不要将不相关的逻辑合并到一个更大的函数中
+- 不要移除为可测试性或可扩展性服务的抽象
+- 不要为行数而非理解优化
 
-### 5. Scope to What Changed
+### 5. 范围限定在更改的内容
 
-Default to simplifying recently modified code. Avoid unrelated drive-by refactors unless explicitly asked.
+默认简化最近修改的代码。除非明确要求，否则避免无关的顺便重构。
 
-## Process
+## 流程
 
-### Step 1: Understand Before Touching
+### 步骤 1：触碰前先理解
 
-Before changing or removing anything, understand why it exists.
+在更改或删除任何内容之前，理解它为什么存在。
 
-Answer:
+回答：
 
-- What is this code's responsibility?
-- What calls it? What does it call?
-- What are the edge cases and error paths?
-- Are there tests that define expected behavior?
-- Why might it have been written this way?
+- 这段代码的职责是什么？
+- 什么调用它？它调用什么？
+- 边界情况和错误路径是什么？
+- 有定义预期行为的测试吗？
+- 为什么可能这样编写？
 
-If you can't answer these, read more context first.
+如果无法回答这些，先阅读更多上下文。
 
-### Step 2: Look for Simplification Opportunities
+### 步骤 2：寻找简化机会
 
-Signals:
+信号：
 
-- Deep nesting
-- Long functions with mixed responsibilities
-- Nested ternaries
-- Boolean flag arguments
-- Repeated conditionals
-- Generic or misleading names
-- Duplicated logic
-- Dead code
-- Wrappers or abstractions that add no value
+- 深度嵌套
+- 混合职责的长函数
+- 嵌套三元表达式
+- 布尔标志参数
+- 重复的条件判断
+- 通用或误导性的名称
+- 重复的逻辑
+- 死代码
+- 无价值的包装器或抽象
 
-### Step 3: Apply Changes Incrementally
+### 步骤 3：增量应用更改
 
-Make one simplification at a time.
+一次做一个简化。
 
-For each simplification:
+对于每个简化：
 
-1. Make the change
-2. Run relevant tests
-3. Keep it only if behavior is preserved
+1. 进行更改
+2. 运行相关测试
+3. 仅在行为保持时保留
 
-Separate refactoring from feature work whenever possible.
+尽可能将重构与功能工作分开。
 
-### Step 4: Verify the Result
+### 步骤 4：验证结果
 
-After simplifying, confirm:
+简化后确认：
 
-- The code is genuinely easier to understand
-- The diff is clean and reviewable
-- Project conventions still match
-- No behavior, error handling, or side effects changed
+- 代码确实更容易理解
+- diff 干净可审查
+- 项目惯例仍然匹配
+- 没有行为、错误处理或副作用改变
 
-## Guidance for This Repository
+## 本仓库指导
 
-- Prefer straightforward TypeScript over clever compression
-- Preserve existing runtime behavior, tests, and hooks
-- Favor explicit names and smaller focused helpers when they improve readability
-- Keep refactors tightly scoped to the task or review feedback
+- 优先使用直接的 TypeScript 而不是巧妙的压缩
+- 保持现有的运行时行为、测试和 hooks
+- 当能提高可读性时，偏好显式名称和更小更专注的辅助函数
+- 保持重构紧密限定在任务或审查反馈范围内
 
-## Verification Checklist
+## 验证清单
 
-- [ ] Existing tests pass without modification
-- [ ] Build/typecheck/lint still pass
-- [ ] No unrelated files were refactored
-- [ ] No error handling was weakened or removed
-- [ ] The result is simpler to review than the original
+- [ ] 现有测试无需修改即可通过
+- [ ] 构建/typecheck/lint 仍然通过
+- [ ] 没有无关文件被重构
+- [ ] 没有错误处理被削弱或移除
+- [ ] 结果比原始版本更简单易审查

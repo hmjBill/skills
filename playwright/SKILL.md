@@ -3,46 +3,45 @@ name: "playwright"
 description: "Use when the task requires automating a real browser from the terminal (navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging) via `playwright-cli` or the bundled wrapper script."
 ---
 
+# Playwright CLI 技能
 
-# Playwright CLI Skill
+使用 `playwright-cli` 从终端驱动真实的浏览器。优先使用捆绑的包装脚本，这样 CLI 即使在没有全局安装时也能工作。
+将此技能视为 CLI 优先的自动化。除非用户明确要求测试文件，否则不要转向 `@playwright/test`。
 
-Drive a real browser from the terminal using `playwright-cli`. Prefer the bundled wrapper script so the CLI works even when it is not globally installed.
-Treat this skill as CLI-first automation. Do not pivot to `@playwright/test` unless the user explicitly asks for test files.
+## 前置检查（必需）
 
-## Prerequisite check (required)
-
-Before proposing commands, check whether `npx` is available (the wrapper depends on it):
+在提议命令之前，检查 `npx` 是否可用（包装脚本依赖它）：
 
 ```bash
 command -v npx >/dev/null 2>&1
 ```
 
-If it is not available, pause and ask the user to install Node.js/npm (which provides `npx`). Provide these steps verbatim:
+如果不可用，暂停并要求用户安装 Node.js/npm（提供 `npx`）。逐字提供以下步骤：
 
 ```bash
-# Verify Node/npm are installed
+# 验证 Node/npm 已安装
 node --version
 npm --version
 
-# If missing, install Node.js/npm, then:
-npm install -g @playwright/cli@latest
+# 如果缺失，安装 Node.js/npm，然后：
+npm install -g @playwright.cli@latest
 playwright-cli --help
 ```
 
-Once `npx` is present, proceed with the wrapper script. A global install of `playwright-cli` is optional.
+一旦 `npx` 存在，继续使用包装脚本。全局安装 `playwright-cli` 是可选的。
 
-## Skill path (set once)
+## 技能路径（设置一次）
 
 ```bash
 export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
 ```
 
-User-scoped skills install under `$CODEX_HOME/skills` (default: `~/.codex/skills`).
+用户范围的技能安装在 `$CODEX_HOME/skills` 下（默认：`~/.codex/skills`）。
 
-## Quick start
+## 快速开始
 
-Use the wrapper script:
+使用包装脚本：
 
 ```bash
 "$PWCLI" open https://playwright.dev --headed
@@ -53,22 +52,22 @@ Use the wrapper script:
 "$PWCLI" screenshot
 ```
 
-If the user prefers a global install, this is also valid:
+如果用户更喜欢全局安装，这也是有效的：
 
 ```bash
-npm install -g @playwright/cli@latest
+npm install -g @playwright.cli@latest
 playwright-cli --help
 ```
 
-## Core workflow
+## 核心工作流程
 
-1. Open the page.
-2. Snapshot to get stable element refs.
-3. Interact using refs from the latest snapshot.
-4. Re-snapshot after navigation or significant DOM changes.
-5. Capture artifacts (screenshot, pdf, traces) when useful.
+1. 打开页面。
+2. 快照以获取稳定的元素引用。
+3. 使用最新快照中的引用进行交互。
+4. 在导航或重大 DOM 更改后重新快照。
+5. 在有用时捕获产物（截图、pdf、追踪）。
 
-Minimal loop:
+最小循环：
 
 ```bash
 "$PWCLI" open https://example.com
@@ -77,20 +76,20 @@ Minimal loop:
 "$PWCLI" snapshot
 ```
 
-## When to snapshot again
+## 何时重新快照
 
-Snapshot again after:
+在以下操作后重新快照：
 
-- navigation
-- clicking elements that change the UI substantially
-- opening/closing modals or menus
-- tab switches
+- 导航
+- 点击显著改变 UI 的元素
+- 打开/关闭模态框或菜单
+- 标签页切换
 
-Refs can go stale. When a command fails due to a missing ref, snapshot again.
+引用可能会失效。当命令因缺少引用而失败时，重新快照。
 
-## Recommended patterns
+## 推荐模式
 
-### Form fill and submit
+### 表单填写和提交
 
 ```bash
 "$PWCLI" open https://example.com/form
@@ -101,7 +100,7 @@ Refs can go stale. When a command fails due to a missing ref, snapshot again.
 "$PWCLI" snapshot
 ```
 
-### Debug a UI flow with traces
+### 使用追踪调试 UI 流程
 
 ```bash
 "$PWCLI" open https://example.com --headed
@@ -110,7 +109,7 @@ Refs can go stale. When a command fails due to a missing ref, snapshot again.
 "$PWCLI" tracing-stop
 ```
 
-### Multi-tab work
+### 多标签页工作
 
 ```bash
 "$PWCLI" tab-new https://example.com
@@ -119,29 +118,29 @@ Refs can go stale. When a command fails due to a missing ref, snapshot again.
 "$PWCLI" snapshot
 ```
 
-## Wrapper script
+## 包装脚本
 
-The wrapper script uses `npx --package @playwright/cli playwright-cli` so the CLI can run without a global install:
+包装脚本使用 `npx --package @playwright/cli playwright-cli`，这样 CLI 可以在没有全局安装的情况下运行：
 
 ```bash
 "$PWCLI" --help
 ```
 
-Prefer the wrapper unless the repository already standardizes on a global install.
+除非仓库已经标准化全局安装，否则优先使用包装脚本。
 
-## References
+## 参考资料
 
-Open only what you need:
+只打开您需要的内容：
 
-- CLI command reference: `references/cli.md`
-- Practical workflows and troubleshooting: `references/workflows.md`
+- CLI 命令参考：`references/cli.md`
+- 实用工作流程和故障排除：`references/workflows.md`
 
-## Guardrails
+## 护栏
 
-- Always snapshot before referencing element ids like `e12`.
-- Re-snapshot when refs seem stale.
-- Prefer explicit commands over `eval` and `run-code` unless needed.
-- When you do not have a fresh snapshot, use placeholder refs like `eX` and say why; do not bypass refs with `run-code`.
-- Use `--headed` when a visual check will help.
-- When capturing artifacts in this repo, use `output/playwright/` and avoid introducing new top-level artifact folders.
-- Default to CLI commands and workflows, not Playwright test specs.
+- 在引用 `e12` 这样的元素 ID 之前始终先快照。
+- 当引用看起来失效时重新快照。
+- 优先使用显式命令而不是 `eval` 和 `run-code`，除非需要。
+- 当您没有新的快照时，使用占位符引用如 `eX` 并说明原因；不要用 `run-code` 绕过引用。
+- 当视觉检查有帮助时使用 `--headed`。
+- 在此仓库中捕获产物时，使用 `output/playwright/` 并避免引入新的顶级产物文件夹。
+- 默认使用 CLI 命令和工作流程，而不是 Playwright 测试规范。
