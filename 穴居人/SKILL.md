@@ -1,6 +1,6 @@
 ﻿---
 name: 穴居人
-description: >
+description: 超压缩沟通模式。去除填充词、冠词和客套话，削减约 75% 的 token 用量，同时保持完整的技术准确性。
   Ultra-compressed communication mode. Cuts token usage ~75% by dropping
   filler, articles, and pleasantries while keeping full technical accuracy.
   Use when user says "caveman mode", "talk like caveman", "use caveman",

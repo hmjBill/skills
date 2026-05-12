@@ -1,6 +1,6 @@
 ﻿---
 name: 方案拷问
-description: Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to stress-test a plan, get grilled on their design, or mentions "grill me".
+description: 针对方案或设计对用户进行无情的面试式拷问，直到达成共同理解，解决决策树的每个分支。当用户想要压力测试方案时使用。
 ---
 
 对我进行关于这个计划各方面的深入追问，直到我们达成共同理解。沿着设计树的每个分支向下走，逐个解决决策之间的依赖关系。对于每个问题，提供你的建议答案。

@@ -1,13 +1,13 @@
 ﻿---
 name: 品牌设计
-description: Brand voice, visual identity, messaging frameworks, asset management, brand consistency. Activate for branded content, tone of voice, marketing assets, brand compliance, style guides.
+description: 品牌语调、视觉识别、信息框架、资产管理、品牌一致性。用于品牌内容、语调风格、营销素材、品牌合规、风格指南。
 argument-hint: "[update|review|create] [args]"
 metadata:
   author: claudekit
   version: "1.0.0"
 ---
 
-# Brand
+# 品牌设计
 
 品牌识别、声音、信息、资产管理及一致性框架。
 
@@ -42,10 +42,10 @@ node scripts/extract-colors.cjs <image-path>
 ## 品牌同步工作流程
 
 ```bash
-# 1. 编辑 docs/brand-guidelines.md（或使用 /brand update）
-# 2. 同步到设计令牌
+# 品牌设计
+# 品牌设计
 node scripts/sync-brand-to-tokens.cjs
-# 3. 验证
+# 品牌设计
 node scripts/inject-brand-context.cjs --json | head -20
 ```
 

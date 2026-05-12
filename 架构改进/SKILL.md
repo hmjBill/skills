@@ -1,9 +1,9 @@
 ﻿---
 name: 架构改进
-description: Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable.
+description: 在领域语言（CONTEXT.md）和决策文档（docs/adr/）的指导下，发现代码库的深化机会。当用户想要改进架构、寻找重构机会、整合耦合模块时使用。
 ---
 
-# 改进代码库架构
+# 架构改进
 
 发现架构摩擦点并提出**深度化机会**——将浅层模块转变为深层模块的重构。目标是可测试性和 AI 可导航性。
 

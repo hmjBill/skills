@@ -1,9 +1,9 @@
 ﻿---
 name: Git安全防护
-description: Set up Claude Code hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute. Use when user wants to prevent destructive git operations, add git safety hooks, or block git push/reset in Claude Code.
+description: 设置 Claude Code 钩子，在危险 Git 命令（push、reset --hard、clean、branch -D 等）执行前阻止它们。当用户想要防止破坏性 Git 操作时使用。
 ---
 
-# 设置 Git Guardrails
+# Git 安全防护
 
 设置一个 PreToolUse 钩子，在 Claude 执行前拦截并阻止危险的 git 命令。
 

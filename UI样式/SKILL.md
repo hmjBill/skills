@@ -1,6 +1,6 @@
 ﻿---
 name: UI样式
-description: Create beautiful, accessible user interfaces with shadcn/ui components (built on Radix UI + Tailwind), Tailwind CSS utility-first styling, and canvas-based visual designs. Use when building user interfaces, implementing design systems, creating responsive layouts, adding accessible components (dialogs, dropdowns, forms, tables), customizing themes and colors, implementing dark mode, generating visual designs and posters, or establishing consistent styling patterns across applications.
+description: 使用 shadcn/ui 组件（基于 Radix UI + Tailwind）、Tailwind CSS 实用优先样式和基于画布的视觉设计，创建美观、可访问的用户界面。
 argument-hint: "[component or layout]"
 license: MIT
 metadata:
@@ -8,7 +8,7 @@ metadata:
   version: "1.0.0"
 ---
 
-# UI 样式技能
+# UI 样式
 
 综合技能指南，用于创建美观、可访问的用户界面，结合使用 shadcn/ui 组件、 Tailwind CSS 工具类样式和基于 Canvas 的视觉设计系统。
 

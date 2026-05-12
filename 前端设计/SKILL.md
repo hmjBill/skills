@@ -1,6 +1,6 @@
 ﻿---
 name: 前端设计
-description: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.
+description: 创建独特的、生产级的前端界面，具有高设计质量。用于构建 Web 组件、页面、制品、海报或应用程序时。生成富有创意的精致代码和 UI 设计。
 license: Complete terms in LICENSE.txt
 ---
 
