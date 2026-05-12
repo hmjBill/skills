@@ -1,9 +1,9 @@
 ﻿---
 name: Playwright
-description: "Use when the task requires automating a real browser from the terminal (navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging) via `playwright-cli` or the bundled wrapper script."
+description: 当任务需要从终端自动化真实浏览器（导航、表单填写、快照、截图、数据提取、UI 流程调试）时使用，通过 `playwright-cli` 或捆绑的封装脚本。
 ---
 
-# Playwright CLI 技能
+# Playwright
 
 使用 `playwright-cli` 从终端驱动真实的浏览器。优先使用捆绑的包装脚本，这样 CLI 即使在没有全局安装时也能工作。
 将此技能视为 CLI 优先的自动化。除非用户明确要求测试文件，否则不要转向 `@playwright/test`。
@@ -19,11 +19,11 @@ command -v npx >/dev/null 2>&1
 如果不可用，暂停并要求用户安装 Node.js/npm（提供 `npx`）。逐字提供以下步骤：
 
 ```bash
-# 验证 Node/npm 已安装
+# Playwright
 node --version
 npm --version
 
-# 如果缺失，安装 Node.js/npm，然后：
+# Playwright
 npm install -g @playwright.cli@latest
 playwright-cli --help
 ```
@@ -105,7 +105,7 @@ playwright-cli --help
 ```bash
 "$PWCLI" open https://example.com --headed
 "$PWCLI" tracing-start
-# ...interactions...
+# Playwright
 "$PWCLI" tracing-stop
 ```
 

@@ -1,10 +1,10 @@
 ﻿---
 name: 截图
-description: "Use when the user explicitly asks for a desktop or system screenshot (full screen, specific app or window, or a pixel region), or when tool-specific capture capabilities are unavailable and an OS-level capture is needed."
+description: 当用户明确要求桌面或系统截图（全屏、特定应用或窗口、像素区域），或工具特定的捕获功能不可用且需要操作系统级捕获时使用。
 ---
 
 
-# Screenshot Capture
+# 截图
 
 每次都遵循以下保存位置规则：
 

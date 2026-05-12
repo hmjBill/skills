@@ -1,9 +1,9 @@
 ﻿---
 name: QA测试
-description: Interactive QA session where user reports bugs or issues conversationally, and the agent files GitHub issues. Explores the codebase in the background for context and domain language. Use when user wants to report bugs, do QA, file issues conversationally, or mentions "QA session".
+description: 交互式 QA 会话，用户以对话方式报告 Bug 或问题，代理在后台探索代码库以获取上下文和领域语言，并提交 GitHub Issue。
 ---
 
-# QA 会话
+# QA 测试
 
 运行交互式 QA 会话。用户描述他们遇到的问题。您进行澄清，在后台探索代码库以获取上下文和领域语言，并提交持久的、以用户为中心的、使用项目领域语言的 GitHub issues。
 

@@ -1,6 +1,6 @@
 ﻿---
 name: 设计系统
-description: Token architecture, component specifications, and slide generation. Three-layer tokens (primitive→semantic→component), CSS variables, spacing/typography scales, component specs, strategic slide creation. Use for design tokens, systematic design, brand-compliant presentations.
+description: 令牌架构、组件规格和幻灯片生成。三层令牌（基础→语义→组件）、CSS 变量、间距/排版比例、组件规格、策略性幻灯片创建。
 argument-hint: "[component or token]"
 license: MIT
 metadata:
@@ -8,7 +8,7 @@ metadata:
   version: "1.0.0"
 ---
 
-# Design System
+# 设计系统
 
 令牌架构、组件规范、系统化设计、幻灯片生成。
 
@@ -121,14 +121,14 @@ node scripts/validate-tokens.cjs --dir src/
 ### 幻灯片搜索（BM25）
 
 ```bash
-# 基本搜索（自动检测领域）
+# 设计系统
 python scripts/search-slides.py "investor pitch"
 
-# 领域特定搜索
+# 设计系统
 python scripts/search-slides.py "problem agitation" -d copy
 python scripts/search-slides.py "revenue growth" -d chart
 
-# 上下文搜索（高级系统）
+# 设计系统
 python scripts/search-slides.py "problem slide" --context --position 2 --total 9
 python scripts/search-slides.py "cta" --context --position 9 --prev-emotion frustration
 ```

@@ -1,6 +1,6 @@
 ﻿---
 name: 横幅设计
-description: "Design banners for social media, ads, website heroes, creative assets, and print. Multiple art direction options with AI-generated visuals. Actions: design, create, generate banner. Platforms: Facebook, Twitter/X, LinkedIn, YouTube, Instagram, Google Display, website hero, print. Styles: minimalist, gradient, bold typography, photo-based, illustrated, geometric, retro, glassmorphism, 3D, neon, duotone, editorial, collage. Uses ui-ux-pro-max, frontend-design, ai-artist, ai-multimodal skills."
+description: 为社交媒体、广告、网站主视觉、创意素材和印刷品设计横幅。支持多种艺术方向和 AI 生成视觉内容。
 argument-hint: "[platform] [style] [dimensions]"
 license: MIT
 metadata:
@@ -8,7 +8,7 @@ metadata:
   version: "1.0.0"
 ---
 
-# Banner Design - 多格式创意横幅系统
+# 横幅设计 - 多格式创意横幅系统
 
 设计覆盖社交、广告、网页和印刷格式的横幅。通过 AI 驱动的视觉元素为每个请求生成多种艺术方向方案。本技能仅处理横幅设计。不处理视频编辑、完整网站设计或印刷制作。
 

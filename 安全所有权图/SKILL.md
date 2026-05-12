@@ -1,9 +1,9 @@
 ﻿---
 name: 安全所有权图
-description: "Analyze git repositories to build a security ownership topology (people-to-file), compute bus factor and sensitive-code ownership, and export CSV/JSON for graph databases and visualization. Trigger only when the user explicitly wants a security-oriented ownership or bus-factor analysis grounded in git history (for example: orphaned sensitive code, security maintainers, CODEOWNERS reality checks for risk, sensitive hotspots, or ownership clusters). Do not trigger for general maintainer lists or non-security ownership questions."
+description: 分析 Git 仓库以构建安全所有权拓扑（人员到文件），计算总线因子和敏感代码所有权，并导出 CSV/JSON 用于图数据库和可视化。
 ---
 
-# Security Ownership Map
+# 安全所有权图
 
 ## Overview
 
@@ -79,7 +79,7 @@ python skills/skills/security-ownership-map/scripts/run_ownership_map.py \
 默认情况下，脚本会标记常见 auth/crypto/secrets 路径。可通过提供 CSV 文件进行覆盖：
 
 ```
-# pattern,tag,weight
+# 安全所有权图
 **/auth/**,auth,1.0
 **/crypto/**,crypto,1.0
 **/*.pem,secrets,1.0
@@ -126,36 +126,36 @@ python skills/skills/security-ownership-map/scripts/query_ownership.py --data-di
 运行以下命令，以有界输出回答常见安全所有权问题：
 
 ```bash
-# Orphaned sensitive code (stale + low bus factor)
+# 安全所有权图
 python skills/skills/security-ownership-map/scripts/query_ownership.py --data-dir ownership-map-out summary --section orphaned_sensitive_code
 
-# Hidden owners for sensitive tags
+# 安全所有权图
 python skills/skills/security-ownership-map/scripts/query_ownership.py --data-dir ownership-map-out summary --section hidden_owners
 
-# Sensitive hotspots with low bus factor
+# 安全所有权图
 python skills/skills/security-ownership-map/scripts/query_ownership.py --data-dir ownership-map-out summary --section bus_factor_hotspots
 
-# Auth/crypto files with bus factor <= 1
+# 安全所有权图
 python skills/skills/security-ownership-map/scripts/query_ownership.py --data-dir ownership-map-out files --tag auth --bus-factor-max 1
 python skills/skills/security-ownership-map/scripts/query_ownership.py --data-dir ownership-map-out files --tag crypto --bus-factor-max 1
 
-# Who is touching sensitive code the most
+# 安全所有权图
 python skills/skills/security-ownership-map/scripts/query_ownership.py --data-dir ownership-map-out people --sort sensitive_touches --limit 10
 
-# Co-change neighbors (cluster hints for ownership drift)
+# 安全所有权图
 python skills/skills/security-ownership-map/scripts/query_ownership.py --data-dir ownership-map-out cochange --file path/to/file --min-jaccard 0.05 --limit 20
 
-# Community maintainers (for a cluster)
+# 安全所有权图
 python skills/skills/security-ownership-map/scripts/query_ownership.py --data-dir ownership-map-out community --id 3
 
-# Monthly maintainers for the community containing a file
+# 安全所有权图
 python skills/skills/security-ownership-map/scripts/community_maintainers.py \
   --data-dir ownership-map-out \
   --file network/card.c \
   --since 2025-01-01 \
   --top 5
 
-# Quarterly buckets instead of monthly
+# 安全所有权图
 python skills/skills/security-ownership-map/scripts/community_maintainers.py \
   --data-dir ownership-map-out \
   --file network/card.c \

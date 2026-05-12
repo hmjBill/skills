@@ -1,9 +1,9 @@
 ﻿---
 name: 安全威胁模型
-description: "Repository-grounded threat modeling that enumerates trust boundaries, assets, attacker capabilities, abuse paths, and mitigations, and writes a concise Markdown threat model. Trigger only when the user explicitly asks to threat model a codebase or path, enumerate threats/abuse paths, or perform AppSec threat modeling. Do not trigger for general architecture summaries, code review, or non-security design work."
+description: 基于代码仓库的威胁建模，枚举信任边界、资产、攻击者能力、滥用路径和缓解措施，并编写简洁的 Markdown 威胁模型。
 ---
 
-# Threat Model Source Code Repo
+# 安全威胁模型
 
 交付一份可执行、AppSec 级别的威胁模型，其内容必须针对仓库或项目路径本身，而不是通用检查清单。将每一项架构声明都锚定到仓库中的证据，并保持假设明确。优先关注真实攻击者目标和具体影响，而非泛化清单。
 

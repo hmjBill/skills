@@ -1,9 +1,9 @@
 ﻿---
 name: 安全最佳实践
-description: "Perform language and framework specific security best-practice reviews and suggest improvements. Trigger only when the user explicitly requests security best practices guidance, a security review/report, or secure-by-default coding help. Trigger only for supported languages (python, javascript/typescript, go). Do not trigger for general code review, debugging, or non-security tasks."
+description: 执行特定语言和框架的安全最佳实践审查并提出改进建议。仅在用户明确请求安全最佳实践指导、安全审查报告或安全编码帮助时触发。
 ---
 
-# Security Best Practices
+# 安全最佳实践
 
 ## Overview
 
@@ -37,11 +37,11 @@ description: "Perform language and framework specific security best-practice rev
 - 如果 `references/` 中存在匹配指导，仅加载相关文件并遵循其说明。
 - 如果不存在匹配指导，请评估你是否掌握所选语言和/或框架的通用安全最佳实践；但若被要求生成报告，应告知用户缺少具体指导（仍可生成报告或检测确定性的关键漏洞）。
 
-# Overrides
+# 安全最佳实践
 
 尽管这些参考资料包含了语言与框架的安全最佳实践，但在某些情况下，客户可能需要绕过或覆盖这些实践。请关注项目文档与提示文件中的具体规则和说明，它们可能要求你覆盖某些最佳实践。覆盖最佳实践时，你可以向用户报告，但不要与用户对抗。如果因项目特定原因需要绕过/忽略某项安全最佳实践，也可建议在项目中补充相关文档，以明确说明未遵循该实践的原因，并便于后续持续执行该绕过策略。
 
-# Report Format
+# 安全最佳实践
 
 生成报告时，应将报告写入 `security_best_practices_report.md`，或写入用户提供的其他位置。你可以询问用户希望写入的路径。
 
@@ -59,7 +59,7 @@ description: "Perform language and framework specific security best-practice rev
 
 并告知用户最终报告写入的位置。
 
-# Fixes
+# 安全最佳实践
 
 如果你已生成报告，让用户先阅读报告，再询问是否开始执行修复。
 
@@ -73,7 +73,7 @@ description: "Perform language and framework specific security best-practice rev
 
 始终遵循用户配置的常规测试流程（如有），以确认改动未引入回归。考虑变更可能带来的二阶影响；若存在，应在实施前告知用户。
 
-# General Security Advice
+# 安全最佳实践
 
 以下是适用于几乎任何语言或框架的一些安全编码建议。
 
