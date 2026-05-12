@@ -1,9 +1,9 @@
 ﻿---
 name: 拆分Issue
-description: Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.
+description: 将计划、规格或 PRD 拆分为可独立领取的 Issue，使用示踪弹垂直切片发布到项目 Issue 追踪器。当用户想要将计划转换为 Issue、创建实施工单时使用。
 ---
 
-# To Issues
+# 拆分 Issue
 
 使用垂直切片（tracer bullets）将计划分解为可独立认领的 issues。
 

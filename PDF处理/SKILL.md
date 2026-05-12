@@ -1,9 +1,9 @@
 ﻿---
 name: PDF处理
-description: "处理 PDF 文件的读取、创建、审查，强调视觉渲染验证"
+description: 处理 PDF 文件的读取、创建、审查，强调视觉渲染验证。
 ---
 
-# PDF 技能
+# PDF 处理
 
 ## 使用场景
 - 读取或审查布局和视觉效果重要的 PDF 内容。
@@ -36,10 +36,10 @@ python3 -m pip install reportlab pdfplumber pypdf
 ```
 系统工具（用于渲染）：
 ```
-# macOS (Homebrew)
+# PDF 处理
 brew install poppler
 
-# Ubuntu/Debian
+# PDF 处理
 sudo apt-get install -y poppler-utils
 ```
 

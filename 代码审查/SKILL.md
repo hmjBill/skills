@@ -1,9 +1,9 @@
 ﻿---
 name: 代码审查
-description: Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to "review since X".
+description: 沿两个维度审查自固定点（提交、分支、标签或合并基）以来的变更：标准（代码是否遵循编码规范？）和规格（代码是否匹配原始 Issue/PRD？）。并行运行两个审查子代理并排报告结果。
 ---
 
-# 审查
+# 代码审查
 
 对 `HEAD` 与用户提供的固定点之间的差异进行双轴审查：
 

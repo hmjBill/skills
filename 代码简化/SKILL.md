@@ -1,6 +1,6 @@
 ﻿---
 name: 代码简化
-description: Simplifies code for clarity without changing behavior. Use for readability, maintainability, and complexity reduction after behavior is understood.
+description: 在不改变行为的前提下简化代码以提升清晰度。在理解行为后用于可读性、可维护性和复杂度降低。
 ---
 
 # 代码简化

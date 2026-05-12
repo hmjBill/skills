@@ -1,13 +1,13 @@
 ﻿---
 name: 幻灯片
-description: Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copywriting formulas, and contextual slide strategies.
+description: 使用 Chart.js、设计令牌、响应式布局、文案公式和上下文幻灯片策略创建策略性 HTML 演示文稿。
 argument-hint: "[topic] [slide-count]"
 metadata:
   author: claudekit
   version: "1.0.0"
 ---
 
-# Slides（幻灯片）
+# 幻灯片
 
 使用数据可视化的战略性 HTML 演示设计。
 

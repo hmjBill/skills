@@ -1,6 +1,6 @@
 ﻿---
 name: 编写PRD
-description: Turn the current conversation context into a PRD and publish it to the project issue tracker. Use when user wants to create a PRD from the current context.
+description: 将当前对话上下文转换为 PRD 并发布到项目 Issue 追踪器。当用户想要从当前上下文创建 PRD 时使用。
 ---
 
 此 skill 获取当前对话上下文和代码库理解并生成 PRD。不要采访用户 — 只是综合你已经知道的内容。

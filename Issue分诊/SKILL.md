@@ -1,9 +1,9 @@
 ﻿---
 name: Issue分诊
-description: Triage issues through a state machine driven by triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent, or manage issue workflow.
+description: 通过分诊角色驱动的状态机进行 Issue 分诊。当用户想要创建 Issue、分诊 Issue、审查传入 Bug 或功能请求、为离线代理准备 Issue 或管理工作流时使用。
 ---
 
-# 分类 (Triage)
+# Issue 分诊
 
 通过分类角色的状态机移动项目问题跟踪器上的 issues。
 

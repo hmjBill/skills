@@ -1,6 +1,6 @@
 ﻿---
 name: 全局视角
-description: Tell the agent to zoom out and give broader context or a higher-level perspective. Use when you're unfamiliar with a section of code or need to understand how it fits into the bigger picture.
+description: 让代理拉远视角，提供更广阔的上下文或更高层次的视角。当你不熟悉某段代码或需要了解它如何融入大局时使用。
 disable-model-invocation: true
 ---
 

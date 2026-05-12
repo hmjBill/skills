@@ -1,9 +1,9 @@
 ﻿---
 name: UI-UX专家
-description: "UI/UX design intelligence for web and mobile. Includes 50+ styles, 161 color palettes, 57 font pairings, 161 product types, 99 UX guidelines, and 25 chart types across 10 stacks (React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, and HTML/CSS). Actions: plan, build, create, design, implement, review, fix, improve, optimize, enhance, refactor, and check UI/UX code. Projects: website, landing page, dashboard, admin panel, e-commerce, SaaS, portfolio, blog, and mobile app. Elements: button, modal, navbar, sidebar, card, table, form, and chart. Styles: glassmorphism, claymorphism, minimalism, brutalism, neumorphism, bento grid, dark mode, responsive, skeuomorphism, and flat design. Topics: color systems, accessibility, animation, layout, typography, font pairing, spacing, interaction states, shadow, and gradient. Integrations: shadcn/ui MCP for component search and examples."
+description: Web 和移动端的 UI/UX 设计智能。包含 50+ 风格、161 色板、57 字体搭配、161 产品类型、99 UX 指南和 25 图表类型，覆盖 10 种技术栈。
 ---
 
-# UI/UX Pro Max - 设计智能
+# UI-UX 专家
 
 Web 和移动应用综合设计指南。包含 50+ 样式、161 个配色方案、57 种字体搭配、161 种产品类型及其推理规则、99 条 UX 指南，以及横跨 10 个技术栈的 25 种图表类型。可搜索的数据库，带有基于优先级的推荐。
 
@@ -493,10 +493,10 @@ python3 skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" -
 ### 步骤 3：补充详细搜索（如需要）
 
 ```bash
-# 获取现代工具产品的风格选项
+# UI-UX 专家
 python3 skills/ui-ux-pro-max/scripts/search.py "minimalism dark mode" --domain style
 
-# 获取搜索交互和加载的 UX 最佳实践
+# UI-UX 专家
 python3 skills/ui-ux-pro-max/scripts/search.py "search loading animation" --domain ux
 ```
 
@@ -515,10 +515,10 @@ python3 skills/ui-ux-pro-max/scripts/search.py "list performance navigation" --s
 `--design-system` 标志支持两种输出格式：
 
 ```bash
-# ASCII 框（默认）- 最佳终端显示
+# UI-UX 专家
 python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system
 
-# Markdown - 最佳文档格式
+# UI-UX 专家
 python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system -f markdown
 ```
 

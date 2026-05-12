@@ -1,6 +1,6 @@
 ﻿---
 name: 工作交接
-description: Compact the current conversation into a handoff document for another agent to pick up.
+description: 将当前对话压缩为交接文档，供另一个代理接续工作。
 argument-hint: "What will the next session be used for?"
 ---
 

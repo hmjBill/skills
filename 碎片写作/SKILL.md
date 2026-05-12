@@ -1,6 +1,6 @@
 ﻿---
 name: 碎片写作
-description: Grilling session that mines the user for fragments — heterogeneous nuggets of writing (claims, vignettes, sharp sentences, half-thoughts) — and appends them to a single document as raw material for a future article. Use when the user wants to develop ideas before imposing structure, or mentions "fragments", "ideate", or "raw material" for writing.
+description: 拷问式会话，从用户挖掘写作碎片——异质化的写作素材（论点、小场景、锐利句子、半成品想法）——并追加到单个文档中作为未来文章的原始素材。
 ---
 
 <what-to-do>
@@ -49,7 +49,7 @@ Blue-sky 慷慨，但要施加压力深化和收紧。不要急着列大纲。�
 ## 文件格式
 
 ```markdown
-# Working title
+# 碎片写作
 
 第一个片段在这里。
 
