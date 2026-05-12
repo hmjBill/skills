@@ -1,5 +1,5 @@
----
-name: "PDF处理"
+﻿---
+name: PDF处理
 description: "处理 PDF 文件的读取、创建、审查，强调视觉渲染验证"
 ---
 

@@ -1,5 +1,5 @@
----
-name: "playwright-interactive"
+﻿---
+name: Playwright交互
 description: "Persistent browser and Electron interaction through `js_repl` for fast iterative UI debugging."
 ---
 

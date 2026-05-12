@@ -1,5 +1,5 @@
----
-name: codemap
+﻿---
+name: 代码地图
 description: Generate comprehensive hierarchical codemaps for UNFAMILIAR repositories. Expensive operation - only use when explicitly asked for codebase documentation or initial repository mapping
 ---
 

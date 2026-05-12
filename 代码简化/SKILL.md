@@ -1,5 +1,5 @@
----
-name: simplify
+﻿---
+name: 代码简化
 description: Simplifies code for clarity without changing behavior. Use for readability, maintainability, and complexity reduction after behavior is understood.
 ---
 
