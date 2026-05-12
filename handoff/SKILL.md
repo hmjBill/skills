@@ -4,10 +4,10 @@ description: Compact the current conversation into a handoff document for anothe
 argument-hint: "What will the next session be used for?"
 ---
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save it to a path produced by `mktemp -t handoff-XXXXXX.md` (read the file before you write to it).
+撰写一份交接文档，总结当前对话，以便新的 agent 可以继续工作。将其保存到 `mktemp -t handoff-XXXXXX.md` 生成的路径（写入前先读取文件）。
 
-Suggest the skills to be used, if any, by the next session.
+如果下一个会话需要使用任何技能，请提出建议。
 
-Do not duplicate content already captured in other artifacts (PRDs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
+不要复制已捕获在其他 artifact（PRD、计划、ADR、issues、commits、diffs）中的内容。改为通过路径或 URL 引用它们。
 
-If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+如果用户传递了参数，将其视为对下一个会话将关注内容的描述，并相应地定制文档。

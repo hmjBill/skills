@@ -6,186 +6,184 @@ description: "Use when the user explicitly asks for a desktop or system screensh
 
 # Screenshot Capture
 
-Follow these save-location rules every time:
+每次都遵循以下保存位置规则：
 
-1) If the user specifies a path, save there.
-2) If the user asks for a screenshot without a path, save to the OS default screenshot location.
-3) If Codex needs a screenshot for its own inspection, save to the temp directory.
+1) 如果用户指定了路径，就保存到该路径。
+2) 如果用户要求截图但未提供路径，就保存到操作系统默认截图位置。
+3) 如果 Codex 为自身检查需要截图，就保存到临时目录。
 
 ## Tool priority
 
-- Prefer tool-specific screenshot capabilities when available (for example: a Figma MCP/skill for Figma files, or Playwright/agent-browser tools for browsers and Electron apps).
-- Use this skill when explicitly asked, for whole-system desktop captures, or when a tool-specific capture cannot get what you need.
-- Otherwise, treat this skill as the default for desktop apps without a better-integrated capture tool.
+- 当可用时，优先使用工具特定的截图能力（例如：用于 Figma 文件的 Figma MCP/skill，或用于浏览器与 Electron 应用的 Playwright/agent-browser 工具）。
+- 在被明确要求时、需要整机桌面截图时，或工具特定截图无法满足需求时，使用此 skill。
+- 否则，对于没有更好集成截图工具的桌面应用，将此 skill 作为默认方案。
 
 ## macOS permission preflight (reduce repeated prompts)
 
-On macOS, run the preflight helper once before window/app capture. It checks
-Screen Recording permission, explains why it is needed, and requests it in one
-place.
+在 macOS 上，在窗口/应用截图前先运行一次 preflight 辅助脚本。
+它会检查 Screen Recording 权限，说明为何需要该权限，并在同一处发起权限请求。
 
-The helpers route Swift's module cache to `$TMPDIR/codex-swift-module-cache`
-to avoid extra sandbox module-cache prompts.
+这些辅助脚本会将 Swift 的 module cache 定向到 `$TMPDIR/codex-swift-module-cache`，
+以避免额外的沙箱 module-cache 提示。
 
 ```bash
 bash <path-to-skill>/scripts/ensure_macos_permissions.sh
 ```
 
-To avoid multiple sandbox approval prompts, combine preflight + capture in one
-command when possible:
+为避免多次沙箱授权提示，尽可能将 preflight 与 capture 合并为一个命令：
 
 ```bash
 bash <path-to-skill>/scripts/ensure_macos_permissions.sh && \
 python3 <path-to-skill>/scripts/take_screenshot.py --app "Codex"
 ```
 
-For Codex inspection runs, keep the output in temp:
+对于 Codex 的检查执行，请将输出保存在临时目录：
 
 ```bash
 bash <path-to-skill>/scripts/ensure_macos_permissions.sh && \
 python3 <path-to-skill>/scripts/take_screenshot.py --app "<App>" --mode temp
 ```
 
-Use the bundled scripts to avoid re-deriving OS-specific commands.
+使用随附脚本，避免重复推导各操作系统特定命令。
 
 ## macOS and Linux (Python helper)
 
-Run the helper from the repo root:
+从仓库根目录运行该辅助脚本：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py
 ```
 
-Common patterns:
+常见用法：
 
-- Default location (user asked for "a screenshot"):
+- 默认位置（用户只说“截个图”）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py
 ```
 
-- Temp location (Codex visual check):
+- 临时位置（Codex 视觉检查）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py --mode temp
 ```
 
-- Explicit location (user provided a path or filename):
+- 显式位置（用户提供了路径或文件名）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py --path output/screen.png
 ```
 
-- App/window capture by app name (macOS only; substring match is OK; captures all matching windows):
+- 按应用名抓取应用/窗口（仅 macOS；支持子串匹配；会抓取所有匹配窗口）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py --app "Codex"
 ```
 
-- Specific window title within an app (macOS only):
+- 指定应用内的窗口标题（仅 macOS）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py --app "Codex" --window-name "Settings"
 ```
 
-- List matching window ids before capturing (macOS only):
+- 在截图前列出匹配窗口 id（仅 macOS）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py --list-windows --app "Codex"
 ```
 
-- Pixel region (x,y,w,h):
+- 像素区域（x,y,w,h）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py --mode temp --region 100,200,800,600
 ```
 
-- Focused/active window (captures only the frontmost window; use `--app` to capture all windows):
+- 焦点/活动窗口（仅抓取最前窗口；使用 `--app` 可抓取该应用的全部窗口）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py --mode temp --active-window
 ```
 
-- Specific window id (use --list-windows on macOS to discover ids):
+- 指定窗口 id（在 macOS 上可用 --list-windows 发现 id）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py --window-id 12345
 ```
 
-The script prints one path per capture. When multiple windows or displays match, it prints multiple paths (one per line) and adds suffixes like `-w<windowId>` or `-d<display>`. View each path sequentially with the image viewer tool, and only manipulate images if needed or requested.
+脚本会为每次截图输出一个路径。若匹配到多个窗口或显示器，会输出多个路径（每行一个），并附加如 `-w<windowId>` 或 `-d<display>` 的后缀。请使用图像查看工具按顺序查看每个路径，仅在有需要或被要求时再处理图像。
 
 ### Workflow examples
 
-- "Take a look at <App> and tell me what you see": capture to temp, then view each printed path in order.
+- “看看 <App> 并告诉我你看到了什么”：先截图到临时目录，再按顺序查看每个输出路径。
 
 ```bash
 bash <path-to-skill>/scripts/ensure_macos_permissions.sh && \
 python3 <path-to-skill>/scripts/take_screenshot.py --app "<App>" --mode temp
 ```
 
-- "The design from Figma is not matching what is implemented": use a Figma MCP/skill to capture the design first, then capture the running app with this skill (typically to temp) and compare the raw screenshots before any manipulation.
+- “Figma 设计和实际实现不一致”：先用 Figma MCP/skill 抓取设计图，再用此 skill 抓取运行中的应用（通常保存到临时目录），并在做任何处理前先比较原始截图。
 
 ### Multi-display behavior
 
-- On macOS, full-screen captures save one file per display when multiple monitors are connected.
-- On Linux and Windows, full-screen captures use the virtual desktop (all monitors in one image); use `--region` to isolate a single display when needed.
+- 在 macOS 上，连接多显示器时，全屏截图会为每个显示器保存一个文件。
+- 在 Linux 和 Windows 上，全屏截图使用虚拟桌面（所有显示器合并为一张图）；需要时可用 `--region` 分离单个显示器。
 
 ### Linux prerequisites and selection logic
 
-The helper automatically selects the first available tool:
+该辅助脚本会自动选择第一个可用工具：
 
 1) `scrot`
 2) `gnome-screenshot`
 3) ImageMagick `import`
 
-If none are available, ask the user to install one of them and retry.
+如果都不可用，请让用户安装其中之一后重试。
 
-Coordinate regions require `scrot` or ImageMagick `import`.
+坐标区域截图需要 `scrot` 或 ImageMagick `import`。
 
-`--app`, `--window-name`, and `--list-windows` are macOS-only. On Linux, use
-`--active-window` or provide `--window-id` when available.
+`--app`、`--window-name` 与 `--list-windows` 仅支持 macOS。在 Linux 上，
+请使用 `--active-window`，或在可用时提供 `--window-id`。
 
 ## Windows (PowerShell helper)
 
-Run the PowerShell helper:
+运行 PowerShell 辅助脚本：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1
 ```
 
-Common patterns:
+常见用法：
 
-- Default location:
+- 默认位置：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1
 ```
 
-- Temp location (Codex visual check):
+- 临时位置（Codex 视觉检查）：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1 -Mode temp
 ```
 
-- Explicit path:
+- 显式路径：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1 -Path "C:\Temp\screen.png"
 ```
 
-- Pixel region (x,y,w,h):
+- 像素区域（x,y,w,h）：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1 -Mode temp -Region 100,200,800,600
 ```
 
-- Active window (ask the user to focus it first):
+- 活动窗口（先让用户将目标窗口置于焦点）：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1 -Mode temp -ActiveWindow
 ```
 
-- Specific window handle (only when provided):
+- 指定窗口句柄（仅在已提供时）：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1 -WindowHandle 123456
@@ -193,29 +191,29 @@ powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot
 
 ## Direct OS commands (fallbacks)
 
-Use these when you cannot run the helpers.
+当无法运行辅助脚本时，使用以下命令。
 
 ### macOS
 
-- Full screen to a specific path:
+- 全屏截图并保存到指定路径：
 
 ```bash
 screencapture -x output/screen.png
 ```
 
-- Pixel region:
+- 像素区域：
 
 ```bash
 screencapture -x -R100,200,800,600 output/region.png
 ```
 
-- Specific window id:
+- 指定窗口 id：
 
 ```bash
 screencapture -x -l12345 output/window.png
 ```
 
-- Interactive selection or window pick:
+- 交互式选择区域或窗口：
 
 ```bash
 screencapture -x -i output/interactive.png
@@ -223,7 +221,7 @@ screencapture -x -i output/interactive.png
 
 ### Linux
 
-- Full screen:
+- 全屏：
 
 ```bash
 scrot output/screen.png
@@ -237,7 +235,7 @@ gnome-screenshot -f output/screen.png
 import -window root output/screen.png
 ```
 
-- Pixel region:
+- 像素区域：
 
 ```bash
 scrot -a 100,200,800,600 output/region.png
@@ -247,7 +245,7 @@ scrot -a 100,200,800,600 output/region.png
 import -window root -crop 800x600+100+200 output/region.png
 ```
 
-- Active window:
+- 活动窗口：
 
 ```bash
 scrot -u output/window.png
@@ -259,9 +257,9 @@ gnome-screenshot -w -f output/window.png
 
 ## Error handling
 
-- On macOS, run `bash <path-to-skill>/scripts/ensure_macos_permissions.sh` first to request Screen Recording in one place.
-- If you see "screen capture checks are blocked in the sandbox", "could not create image from display", or Swift `ModuleCache` permission errors in a sandboxed run, rerun the command with escalated permissions.
-- If macOS app/window capture returns no matches, run `--list-windows --app "AppName"` and retry with `--window-id`, and make sure the app is visible on screen.
-- If Linux region/window capture fails, check tool availability with `command -v scrot`, `command -v gnome-screenshot`, and `command -v import`.
-- If saving to the OS default location fails with permission errors in a sandbox, rerun the command with escalated permissions.
-- Always report the saved file path in the response.
+- 在 macOS 上，先运行 `bash <path-to-skill>/scripts/ensure_macos_permissions.sh`，以在同一处请求 Screen Recording 权限。
+- 如果在沙箱环境中看到 “screen capture checks are blocked in the sandbox”、“could not create image from display” 或 Swift `ModuleCache` 权限错误，请使用提升权限后重新运行命令。
+- 如果 macOS 应用/窗口截图未匹配到结果，请运行 `--list-windows --app "AppName"`，然后改用 `--window-id` 重试，并确保该应用在屏幕上可见。
+- 如果 Linux 的区域/窗口截图失败，请用 `command -v scrot`、`command -v gnome-screenshot` 和 `command -v import` 检查工具可用性。
+- 如果在沙箱中保存到操作系统默认位置因权限错误失败，请使用提升权限后重新运行命令。
+- 始终在回复中报告已保存的文件路径。

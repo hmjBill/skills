@@ -5,97 +5,97 @@ description: Shape an article as a journey of beats, choose-your-own-adventure s
 
 <what-to-do>
 
-The user has passed (or will pass) a markdown file of raw material.
+用户已经提供（或将提供）一份原始材料的 markdown 文件。
 
-If the user did not say where to save the article, ask once and remember the path.
+如果用户没有说明保存文章的位置，请询问一次并记住路径。
 
-Then run a beat-by-beat journey:
+然后运行逐节之旅：
 
-1. Write 2–3 candidate **starting beats**, drawn from the raw material. Each is a different entry point into the article. Show the user the beats before writing it to the article file. The user picks one.
-2. Once the user picks a starting beat, write **only that beat** to the article file. A beat may be one sentence or several paragraphs — whatever that beat naturally is. Stop there.
-3. Re-read the article file from disk. Then offer 2–3 candidate **next beats** — different directions the journey could pivot to from where the article now stands.
-4. Loop steps 2–4 until the article reaches a natural end.
+1. 根据原始材料写出 2–3 个候选**起始节**。每个节都是文章的 不同入口点。在写入文章文件之前向用户展示这些节。用户选择一个。
+2. 用户选择起始节后，**仅将该节**写入文章文件。一节可以是一句话或几段——取决于该节自然的长度。就停在这里。
+3. 从磁盘重新读取文章文件。然后提供 2–3 个候选**下一节**——从文章当前位置可以转向的不同方向。
+4. 循环步骤 2–4，直到文章达到自然结尾。
 
 </what-to-do>
 
 <supporting-info>
 
-## What is a beat
+## 什么是节
 
-A beat is one move in the journey. It does one thing — sets a scene, lands a point, asks a question, tells a small story, drops an aside, twists the angle. Then it stops, leaving the reader at a place where the next beat can pivot.
+节是旅程中的一步。它做一件事——设置场景、落地观点、提出问题、讲个小故事、抛出一个题外话、转变角度。然后它停止，让读者处于下一节可以转向的位置。
 
-A beat is sized by what it needs:
+节的大小由其需要决定：
 
-- A single sentence if that's all the move is ("And then nothing happened for three weeks.").
-- A short paragraph if the move needs setup.
-- Multiple paragraphs if the beat is a self-contained vignette, argument, or example.
+- 如果那是一切的全部，一句话就足够（"然后三个星期什么都没发生。"）。
+- 如果移动需要铺垫，一个短段落。
+- 如果节是一个独立的短文、论点或例子，则多段。
 
-If a "beat" needs five paragraphs and three subheadings, it's not a beat — it's two beats glued together. Split it.
+如果一个"节"需要五段和三个小标题，它就不是一节——而是粘在一起的两节。拆开它。
 
-## Offering candidate beats
+## 提供候选节
 
-Each candidate should be genuinely different — different angle, different tone, different move. Not three flavours of the same paragraph. The user is choosing a _direction_, so the choices need to diverge.
+每个候选都应该是真正不同的——不同的角度、不同的语气、不同的移动。不是同一段落的三个版本。用户正在选择_方向_，所以选择需要分歧。
 
-Format the offer like a menu:
+将选择格式化为菜单：
 
 ```
-Where do you want to start?
+你想从哪里开始？
 
-1. **Open with the failure.** Drop the reader into the moment it broke —
-   the bug, the silence, the wrong number on the dashboard. Hooks on shock.
+1. **以失败开场。** 让读者置身于它破裂的瞬间——
+   bug、静默、仪表盘上的错误数字。以震惊为钩。
 
-2. **Open with the contradiction.** State the thing everyone believes,
-   then state the thing that turns out to be true. Hooks on curiosity.
+2. **以矛盾开场。** 陈述每个人都相信的事情，
+   然后陈述意想不到的真相。以好奇为钩。
 
-3. **Open with the small scene.** A specific morning, a specific
-   conversation. Hooks on intimacy.
+3. **以小场景开场。** 一个特定的早晨，一段特定的
+   对话。以亲密为钩。
 ```
 
-Sketch the move, not the prose. The user picks a direction; you write the prose afterward.
+勾勒移动，而非散文。用户选择方向；你之后写散文。
 
-Always end the menu with your recommendation and a one-line reason. Don't sit on the fence — pick one. Example: "I'd go with **2** — the contradiction sets up the strongest through-line for what's in the pile." The user can override; they usually won't, but they need your read.
+总是在菜单末尾附上你的推荐和一行原因。不要骑墙——选一个。例如："我选 **2**——矛盾为堆中最强的主线埋下伏笔。"用户可以覆盖；他们通常不会，但他们需要你的判断。
 
-## Writing one beat
+## 写一节
 
-Once a beat is picked, write _that beat only_ to the article file. Do not write the next beat. Do not foreshadow the next beat. Do not write transitions out of the beat — the next beat will pivot, and pivots are written when their beat is written.
+一旦选定一节，就_仅将该节_写入文章文件。不要写下一节。不要预告下一节。不要写出节的过渡——下一节会转向，而转向是在写该节时才写的。
 
-Pull material from the raw pile to populate the beat. You can paraphrase, split, recombine, or quote. The pile is a quarry.
+从原始堆中提取材料来填充节。你可以释义、拆分、重组或引用。堆是一个采石场。
 
-If the beat needs something the pile doesn't have, name the gap before writing: "this beat wants a concrete example and the pile doesn't have one — give me one or pick a different beat."
+如果节需要堆中没有的东西，在写之前指出差距："这一节想要一个具体例子但堆里没有——给我一个或选择一个不同的节。"
 
-## Pivoting to the next beat
+## 转向下一节
 
-After the user has edited, re-read the article file. The article may have changed in ways that change what the next beat should be. Then offer 2–3 candidates again.
+用户编辑后，重新读取文章文件。文章可能以改变下一节应该是什么的方式发生了变化。然后再次提供 2–3 个候选。
 
-The candidates should respect the article so far. Useful pivot moves:
+候选应该尊重迄今为止的文章。有用的转向移动：
 
-- **Continue** — push further in the same direction, deepen what's there.
-- **Contrast** — introduce the opposite, the counterexample, the doubt.
-- **Zoom in** — narrow to a specific case, scene, or detail.
-- **Zoom out** — widen to the broader implication or pattern.
-- **Aside** — break the fourth wall, drop a tip, add a footnote-shaped paragraph.
-- **Pivot hard** — deliberately change subject, trusting the connection will land later.
+- **继续** ——在同一方向上进一步深入，加深已有的内容。
+- **对比** ——引入相反的、对立的例子、怀疑。
+- **放大** ——缩小到特定案例、场景或细节。
+- **缩小** ——扩大到更广泛的含义或模式。
+- **题外话** ——打破第四面墙，抛出一个技巧，添加一个脚注形状的段落。
+- **硬转** ——故意改变主题，相信联系稍后会落地。
 
-Mix the candidates. If you've offered three "continue" options in a row, force a contrast or zoom into the next menu.
+混合候选。如果你连续提供了三个"继续"选项，在下一个菜单中强制对比或放大。
 
-## Ending the journey
+## 结束旅程
 
-The article ends when the journey is complete — not when the pile is empty. Most piles will have leftover fragments that don't make it in. That is fine; that is the point of having more raw material than you need.
+当旅程完成时文章结束——而非当堆空了时。大多数堆会有剩余的碎片没能进去。这没关系；这就是拥有比需要更多原材料的意义。
 
-When you sense an ending is near, say so: "we could end on the last beat, or add one more that lands the takeaway — which?" Let the user decide.
+当你感觉快要结束时，说出来："我们可以在最后一节结束，或者再加一节能落地要点的节——哪个？"让用户决定。
 
-## Writing rhythm
+## 写作节奏
 
-- Append one beat at a time. Never write ahead.
-- Re-read the article file from disk before every write. Preserve user edits absolutely.
-- If the user edits a previous beat substantially, let it change what comes next. The journey is alive.
-- If the user says "rewrite that beat" or "go back and try a different beat 3", do it — edit in place, leave the rest alone.
+- 一次追加一节。永远不要提前写。
+- 每次写之前从磁盘重新读取文章文件。绝对保留用户编辑。
+- 如果用户大幅编辑了之前的节，让它改变接下来发生的事情。旅程是活的。
+- 如果用户说"重写那一节"或"回去试试不同的第 3 节"，照做——就地编辑，保留其余部分不变。
 
-## Out of scope
+## 范围之外
 
-- Outlining the whole article up front.
-- Writing multiple beats in a single turn.
-- Editing the raw material file.
-- Imposing a fixed structure (intro/body/conclusion). The structure is whatever the journey turns out to be.
+- 预先概述整篇文章。
+- 在一次对话中写多节。
+- 编辑原始材料文件。
+- 强加固定结构（引言/正文/结论）。结构是旅程最终的样子。
 
 </supporting-info>

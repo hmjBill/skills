@@ -7,36 +7,36 @@ metadata:
   version: "1.0.0"
 ---
 
-# Slides
+# Slides（幻灯片）
 
-Strategic HTML presentation design with data visualization.
+使用数据可视化的战略性 HTML 演示设计。
 
 <args>$ARGUMENTS</args>
 
-## When to Use
+## 何时使用
 
-- Marketing presentations and pitch decks
-- Data-driven slides with Chart.js
-- Strategic slide design with layout patterns
-- Copywriting-optimized presentation content
+- 营销演示和 pitch deck
+- 使用 Chart.js 的数据驱动幻灯片
+- 战略性幻灯片设计与布局模式
+- 文案优化演示内容
 
-## Subcommands
+## 子命令
 
-| Subcommand | Description | Reference |
-|------------|-------------|-----------|
-| `create` | Create strategic presentation slides | `references/create.md` |
+| 子命令 | 描述 | 参考 |
+|--------|------|------|
+| `create` | 创建战略性演示幻灯片 | `references/create.md` |
 
-## References (Knowledge Base)
+## 参考资料（知识库）
 
-| Topic | File |
-|-------|------|
-| Layout Patterns | `references/layout-patterns.md` |
-| HTML Template | `references/html-template.md` |
-| Copywriting Formulas | `references/copywriting-formulas.md` |
-| Slide Strategies | `references/slide-strategies.md` |
+| 主题 | 文件 |
+|------|------|
+| 布局模式 | `references/layout-patterns.md` |
+| HTML 模板 | `references/html-template.md` |
+| 文案公式 | `references/copywriting-formulas.md` |
+| 幻灯片策略 | `references/slide-strategies.md` |
 
-## Routing
+## 路由
 
-1. Parse subcommand from `$ARGUMENTS` (first word)
-2. Load corresponding `references/{subcommand}.md`
-3. Execute with remaining arguments
+1. 从 `$ARGUMENTS`（第一个词）解析子命令
+2. 加载相应的 `references/{subcommand}.md`
+3. 使用剩余参数执行
