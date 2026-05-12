@@ -4,4 +4,4 @@ description: Tell the agent to zoom out and give broader context or a higher-lev
 disable-model-invocation: true
 ---
 
-I don't know this area of code well. Go up a layer of abstraction. Give me a map of all the relevant modules and callers, using the project's domain glossary vocabulary.
+我对这块代码不太熟悉。往上一层抽象。给我一张所有相关模块和调用者的地图，使用项目的领域词汇表。

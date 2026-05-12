@@ -3,62 +3,62 @@ name: "playwright-interactive"
 description: "Persistent browser and Electron interaction through `js_repl` for fast iterative UI debugging."
 ---
 
-# Playwright Interactive Skill
+# Playwright 交互式技能
 
-Use a persistent `js_repl` Playwright session to debug local web or Electron apps, keep the same handles alive across iterations, and run functional plus visual QA without restarting the whole toolchain unless the process ownership changed.
+使用持久的 `js_repl` Playwright 会话来调试本地 Web 或 Electron 应用，跨迭代保持相同的句柄活跃，并在不重启整个工具链的情况下运行功能和视觉 QA，除非进程所有权发生了变化。
 
-## Preconditions
+## 前置条件
 
-- `js_repl` must be enabled for this skill.
-- If `js_repl` is missing, enable it in `~/.codex/config.toml`:
+- 此技能必须启用 `js_repl`。
+- 如果 `js_repl` 缺失，在 `~/.codex/config.toml` 中启用它：
 
 ```toml
 [features]
 js_repl = true
 ```
 
-- You can also start a new session with `--enable js_repl` (equivalent to `-c features.js_repl=true`).
-- After enabling `js_repl`, start a new Codex session so the tool list refreshes.
-- For now, run this workflow with sandboxing disabled: start Codex with `--sandbox danger-full-access` (or the equivalent config for `sandbox_mode=danger-full-access`). This is a temporary requirement while `js_repl` + Playwright support inside the sandbox is still being completed.
-- Run setup from the same project directory you need to debug.
-- Treat `js_repl_reset` as a recovery tool, not routine cleanup. Resetting the kernel destroys your Playwright handles.
+- 您也可以用 `--enable js_repl`（等同于 `-c features.js_repl=true`）启动新会话。
+- 启用 `js_repl` 后，启动新的 Codex 会话以刷新工具列表。
+- 目前，使用禁用沙箱的方式运行此工作流程：用 `--sandbox danger-full-access` 启动 Codex（或 `sandbox_mode=danger-full-access` 的等效配置）。这是临时要求，因为 `js_repl` + Playwright 在沙箱内的支持仍在完成中。
+- 从您需要调试的同一项目目录运行设置。
+- 将 `js_repl_reset` 视为恢复工具，而不是常规清理。重置内核会销毁您的 Playwright 句柄。
 
-## One-time setup
+## 一次性设置
 
 ```bash
 test -f package.json || npm init -y
 npm install playwright
-# Web-only, for headed Chromium or mobile emulation:
+# 仅 Web，用于有头 Chromium 或移动模拟：
 # npx playwright install chromium
-# Electron-only, and only if the target workspace is the app itself:
+# 仅 Electron，并且仅在目标工作区是应用本身时：
 # npm install --save-dev electron
 node -e "import('playwright').then(() => console.log('playwright import ok')).catch((error) => { console.error(error); process.exit(1); })"
 ```
 
-If you switch to a different workspace later, repeat setup there.
+如果以后切换到不同的工作区，请在该处重复设置。
 
-## Core Workflow
+## 核心工作流程
 
-1. Write a brief QA inventory before testing:
-   - Build the inventory from three sources: the user's requested requirements, the user-visible features or behaviors you actually implemented, and the claims you expect to make in the final response.
-   - Anything that appears in any of those three sources must map to at least one QA check before signoff.
-   - List the user-visible claims you intend to sign off on.
-   - List every meaningful user-facing control, mode switch, or implemented interactive behavior.
-   - List the state changes or view changes each control or implemented behavior can cause.
-   - Use this as the shared coverage list for both functional QA and visual QA.
-   - For each claim or control-state pair, note the intended functional check, the specific state where the visual check must happen, and the evidence you expect to capture.
-   - If a requirement is visually central but subjective, convert it into an observable QA check instead of leaving it implicit.
-   - Add at least 2 exploratory or off-happy-path scenarios that could expose fragile behavior.
-2. Run the bootstrap cell once.
-3. Start or confirm any required dev server in a persistent TTY session.
-4. Launch the correct runtime and keep reusing the same Playwright handles.
-5. After each code change, reload for renderer-only changes or relaunch for main-process/startup changes.
-6. Run functional QA with normal user input.
-7. Run a separate visual QA pass.
-8. Verify viewport fit and capture the screenshots needed to support your claims.
-9. Clean up the Playwright session only when the task is actually finished.
+1. 在测试之前编写简短的 QA 清单：
+   - 从三个来源构建清单：用户请求的需求、您实际实现的用户可见功能或行为，以及您期望在最终响应中提出的声明。
+   - 出现在任何这三个来源中的任何内容必须在签收前映射到至少一个 QA 检查。
+   - 列出您打算签收的用户可见声明。
+   - 列出每个有意义的用户面向控件、模式切换或已实现的交互行为。
+   - 列出每个控件或已实现行为可以导致的状态更改或视图更改。
+   - 使用这作为功能和视觉 QA 的共同覆盖列表。
+   - 对于每个声明或控件-状态对，记下预期的功能检查、必须进行视觉检查的特定状态，以及您期望捕获的证据。
+   - 如果需求在视觉上很重要但很主观，请将其转换为可观察的 QA 检查，而不是留作隐含的。
+   - 添加至少 2 个探索性或非快乐路径场景，它们可能会暴露脆弱行为。
+2. 运行引导单元一次。
+3. 在持久性 TTY 会话中启动或确认任何所需的开发服务器。
+4. 启动正确的运行时并继续重用相同的 Playwright 句柄。
+5. 每次代码更改后，对于仅渲染器更改则重新加载，对于主进程/启动更改则重新启动。
+6. 使用正常用户输入运行功能 QA。
+7. 运行单独的视觉 QA 通道。
+8. 验证视口适配并捕获支持您声明所需的截图。
+9. 仅在实际完成任务时清理 Playwright 会话。
 
-## Bootstrap (Run Once)
+## 引导（运行一次）
 
 ```javascript
 var chromium;
@@ -81,13 +81,13 @@ try {
 }
 ```
 
-Binding rules:
+绑定规则：
 
-- Use `var` for the shared top-level Playwright handles because later `js_repl` cells reuse them.
-- The setup cells below are intentionally short happy paths. If a handle looks stale, set that binding to `undefined` and rerun the cell instead of adding recovery logic everywhere.
-- Prefer one named handle per surface you care about (`page`, `mobilePage`, `appWindow`) over repeatedly rediscovering pages from the context.
+- 使用 `var` 来共享顶级 Playwright 句柄，因为后续的 `js_repl` 单元会重用它们。
+- 下面的设置单元故意使用简短的快乐路径。如果某个句柄看起来失效了，将该绑定设置为 `undefined` 并重新运行单元，而不是到处添加恢复逻辑。
+- 每个您关心的表面优先使用一个命名句柄（`page`、`mobilePage`、`appWindow`），而不是从上下文重复发现页面。
 
-Shared web helpers:
+共享 Web 帮助函数：
 
 ```javascript
 var resetWebHandles = function () {
@@ -118,24 +118,24 @@ var reloadWebContexts = async function () {
 };
 ```
 
-## Choose Session Mode
+## 选择会话模式
 
-For web apps, use an explicit viewport by default and treat native-window mode as a separate validation pass.
+对于 Web 应用，默认使用显式视口，并将本机窗口模式作为单独的验证通道。
 
-- Use an explicit viewport for routine iteration, breakpoint checks, reproducible screenshots, snapshot diffs, and model-assisted localization. This is the default because it is stable across machines and avoids host window-manager variability.
-- When you need deterministic high-DPI behavior, keep the explicit viewport and add `deviceScaleFactor` rather than switching straight to native-window mode.
-- Use native-window mode (`viewport: null`) for a separate headed pass when you need to validate launched window size, OS-level DPI behavior, browser chrome interactions, or bugs that may depend on the host display configuration.
-- For Electron, assume native-window behavior all the time. Electron launches through Playwright with `noDefaultViewport`, so treat it like a real desktop window and check the as-launched size and layout before resizing anything.
-- When signoff depends on both layout breakpoints and real desktop behavior, do both passes: explicit viewport first for deterministic QA, then native-window validation for final environment-specific checks.
-- Treat switching modes as a context reset. Do not reuse a viewport-emulated `context` for a native-window pass or vice versa; close the old `page` and `context`, then create a new one for the new mode.
+- 将显式视口用于常规迭代、断点检查、可重现截图、快照差异和模型辅助本地化。这是默认设置，因为它在机器间是稳定的并避免主机窗口管理器的可变性。
+- 当您需要确定性的高 DPI 行为时，保持显式视口并添加 `deviceScaleFactor`，而不是直接切换到本机窗口模式。
+- 在需要验证启动窗口大小、操作系统级 DPI 行为、浏览器 chrome 交互或可能依赖于主机显示配置的 bug 时，使用本机窗口模式（`viewport: null`）进行单独的有头通道。
+- 对于 Electron，始终假设本机窗口行为。Electron 通过 Playwright 以 `noDefaultViewport` 启动，因此将其视为真实的桌面窗口，并在调整任何尺寸之前检查启动后的大小和布局。
+- 当签收同时取决于布局断点和真实桌面行为时，两个通道都做：先用显式视口进行确定性 QA，然后用本机窗口验证进行最终环境特定检查。
+- 将切换模式视为上下文重置。不要将视口模拟的 `context` 重用于本机窗口通道，反之亦然；关闭旧的 `page` 和 `context`，然后为新模式创建一个新的。
 
-## Start or Reuse Web Session
+## 启动或重用 Web 会话
 
-Desktop and mobile web sessions share the same `browser`, helpers, and QA flow. The main difference is which context and page pair you create.
+桌面和移动 Web 会话共享相同的 `browser`、帮助函数和 QA 流程。主要区别在于您创建哪个上下文和页面对。
 
-### Desktop Web Context
+### 桌面 Web 上下文
 
-Set `TARGET_URL` to the app you are debugging. For local servers, prefer `127.0.0.1` over `localhost`.
+将 `TARGET_URL` 设置为您正在调试的应用。对于本地服务器，优先使用 `127.0.0.1` 而不是 `localhost`。
 
 ```javascript
 var TARGET_URL = "http://127.0.0.1:3000";
@@ -152,11 +152,11 @@ await page.goto(TARGET_URL, { waitUntil: "domcontentloaded" });
 console.log("Loaded:", await page.title());
 ```
 
-If `context` or `page` is stale, set `context = page = undefined` and rerun the cell.
+如果 `context` 或 `page` 失效了，设置 `context = page = undefined` 并重新运行单元。
 
-### Mobile Web Context
+### 移动 Web 上下文
 
-Reuse `TARGET_URL` when it already exists; otherwise set a mobile target directly.
+当 `TARGET_URL` 已存在时重用它；否则直接设置移动目标。
 
 ```javascript
 var MOBILE_TARGET_URL = typeof TARGET_URL === "string"
@@ -177,9 +177,9 @@ await mobilePage.goto(MOBILE_TARGET_URL, { waitUntil: "domcontentloaded" });
 console.log("Loaded mobile:", await mobilePage.title());
 ```
 
-If `mobileContext` or `mobilePage` is stale, set `mobileContext = mobilePage = undefined` and rerun the cell.
+如果 `mobileContext` 或 `mobilePage` 失效了，设置 `mobileContext = mobilePage = undefined` 并重新运行单元。
 
-### Native-Window Web Pass
+### 本机窗口 Web 通道
 
 ```javascript
 var TARGET_URL = "http://127.0.0.1:3000";
@@ -199,9 +199,9 @@ await page.goto(TARGET_URL, { waitUntil: "domcontentloaded" });
 console.log("Loaded native window:", await page.title());
 ```
 
-## Start or Reuse Electron Session
+## 启动或重用 Electron 会话
 
-Set `ELECTRON_ENTRY` to `.` when the current workspace is the Electron app and `package.json` points `main` to the right entry file. If you need to target a specific main-process file directly, use a path such as `./main.js` instead.
+当当前工作区是 Electron 应用且 `package.json` 的 `main` 指向正确的入口文件时，将 `ELECTRON_ENTRY` 设置为 `.`。如果您需要直接针对特定的主进程文件，请使用诸如下面的路径 `./main.js`。
 
 ```javascript
 var ELECTRON_ENTRY = ".";
@@ -222,30 +222,30 @@ appWindow ??= await electronApp.firstWindow();
 console.log("Loaded Electron window:", await appWindow.title());
 ```
 
-If `js_repl` is not already running from the Electron app workspace, pass `cwd` explicitly when launching.
+如果 `js_repl` 还没有从 Electron 应用工作区运行，launch 时显式传递 `cwd`。
 
-If the app process looks stale, set `electronApp = appWindow = undefined` and rerun the cell.
+如果应用进程看起来失效了，设置 `electronApp = appWindow = undefined` 并重新运行单元。
 
-If you already have an Electron session but need a fresh process after a main-process, preload, or startup change, use the restart cell in the next section instead of rerunning this one.
+如果您已经有一个 Electron 会话，但在主进程、preload 或启动更改后需要一个新的进程，请使用下一节的 restart 单元而不是重新运行这个。
 
-## Reuse Sessions During Iteration
+## 迭代期间重用会话
 
-Keep the same session alive whenever you can.
+尽可能保持同一会话活跃。
 
-Web renderer reload:
+Web 渲染器重新加载：
 
 ```javascript
 await reloadWebContexts();
 ```
 
-Electron renderer-only reload:
+Electron 渲染器仅重新加载：
 
 ```javascript
 await appWindow.reload({ waitUntil: "domcontentloaded" });
 console.log("Reloaded Electron window");
 ```
 
-Electron restart after main-process, preload, or startup changes:
+主进程、preload 或启动更改后的 Electron 重启：
 
 ```javascript
 await electronApp.close().catch(() => {});
@@ -260,105 +260,105 @@ appWindow = await electronApp.firstWindow();
 console.log("Relaunched Electron window:", await appWindow.title());
 ```
 
-If your launch requires an explicit `cwd`, include the same `cwd` here.
+如果您的启动需要显式 `cwd`，请在此处包含相同的 `cwd`。
 
-Default posture:
+默认姿态：
 
-- Keep each `js_repl` cell short and focused on one interaction burst.
-- Reuse the existing top-level bindings (`browser`, `context`, `page`, `electronApp`, `appWindow`) instead of redeclaring them.
-- If you need isolation, create a new page or a new context inside the same browser.
-- For Electron, use `electronApp.evaluate(...)` only for main-process inspection or purpose-built diagnostics.
-- Fix helper mistakes in place; do not reset the REPL unless the kernel is actually broken.
+- 保持每个 `js_repl` 单元简短，专注于一次交互突发。
+- 重用现有的顶级绑定（`browser`、`context`、`page`、`electronApp`、`appWindow`）而不是重新声明它们。
+- 如果您需要隔离，在同一浏览器内创建一个新页面或新上下文。
+- 对于 Electron，仅将 `electronApp.evaluate(...)` 用于主进程检查或专用诊断。
+- 在原地修复帮助函数错误；除非内核真的坏了，否则不要重置 REPL。
 
-## Checklists
+## 检查清单
 
-### Session Loop
+### 会话循环
 
-- Bootstrap `js_repl` once, then keep the same Playwright handles alive across iterations.
-- Launch the target runtime from the current workspace.
-- Make the code change.
-- Reload or relaunch using the correct path for that change.
-- Update the shared QA inventory if exploration reveals an additional control, state, or visible claim.
-- Re-run functional QA.
-- Re-run visual QA.
-- Capture final artifacts only after the current state is the one you are evaluating.
+- 引导 `js_repl` 一次，然后在迭代之间保持相同的 Playwright 句柄活跃。
+- 从当前工作区启动目标运行时。
+- 进行代码更改。
+- 使用对该更改正确的路径重新加载或重新启动。
+- 如果探索揭示了额外的控件、状态或可见声明，请更新共享 QA 清单。
+- 重新运行功能 QA。
+- 重新运行视觉 QA。
+- 仅在当前状态是您正在评估的状态后才捕获最终产物。
 
-### Reload Decision
+### 重新加载决策
 
-- Renderer-only change: reload the existing page or Electron window.
-- Main-process, preload, or startup change: relaunch Electron.
-- New uncertainty about process ownership or startup code: relaunch instead of guessing.
+- 仅渲染器更改：重新加载现有页面或 Electron 窗口。
+- 主进程、preload 或启动更改：重新启动 Electron。
+- 对进程所有权或启动代码的新不确定性：重新启动而不是猜测。
 
-### Functional QA
+### 功能 QA
 
-- Use real user controls for signoff: keyboard, mouse, click, touch, or equivalent Playwright input APIs.
-- Verify at least one end-to-end critical flow.
-- Confirm the visible result of that flow, not just internal state.
-- For realtime or animation-heavy apps, verify behavior under actual interaction timing.
-- Work through the shared QA inventory rather than ad hoc spot checks.
-- Cover every obvious visible control at least once before signoff, not only the main happy path.
-- For reversible controls or stateful toggles in the inventory, test the full cycle: initial state, changed state, and return to the initial state.
-- After the scripted checks pass, do a short exploratory pass using normal input for 30-90 seconds instead of following only the intended path.
-- If the exploratory pass reveals a new state, control, or claim, add it to the shared QA inventory and cover it before signoff.
-- `page.evaluate(...)` and `electronApp.evaluate(...)` may inspect or stage state, but they do not count as signoff input.
+- 使用真实的用户控件进行签收：键盘、鼠标、点击、触摸或等效的 Playwright 输入 API。
+- 验证至少一个端到端关键流程。
+- 确认该流程的可见结果，而不仅仅是内部状态。
+- 对于实时或动画密集型应用，在实际交互计时下验证行为。
+- 通过共享 QA 清单而不是临时抽查来工作。
+- 在签收前至少一次覆盖每个显而易见的可见控件，而不仅仅是主要的快乐路径。
+- 对于清单中的可逆控件或状态切换，测试完整周期：初始状态、更改状态，然后返回初始状态。
+- 脚本检查通过后，进行简短的探索性通道，使用正常输入 30-90 秒，而不是仅遵循预期路径。
+- 如果探索性通道揭示了新状态、控件或声明，请将其添加到共享 QA 清单并在签收前覆盖它。
+- `page.evaluate(...)` 和 `electronApp.evaluate(...)` 可以检查或暂存状态，但它们不计入签收输入。
 
-### Visual QA
+### 视觉 QA
 
-- Treat visual QA as separate from functional QA.
-- Use the same shared QA inventory defined before testing and updated during QA; do not start visual coverage from a different implicit list.
-- Restate the user-visible claims and verify each one explicitly; do not assume a functional pass proves a visual claim.
-- A user-visible claim is not signed off until it has been inspected in the specific state where it is meant to be perceived.
-- Inspect the initial viewport before scrolling.
-- Confirm that the initial view visibly supports the interface's primary claims; if a core promised element is not clearly perceptible there, treat that as a bug.
-- Inspect all required visible regions, not just the main interaction surface.
-- Inspect the states and modes already enumerated in the shared QA inventory, including at least one meaningful post-interaction state when the task is interactive.
-- If motion or transitions are part of the experience, inspect at least one in-transition state in addition to the settled endpoints.
-- If labels, overlays, annotations, guides, or highlights are meant to track changing content, verify that relationship after the relevant state change.
-- For dynamic or interaction-dependent visuals, inspect long enough to judge stability, layering, and readability; do not rely on a single screenshot for signoff.
-- For interfaces that can become denser after loading or interaction, inspect the densest realistic state you can reach during QA, not only the empty, loading, or collapsed state.
-- If the product has a defined minimum supported viewport or window size, run a separate visual QA pass there; otherwise, choose a smaller but still realistic size and inspect it explicitly.
-- Distinguish presence from implementation: if an intended affordance is technically there but not clearly perceptible because of weak contrast, occlusion, clipping, or instability, treat that as a visual failure.
-- If any required visible region is clipped, cut off, obscured, or pushed outside the viewport in the state you are evaluating, treat that as a bug even if page-level scroll metrics appear acceptable.
-- Look for clipping, overflow, distortion, layout imbalance, inconsistent spacing, alignment problems, illegible text, weak contrast, broken layering, and awkward motion states.
-- Judge aesthetic quality as well as correctness. The UI should feel intentional, coherent, and visually pleasing for the task.
-- Prefer viewport screenshots for signoff. Use full-page captures only as secondary debugging artifacts, and capture a focused screenshot when a region needs closer inspection.
-- If motion makes a screenshot ambiguous, wait briefly for the UI to settle, then capture the image you are actually evaluating.
-- Before signoff, explicitly ask: what visible part of this interface have I not yet inspected closely?
-- Before signoff, explicitly ask: what visible defect would most likely embarrass this result if the user looked closely?
+- 将视觉 QA 视为与功能 QA 分开。
+- 使用在测试前定义的共享 QA 清单并在 QA 期间更新；不要从不同的隐含列表开始视觉覆盖。
+- 重申用户可见的声明并明确验证每一个；不要假设功能通道证明视觉声明。
+- 用户可见的声明在它被感知到的特定状态下经过检查之前不能签收。
+- 在滚动之前检查初始视口。
+- 确认初始视图明显支持界面的主要声明；如果核心承诺元素在那里不明显可感知，将其视为 bug。
+- 检查所有需要的可见区域，而不仅仅是主要的交互表面。
+- 检查共享 QA 清单中已列举的状态和模式，包括至少一个有意义的交互后状态（当任务是交互式的时）。
+- 如果运动或过渡是体验的一部分，除了已解决的端点外，还要检查至少一个过渡中状态。
+- 如果标签、叠加、注释、指南或高亮应该跟踪变化的内容，请在相关状态更改后验证该关系。
+- 对于动态或交互依赖的视觉效果，检查足够长的时间以判断稳定性、层叠和可读性；不要依赖单个截图进行签收。
+- 对于可以在加载或交互后变得更密集的界面，检查您在 QA 期间可以到达的最密集的真实状态，而不仅仅是空、加载或折叠状态。
+- 如果产品有定义的最小支持视口或窗口大小，请在那里运行单独的视觉 QA 通道；否则，选择一个更小但仍然现实的尺寸并明确检查它。
+- 区分存在和实现：如果预期的功能确实存在但由于对比度弱、遮挡、裁剪或不稳定而不太明显可感知，将其视为视觉失败。
+- 如果任何需要的可见区域在您评估的状态中被裁剪、切断、遮挡或推到视口外，将其视为 bug，即使页面级滚动指标看起来可以接受。
+- 寻找裁剪、溢出、扭曲、布局不平衡、不一致间距、对齐问题、难以辨认的文本、弱对比度、破损的层叠和尴尬的运动状态。
+- 同时判断美学质量和正确性。UI 应该为任务感觉是有意的、连贯的且视觉上令人愉悦的。
+- 优先使用视口截图进行签收。仅将全页捕获作为辅助调试产物使用，并在区域需要更近距离检查时捕获聚焦截图。
+- 如果运动使截图模糊，请短暂等待 UI 稳定，然后捕获您实际评估的图像。
+- 在签收前明确问：我还没有密切检查过这个界面的哪些可见部分？
+- 在签收前明确问：如果用户仔细看，什么可见缺陷最有可能让这个结果尴尬？
 
-### Signoff
+### 签收
 
-- The functional path passed with normal user input.
-- Coverage is explicit against the shared QA inventory: note which requirements, implemented features, controls, states, and claims were exercised, and call out any intentional exclusions.
-- The visual QA pass covered the whole relevant interface.
-- Each user-visible claim has a matching visual check and reviewed screenshot artifact from the state and viewport or window size where that claim matters.
-- The viewport-fit checks passed for the intended initial view and any required minimum supported viewport or window size.
-- If the product launches in a window, the as-launched size, placement, and initial layout were checked before any manual resize or repositioning.
-- The UI is not just functional; it is visually coherent and not aesthetically weak for the task.
-- Functional correctness, viewport fit, and visual quality must each pass on their own; one does not imply the others.
-- A short exploratory pass was completed for interactive products, and the response mentions what that pass covered.
-- If screenshot review and numeric checks disagreed at any point, the discrepancy was investigated before signoff; visible clipping in screenshots is a failure to resolve, not something metrics can overrule.
-- Include a brief negative confirmation of the main defect classes you checked for and did not find.
-- Cleanup was executed, or you intentionally kept the session alive for further work.
+- 功能路径通过正常用户输入通过。
+- 覆盖率是针对共享 QA 清单明确的：记下哪些需求、实现的功能、控件、状态和声明被执行，并指出任何有意的排除。
+- 视觉 QA 通道覆盖了整个相关界面。
+- 每个用户可见的声明都有匹配的视觉检查和来自该声明重要的状态和视口或窗口大小的审查截图产物。
+- 视口适配检查对于预期的初始视图和任何要求的最小支持视口或窗口大小都通过了。
+- 如果产品在窗口中启动，在任何手动调整大小或重新定位之前检查了启动后的大小、位置和初始布局。
+- UI 不仅仅是功能性的；它在视觉上是连贯的，对于任务来说不是美学上弱的。
+- 功能正确性、视口适配和视觉质量必须各自独立通过；一个不暗示其他。
+- 简短探索性通道已完成（对于交互式产品），并且响应提到了该通道覆盖了什么。
+- 如果截图审查和数字检查在任何时候不同意，在签收前调查差异；截图中的可见裁剪是无法解决的失败，而不是指标可以否决的。
+- 包括对您检查过但没有发现的主要缺陷类的简要负面确认。
+- 执行了清理，或者您有意保持会话活跃以进行进一步工作。
 
-## Screenshot Examples
+## 截图示例
 
-If you plan to emit a screenshot through `codex.emitImage(...)`, use the CSS-normalized paths in the next section by default. Those are the canonical examples for screenshots that will be interpreted by the model or used for coordinate-based follow-up actions. Keep raw captures as an exception for fidelity-sensitive debugging only; the raw exception examples appear after the normalization guidance.
+如果您计划通过 `codex.emitImage(...)` 发出截图，请默认使用下一节中的 CSS 规范化路径。这些是将被模型解释或用于基于坐标的跟进操作的截图的规范示例。将原始捕获保留为仅对保真度敏感的调试的异常；原始异常示例出现在规范化指导之后。
 
-### Model-bound screenshots (default)
+### 模型绑定截图（默认）
 
-If you will emit a screenshot with `codex.emitImage(...)` for model interpretation, normalize it to CSS pixels for the exact region you captured before emitting. This keeps returned coordinates aligned with Playwright CSS pixels if the reply is later used for clicking, and it also reduces image payload size and model token cost.
+如果您将使用 `codex.emitImage(...)` 发出截图供模型解释，请在发出之前将其规范化为捕获的确切区域的 CSS 像素。这保持返回的坐标与 Playwright CSS 像素对齐（如果回复后来用于点击），同时也减少了图像有效载荷大小和模型 token 成本。
 
-Do not emit raw native-window screenshots by default. Skip normalization only when you explicitly need device-pixel fidelity, such as Retina or DPI artifact debugging, pixel-accurate rendering inspection, or another fidelity-sensitive case where raw pixels matter more than payload size. For local-only inspection that will not be emitted to the model, raw capture is fine.
+默认不要发出原始本机窗口截图。仅在您明确需要设备像素保真度时才跳过规范化，例如 Retina 或 DPI 伪影调试、像素精确渲染检查或其他保真度敏感的情况（原始像素比有效载荷大小更重要）。对于不会发送到模型的本地检查，原始捕获是可以的。
 
-Do not assume `page.screenshot({ scale: "css" })` is enough in native-window mode (`viewport: null`). In Chromium on macOS Retina displays, headed native-window screenshots can still come back at device-pixel size even when `scale: "css"` is requested. The same caveat applies to Electron windows launched through Playwright because Electron runs with `noDefaultViewport`, and `appWindow.screenshot({ scale: "css" })` may still return device-pixel output.
+不要假设 `page.screenshot({ scale: "css" })` 在本机窗口模式（`viewport: null`）中就足够了。在 macOS Retina 显示器上的 Chromium 中，有头本机窗口截图即使请求了 `scale: "css"`，仍可能以设备像素大小返回。相同的警告适用于通过 Playwright 启动的 Electron 窗口，因为 Electron 以 `noDefaultViewport` 运行，而 `appWindow.screenshot({ scale: "css" })` 可能仍返回设备像素输出。
 
-Use separate normalization paths for web pages and Electron windows:
+为 Web 页面和 Electron 窗口使用单独的规范化路径：
 
-- Web: prefer `page.screenshot({ scale: "css" })` directly. If native-window Chromium still returns device-pixel output, resize inside the current page with canvas; no scratch page is required.
-- Electron: do not use `appWindow.context().newPage()` or `electronApp.context().newPage()` as a scratch page. Electron contexts do not support that path reliably. Capture in the main process with `BrowserWindow.capturePage(...)`, resize with `nativeImage.resize(...)`, and emit those bytes directly.
+- Web：直接优先使用 `page.screenshot({ scale: "css" })`。如果本机窗口 Chromium 仍然返回设备像素输出，在当前页面内使用 canvas 调整大小；不需要临时页面。
+- Electron：不要使用 `appWindow.context().newPage()` 或 `electronApp.context().newPage()` 作为临时页面。Electron 上下文不支持该路径可靠。使用 `BrowserWindow.capturePage(...)` 在主进程中捕获，调整大小与 `nativeImage.resize(...)`，并直接发出这些字节。
 
-Shared helpers and conventions:
+共享帮助函数和约定：
 
 ```javascript
 var emitJpeg = async function (bytes) {
@@ -393,39 +393,39 @@ var tapCssPoint = async function ({ page, x, y, clip }) {
 };
 ```
 
-- Use `page` or `mobilePage` for web, or `appWindow` for Electron, as the `surface`.
-- Treat `clip` as CSS pixels from `getBoundingClientRect()` in the renderer.
-- Prefer JPEG at `quality: 85` unless lossless fidelity is specifically required.
-- For full-image captures, use returned `{ x, y }` directly.
-- For clipped captures, add the clip origin back when clicking.
+- 对于 Web 使用 `page` 或 `mobilePage`，对于 Electron 使用 `appWindow` 作为 `surface`。
+- 将 `clip` 视为渲染器中 `getBoundingClientRect()` 的 CSS 像素。
+- 除非明确需要无损保真度，否则优先使用 `quality: 85` 的 JPEG。
+- 对于全图捕获，直接使用返回的 `{ x, y }`。
+- 对于裁剪捕获，点击时添加裁剪原点。
 
-### Web CSS normalization
+### Web CSS 规范化
 
-Preferred web path for explicit-viewport contexts, and often for web in general:
+对于显式视口上下文的优选 Web 路径，通常也适用于 Web：
 
 ```javascript
 await emitWebJpeg(page);
 ```
 
-Mobile web uses the same path; substitute `mobilePage` for `page`:
+移动 Web 使用相同路径；将 `page` 替换为 `mobilePage`：
 
 ```javascript
 await emitWebJpeg(mobilePage);
 ```
 
-If the model returns `{ x, y }`, click it directly:
+如果模型返回 `{ x, y }`，直接点击它：
 
 ```javascript
 await clickCssPoint({ surface: page, x, y });
 ```
 
-Mobile web click path:
+移动 Web 点击路径：
 
 ```javascript
 await tapCssPoint({ page: mobilePage, x, y });
 ```
 
-For web `clip` screenshots or element screenshots in this normal path, `scale: "css"` usually works directly. Add the region origin back when clicking.
+对于此正常路径中的 Web `clip` 截图或元素截图，`scale: "css"` 通常直接工作。点击时添加区域原点。
 
 - `await emitWebJpeg(page, { clip })`
 - `await emitWebJpeg(mobilePage, { clip })`
@@ -433,7 +433,7 @@ For web `clip` screenshots or element screenshots in this normal path, `scale: "
 - `await tapCssPoint({ page: mobilePage, clip, x, y })`
 - `await clickCssPoint({ surface: page, clip: box, x, y })` after `const box = await locator.boundingBox()`
 
-Web native-window fallback when `scale: "css"` still comes back at device-pixel size:
+当 `scale: "css"` 仍然以设备像素大小返回时，Web 本机窗口回退：
 
 ```javascript
 var emitWebScreenshotCssScaled = async function ({ page, clip, quality = 0.85 } = {}) {
@@ -482,23 +482,23 @@ var emitWebScreenshotCssScaled = async function ({ page, clip, quality = 0.85 } 
 };
 ```
 
-For a full viewport fallback capture, treat returned `{ x, y }` as direct CSS coordinates:
+对于全视口回退捕获，将返回的 `{ x, y }` 视为直接 CSS 坐标：
 
 ```javascript
 await emitWebScreenshotCssScaled({ page });
 await clickCssPoint({ surface: page, x, y });
 ```
 
-For a clipped fallback capture, add the clip origin back:
+对于裁剪回退捕获，添加裁剪原点：
 
 ```javascript
 await emitWebScreenshotCssScaled({ page, clip });
 await clickCssPoint({ surface: page, clip, x, y });
 ```
 
-### Electron CSS normalization
+### Electron CSS 规范化
 
-For Electron, normalize in the main process instead of opening a scratch Playwright page. The helper below returns CSS-scaled bytes for the full content area or for a clipped CSS-pixel region. Treat `clip` as content-area CSS pixels, for example values taken from `getBoundingClientRect()` in the renderer.
+对于 Electron，在主进程中规范化，而不是打开临时 Playwright 页面。下面的帮助函数返回全内容区域或裁剪 CSS 像素区域的 CSS 缩放字节。将 `clip` 视为内容区域 CSS 像素，例如从渲染器中 `getBoundingClientRect()` 获取的值。
 
 ```javascript
 var emitElectronScreenshotCssScaled = async function ({ electronApp, clip, quality = 85 } = {}) {
@@ -526,14 +526,14 @@ var emitElectronScreenshotCssScaled = async function ({ electronApp, clip, quali
 };
 ```
 
-Full Electron window:
+全 Electron 窗口：
 
 ```javascript
 await emitElectronScreenshotCssScaled({ electronApp });
 await clickCssPoint({ surface: appWindow, x, y });
 ```
 
-Clipped Electron region using CSS pixels from the renderer:
+使用来自渲染器的 CSS 像素裁剪 Electron 区域：
 
 ```javascript
 var clip = await appWindow.evaluate(() => {
@@ -550,11 +550,11 @@ await emitElectronScreenshotCssScaled({ electronApp, clip });
 await clickCssPoint({ surface: appWindow, clip, x, y });
 ```
 
-### Raw Screenshot Exception Examples
+### 原始截图异常示例
 
-Use these only when raw pixels matter more than CSS-coordinate alignment, such as Retina or DPI artifact debugging, pixel-accurate rendering inspection, or other fidelity-sensitive review.
+仅在原始像素比 CSS 坐标对齐更重要时使用这些，例如 Retina 或 DPI 伪影调试、像素精确渲染检查或其他保真度敏感审查。
 
-Web desktop raw emit:
+Web 桌面原始发出：
 
 ```javascript
 await codex.emitImage({
@@ -564,7 +564,7 @@ await codex.emitImage({
 });
 ```
 
-Electron raw emit:
+Electron 原始发出：
 
 ```javascript
 await codex.emitImage({
@@ -574,7 +574,7 @@ await codex.emitImage({
 });
 ```
 
-Mobile raw emit after the mobile web context is already running:
+移动 Web 原始发出（在移动 Web 上下文已运行后）：
 
 ```javascript
 await codex.emitImage({
@@ -584,21 +584,21 @@ await codex.emitImage({
 });
 ```
 
-## Viewport Fit Checks (Required)
+## 视口适配检查（必需）
 
-Do not assume a screenshot is acceptable just because the main widget is visible. Before signoff, explicitly verify that the intended initial view matches the product requirement, using both screenshot review and numeric checks.
+不要仅仅因为主小组件可见就假设截图可以接受。在签收前，明确验证预期的初始视图与产品要求匹配，使用截图审查和数字检查。
 
-- Define the intended initial view before signoff. For scrollable pages, this is the above-the-fold experience. For app-like shells, games, editors, dashboards, or tools, this is the full interactive surface plus the controls and status needed to use it.
-- Use screenshots as the primary evidence for fit. Numeric checks support the screenshots; they do not overrule visible clipping.
-- Signoff fails if any required visible region is clipped, cut off, obscured, or pushed outside the viewport in the intended initial view, even if page-level scroll metrics appear acceptable.
-- Scrolling is acceptable when the product is designed to scroll and the initial view still communicates the core experience and exposes the primary call to action or required starting context.
-- For fixed-shell interfaces, scrolling is not an acceptable workaround if it is needed to reach part of the primary interactive surface or essential controls.
-- Do not rely on document scroll metrics alone. Fixed-height shells, internal panes, and hidden-overflow containers can clip required UI while page-level scroll checks still look clean.
-- Check region bounds, not just document bounds. Verify that each required visible region fits within the viewport in the startup state.
-- For Electron or desktop apps, verify both the launched window size and placement and the renderer's initial visible layout before any manual resize or repositioning.
-- Passing viewport-fit checks only proves that the intended initial view is visible without unintended clipping or scrolling. It does not prove that the UI is visually correct or aesthetically successful.
+- 在签收前定义预期的初始视图。对于可滚动页面，这是折叠线以上的体验。对于类似外壳的应用、游戏、编辑器、仪表板或工具，这是完整的交互表面加上使用它所需的控件和状态。
+- 使用截图作为适配的主要证据。数字检查支持截图；它们不能否决可见的裁剪。
+- 如果预期的初始视图中有任何需要的可见区域被裁剪、切断、遮挡或推到视口外，签收失败，即使页面级滚动指标看起来可以接受。
+- 当产品被设计为可滚动且初始视图仍然传达核心体验并暴露主要行动号召或所需起始上下文时，滚动是可以接受的。
+- 对于固定外壳界面，如果需要滚动才能到达主交互表面或基本控件的某部分，滚动不是可接受的解决方法。
+- 不要仅依赖文档滚动指标。固定高度外壳、内部窗格和隐藏溢出容器可能会裁剪所需的 UI，而页面级滚动检查看起来仍然是干净的。
+- 检查区域边界，而不仅仅是文档边界。验证每个需要的可见区域在启动状态下适合视口内。
+- 对于 Electron 或桌面应用，在任何手动调整大小或重新定位之前，验证启动窗口大小和位置以及渲染器的初始可见布局。
+- 通过视口适配检查仅证明预期的初始视图可见且没有意外的裁剪或滚动。它不能证明 UI 在视觉上正确或美学上成功。
 
-Web or renderer check:
+Web 或渲染器检查：
 
 ```javascript
 console.log(await page.evaluate(() => ({
@@ -613,7 +613,7 @@ console.log(await page.evaluate(() => ({
 })));
 ```
 
-Electron check:
+Electron 检查：
 
 ```javascript
 console.log(await appWindow.evaluate(() => ({
@@ -628,28 +628,28 @@ console.log(await appWindow.evaluate(() => ({
 })));
 ```
 
-Augment the numeric check with `getBoundingClientRect()` checks for the required visible regions in your specific UI when clipping is a realistic failure mode; document-level metrics alone are not sufficient for fixed shells.
+当裁剪是现实的失败模式时，使用 `getBoundingClientRect()` 检查来增强数字检查，以获取特定 UI 中需要的可见区域；文档级指标对于固定外壳来说单独是不够的。
 
-## Dev Server
+## 开发服务器
 
-For local web debugging, keep the app running in a persistent TTY session. Do not rely on one-shot background commands from a short-lived shell.
+对于本地 Web 调试，在持久性 TTY 会话中保持应用运行。不要依赖来自短命 shell 的一次性后台命令。
 
-Use the project's normal start command, for example:
+使用项目的正常启动命令，例如：
 
 ```bash
 npm start
 ```
 
-Before `page.goto(...)`, verify the chosen port is listening and the app responds.
+在 `page.goto(...)` 之前，验证所选端口正在监听且应用有响应。
 
-For Electron debugging, launch the app from `js_repl` through `_electron.launch(...)` so the same session owns the process. If the Electron renderer depends on a separate dev server (for example Vite or Next), keep that server running in a persistent TTY session and then relaunch or reload the Electron app from `js_repl`.
+对于 Electron 调试，通过 `_electron.launch(...)` 从 `js_repl` 启动应用，以便同一会话拥有进程。如果 Electron 渲染器依赖于单独的开发服务器（例如 Vite 或 Next），请在该服务器在持久性 TTY 会话中保持运行，然后从 `js_repl` 重新启动或重新加载 Electron 应用。
 
-## Cleanup
+## 清理
 
-Only run cleanup when the task is actually finished:
+仅在实际完成任务时运行清理：
 
-- This cleanup is manual. Exiting Codex, closing the terminal, or losing the `js_repl` session does not implicitly run `electronApp.close()`, `context.close()`, or `browser.close()`.
-- For Electron specifically, assume the app may keep running if you leave the session without executing the cleanup cell first.
+- 此清理是手动的。退出 Codex、关闭终端或丢失 `js_repl` 会话不会隐式运行 `electronApp.close()`、`context.close()` 或 `browser.close()`。
+- 对于 Electron，特别假设如果您在不首先执行清理单元的情况下离开会话，应用可能会继续运行。
 
 ```javascript
 if (electronApp) {
@@ -679,15 +679,15 @@ appWindow = undefined;
 console.log("Playwright session closed");
 ```
 
-If you plan to exit Codex immediately after debugging, run the cleanup cell first and wait for the `"Playwright session closed"` log before quitting.
+如果您计划在调试后立即退出 Codex，请先运行清理单元并在退出前等待 `"Playwright session closed"` 日志。
 
-## Common Failure Modes
+## 常见失败模式
 
-- `Cannot find module 'playwright'`: run the one-time setup in the current workspace and verify the import before using `js_repl`.
-- Playwright package is installed but the browser executable is missing: run `npx playwright install chromium`.
-- `page.goto: net::ERR_CONNECTION_REFUSED`: make sure the dev server is still running in a persistent TTY session, recheck the port, and prefer `http://127.0.0.1:<port>`.
-- `electron.launch` hangs, times out, or exits immediately: verify the local `electron` dependency, confirm the `args` target, and make sure any renderer dev server is already running before launch.
-- `Identifier has already been declared`: reuse the existing top-level bindings, choose a new name, or wrap the code in `{ ... }`. Use `js_repl_reset` only when the kernel is genuinely stuck.
-- `browserContext.newPage: Protocol error (Target.createTarget): Not supported` while working with Electron: do not use `appWindow.context().newPage()` or `electronApp.context().newPage()` as a scratch page; use the Electron-specific screenshot normalization flow in the model-bound screenshots section.
-- `js_repl` timed out or reset: rerun the bootstrap cell and recreate the session with shorter, more focused cells.
-- Browser launch or network operations fail immediately: confirm the session was started with `--sandbox danger-full-access` and restart that way if needed.
+- `Cannot find module 'playwright'`：在当前工作区运行一次性设置并验证导入，然后再使用 `js_repl`。
+- Playwright 包已安装但浏览器可执行文件缺失：运行 `npx playwright install chromium`。
+- `page.goto: net::ERR_CONNECTION_REFUSED`：确保开发服务器仍在持久性 TTY 会话中运行，重新检查端口，并优先使用 `http://127.0.0.1:<port>`。
+- `electron.launch` 挂起、超时或立即退出：验证本地 `electron` 依赖项，确认 `args` 目标，并确保任何渲染器开发服务器在启动前已运行。
+- `Identifier has already been declared`：重用现有顶级绑定，选择新名称，或将代码包装在 `{ ... }` 中。仅在内核真正卡住时使用 `js_repl_reset`。
+- 在使用 Electron 时 `browserContext.newPage: Protocol error (Target.createTarget): Not supported`：不要使用 `appWindow.context().newPage()` 或 `electronApp.context().newPage()` 作为临时页面；使用模型绑定截图部分中的 Electron 特定截图规范化流程。
+- `js_repl` 超时或重置：重新运行引导单元并用更短、更集中的单元重新创建会话。
+- 浏览器启动或网络操作立即失败：确认会话是用 `--sandbox danger-full-access` 启动的，如需要请以此方式重启。

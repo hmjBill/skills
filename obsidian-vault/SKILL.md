@@ -3,56 +3,56 @@ name: obsidian-vault
 description: Search, create, and manage notes in the Obsidian vault with wikilinks and index notes. Use when user wants to find, create, or organize notes in Obsidian.
 ---
 
-# Obsidian Vault
+# Obsidian 知识库
 
-## Vault location
+## 知识库位置
 
 `/mnt/d/Obsidian Vault/AI Research/`
 
-Mostly flat at root level.
+根级别基本扁平。
 
-## Naming conventions
+## 命名约定
 
-- **Index notes**: aggregate related topics (e.g., `Ralph Wiggum Index.md`, `Skills Index.md`, `RAG Index.md`)
-- **Title case** for all note names
-- No folders for organization - use links and index notes instead
+- **索引笔记**：聚合相关主题（例如 `Ralph Wiggum Index.md`、`Skills Index.md`、`RAG Index.md`）
+- 所有笔记名称使用首字母大写
+- 不使用文件夹进行组织——使用链接和索引笔记代替
 
-## Linking
+## 链接
 
-- Use Obsidian `[[wikilinks]]` syntax: `[[Note Title]]`
-- Notes link to dependencies/related notes at the bottom
-- Index notes are just lists of `[[wikilinks]]`
+- 使用 Obsidian `[[wikilinks]]` 语法：`[[Note Title]]`
+- 笔记在底部链接到依赖项/相关笔记
+- 索引笔记只是 `[[wikilinks]]` 列表
 
-## Workflows
+## 工作流程
 
-### Search for notes
+### 搜索笔记
 
 ```bash
-# Search by filename
+# 按文件名搜索
 find "/mnt/d/Obsidian Vault/AI Research/" -name "*.md" | grep -i "keyword"
 
-# Search by content
+# 按内容搜索
 grep -rl "keyword" "/mnt/d/Obsidian Vault/AI Research/" --include="*.md"
 ```
 
-Or use Grep/Glob tools directly on the vault path.
+或者直接在知识库路径上使用 Grep/Glob 工具。
 
-### Create a new note
+### 创建新笔记
 
-1. Use **Title Case** for filename
-2. Write content as a unit of learning (per vault rules)
-3. Add `[[wikilinks]]` to related notes at the bottom
-4. If part of a numbered sequence, use the hierarchical numbering scheme
+1. 文件名使用**首字母大写**
+2. 按照知识库规则将内容写成一个学习单元
+3. 在底部添加相关笔记的 `[[wikilinks]]`
+4. 如果是编号序列的一部分，使用层次编号方案
 
-### Find related notes
+### 查找相关笔记
 
-Search for `[[Note Title]]` across the vault to find backlinks:
+在整个知识库中搜索 `[[Note Title]]` 以找到反向链接：
 
 ```bash
 grep -rl "\\[\\[Note Title\\]\\]" "/mnt/d/Obsidian Vault/AI Research/"
 ```
 
-### Find index notes
+### 查找索引笔记
 
 ```bash
 find "/mnt/d/Obsidian Vault/AI Research/" -name "*Index*"
