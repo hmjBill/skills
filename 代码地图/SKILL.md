@@ -1,9 +1,9 @@
 ﻿---
 name: 代码地图
-description: Generate comprehensive hierarchical codemaps for UNFAMILIAR repositories. Expensive operation - only use when explicitly asked for codebase documentation or initial repository mapping
+description: 为不熟悉的代码仓库生成全面的分层代码地图。高开销操作，仅在明确要求代码库文档或初始仓库映射时使用。
 ---
 
-# Codemap 技能
+# 代码地图
 
 帮助用户通过创建分层代码地图来理解和映射仓库。
 
@@ -118,7 +118,7 @@ Fixer 负责在此工作流程中编写 `codemap.md` 文件。使用精确的技
 代码地图示例：
 
 ```markdown
-# src/agents/
+# 代码地图
 
 ## 职责
 定义代理个性并管理其配置生命周期。
@@ -144,7 +144,7 @@ Fixer 负责在此工作流程中编写 `codemap.md` 文件。使用精确的技
 示例**根代码地图（地图集）**：
 
 ```markdown
-# 仓库地图集：oh-my-opencode-slim
+# 代码地图
 
 ## 项目职责
 面向 OpenCode 的高性能、低延迟代理编排插件，专注于专业子代理委托和多路复用器辅助的子会话。

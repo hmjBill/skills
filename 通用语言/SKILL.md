@@ -1,10 +1,10 @@
 ﻿---
 name: 通用语言
-description: Extract a DDD-style ubiquitous language glossary from the current conversation, flagging ambiguities and proposing canonical terms. Saves to UBIQUITOUS_LANGUAGE.md. Use when user wants to define domain terms, build a glossary, harden terminology, create a ubiquitous language, or mentions "domain model" or "DDD".
+description: 从当前对话中提取 DDD 风格的通用语言词汇表，标记歧义并提出规范术语。保存到 UBIQUITOUS_LANGUAGE.md。当用户想要定义领域术语、构建词汇表或创建通用语言时使用。
 disable-model-invocation: true
 ---
 
-# Ubiquitous Language（通用语言）
+# 通用语言
 
 从当前对话中提取并形式化领域术语为一致的词汇表，保存到本地文件。
 
@@ -24,7 +24,7 @@ disable-model-invocation: true
 使用此结构写入 `UBIQUITOUS_LANGUAGE.md` 文件：
 
 ```md
-# Ubiquitous Language
+# 通用语言
 
 ## Order lifecycle
 

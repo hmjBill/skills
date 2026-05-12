@@ -1,9 +1,9 @@
 ﻿---
 name: Playwright交互
-description: "Persistent browser and Electron interaction through `js_repl` for fast iterative UI debugging."
+description: 通过 `js_repl` 实现持久化浏览器和 Electron 交互，用于快速迭代式 UI 调试。
 ---
 
-# Playwright 交互式技能
+# Playwright 交互
 
 使用持久的 `js_repl` Playwright 会话来调试本地 Web 或 Electron 应用，跨迭代保持相同的句柄活跃，并在不重启整个工具链的情况下运行功能和视觉 QA，除非进程所有权发生了变化。
 
@@ -28,10 +28,10 @@ js_repl = true
 ```bash
 test -f package.json || npm init -y
 npm install playwright
-# 仅 Web，用于有头 Chromium 或移动模拟：
-# npx playwright install chromium
-# 仅 Electron，并且仅在目标工作区是应用本身时：
-# npm install --save-dev electron
+# Playwright 交互
+# Playwright 交互
+# Playwright 交互
+# Playwright 交互
 node -e "import('playwright').then(() => console.log('playwright import ok')).catch((error) => { console.error(error); process.exit(1); })"
 ```
 

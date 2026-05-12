@@ -1,6 +1,6 @@
 ﻿---
 name: 节拍写作
-description: Shape an article as a journey of beats, choose-your-own-adventure style. The user picks a starting beat from the raw material, you write only that beat, then offer options for where to pivot next, beat by beat, until the article reaches a natural end. Use when the user has raw material and wants to assemble it as a narrative rather than an argument.
+description: 将文章塑造为节拍之旅，选择你自己的冒险风格。用户从原始材料中选择起始节拍，逐个节拍写作，直到文章自然结束。用于将素材组装为叙事而非论证。
 ---
 
 <what-to-do>

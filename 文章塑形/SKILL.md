@@ -1,6 +1,6 @@
 ﻿---
 name: 文章塑形
-description: Take a markdown file of raw material and shape it into an article through a conversational session — drafting candidate openings, growing the piece paragraph by paragraph, arguing about format (lists, tables, callouts, quotes) at each step. Use when the user has a pile of notes, fragments, or a rough draft and wants help turning it into something publishable.
+description: 通过对话式会话将 Markdown 原始材料塑造成文章——起草候选开头、逐段扩展、在每步讨论格式（列表、表格、标注、引用）。当用户有笔记堆、碎片或粗稿并想转换为可发布内容时使用。
 ---
 
 <what-to-do>

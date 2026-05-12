@@ -1,9 +1,9 @@
 ﻿---
 name: 练习脚手架
-description: Create exercise directory structures with sections, problems, solutions, and explainers that pass linting. Use when user wants to scaffold exercises, create exercise stubs, or set up a new course section.
+description: 创建包含章节、问题、解决方案和说明的练习目录结构，确保通过代码检查。当用户想要搭建练习、创建练习模板或设置新课程章节时使用。
 ---
 
-# 脚手架练习
+# 练习脚手架
 
 创建能够通过 `pnpm ai-hero-cli internal lint` 检查的练习目录结构，然后使用 `git commit` 提交。
 
@@ -34,7 +34,7 @@ description: Create exercise directory structures with sections, problems, solut
 创建占位时，创建一个带有标题和描述的最小化 readme：
 
 ```md
-# Exercise Title
+# 练习脚手架
 
 Description here
 ```

@@ -1,6 +1,6 @@
 ﻿---
 name: Obsidian知识库
-description: Search, create, and manage notes in the Obsidian vault with wikilinks and index notes. Use when user wants to find, create, or organize notes in Obsidian.
+description: 在 Obsidian 知识库中搜索、创建和管理笔记，支持 wiki 链接和索引笔记。当用户想要在 Obsidian 中查找、创建或组织笔记时使用。
 ---
 
 # Obsidian 知识库
@@ -28,10 +28,10 @@ description: Search, create, and manage notes in the Obsidian vault with wikilin
 ### 搜索笔记
 
 ```bash
-# 按文件名搜索
+# Obsidian 知识库
 find "/mnt/d/Obsidian Vault/AI Research/" -name "*.md" | grep -i "keyword"
 
-# 按内容搜索
+# Obsidian 知识库
 grep -rl "keyword" "/mnt/d/Obsidian Vault/AI Research/" --include="*.md"
 ```
 
