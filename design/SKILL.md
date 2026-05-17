@@ -1,4 +1,4 @@
-﻿---
+---
 name: design
 description: 综合设计技能：品牌识别、设计令牌、UI 样式、Logo 生成、企业识别系统、HTML 演示文稿、横幅设计、图标设计、社交照片。
 argument-hint: "[design-type] [context]"

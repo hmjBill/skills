@@ -1,4 +1,4 @@
-﻿---
+---
 name: security-ownership-map
 description: 分析 Git 仓库以构建安全所有权拓扑（人员到文件），计算总线因子和敏感代码所有权，并导出 CSV/JSON 用于图数据库和可视化。
 ---

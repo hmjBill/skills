@@ -1,4 +1,4 @@
-﻿---
+---
 name: triage
 description: 通过分诊角色驱动的状态机进行 Issue 分诊。当用户想要创建 Issue、分诊 Issue、审查传入 Bug 或功能请求、为离线代理准备 Issue 或管理工作流时使用。
 ---

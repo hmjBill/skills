@@ -1,4 +1,4 @@
-﻿---
+---
 name: to-prd
 description: 将当前对话上下文转换为 PRD 并发布到项目 Issue 追踪器。当用户想要从当前上下文创建 PRD 时使用。
 ---

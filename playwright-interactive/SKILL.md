@@ -1,4 +1,4 @@
-﻿---
+---
 name: playwright-interactive
 description: 通过 `js_repl` 实现持久化浏览器和 Electron 交互，用于快速迭代式 UI 调试。
 ---

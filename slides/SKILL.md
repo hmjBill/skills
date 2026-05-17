@@ -1,4 +1,4 @@
-﻿---
+---
 name: slides
 description: 使用 Chart.js、设计令牌、响应式布局、文案公式和上下文幻灯片策略创建策略性 HTML 演示文稿。
 argument-hint: "[topic] [slide-count]"

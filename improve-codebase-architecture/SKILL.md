@@ -1,4 +1,4 @@
-﻿---
+---
 name: improve-codebase-architecture
 description: 在领域语言（CONTEXT.md）和决策文档（docs/adr/）的指导下，发现代码库的深化机会。当用户想要改进架构、寻找重构机会、整合耦合模块时使用。
 ---

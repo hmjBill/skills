@@ -1,4 +1,4 @@
-﻿---
+---
 name: env-bootstrap
 description: "开发环境引导与依赖补齐，安装缺失工具链并验证环境可用性"
 ---

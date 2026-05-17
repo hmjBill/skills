@@ -1,4 +1,4 @@
-﻿---
+---
 name: design-system
 description: 令牌架构、组件规格和幻灯片生成。三层令牌（基础→语义→组件）、CSS 变量、间距/排版比例、组件规格、策略性幻灯片创建。
 argument-hint: "[component or token]"

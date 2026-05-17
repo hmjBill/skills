@@ -1,4 +1,4 @@
-﻿---
+---
 name: security-threat-model
 description: 基于代码仓库的威胁建模，枚举信任边界、资产、攻击者能力、滥用路径和缓解措施，并编写简洁的 Markdown 威胁模型。
 ---

@@ -1,4 +1,4 @@
-﻿---
+---
 name: workflow-checker
 description: "通用工程检查清单，汇总配置、列出已启用技能/MCP/LSP状态"
 ---

@@ -1,4 +1,4 @@
-﻿---
+---
 name: banner-design
 description: 为社交媒体、广告、网站主视觉、创意素材和印刷品设计横幅。支持多种艺术方向和 AI 生成视觉内容。
 argument-hint: "[platform] [style] [dimensions]"

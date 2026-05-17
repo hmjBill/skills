@@ -1,4 +1,4 @@
-﻿---
+---
 name: grill-with-docs
 description: 针对现有领域模型挑战你的方案，锐化术语，并在决策明确时同步更新文档（CONTEXT.md、ADR）。当用户想要对照项目语言和文档决策压力测试方案时使用。
 ---
