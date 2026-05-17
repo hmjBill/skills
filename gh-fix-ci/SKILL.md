@@ -1,4 +1,4 @@
-﻿---
+---
 name: gh-fix-ci
 description: "调试 GitHub Actions 中失败的 PR checks，分析日志并制定修复方案"
 ---

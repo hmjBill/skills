@@ -1,4 +1,4 @@
-﻿---
+---
 name: handoff
 description: 将当前对话压缩为交接文档，供另一个代理接续工作。
 argument-hint: "What will the next session be used for?"

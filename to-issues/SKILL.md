@@ -1,4 +1,4 @@
-﻿---
+---
 name: to-issues
 description: 将计划、规格或 PRD 拆分为可独立领取的 Issue，使用示踪弹垂直切片发布到项目 Issue 追踪器。当用户想要将计划转换为 Issue、创建实施工单时使用。
 ---

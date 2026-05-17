@@ -1,4 +1,4 @@
-﻿---
+---
 name: gh-address-comments
 description: "处理 GitHub PR review 评论，汇总待处理评论并按选择修复"
 metadata:

@@ -1,4 +1,4 @@
-﻿---
+---
 name: playwright
 description: 当任务需要从终端自动化真实浏览器（导航、表单填写、快照、截图、数据提取、UI 流程调试）时使用，通过 `playwright-cli` 或捆绑的封装脚本。
 ---

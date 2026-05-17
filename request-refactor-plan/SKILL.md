@@ -1,4 +1,4 @@
-﻿---
+---
 name: request-refactor-plan
 description: 通过用户访谈创建详细的重构计划和微小提交，然后作为 GitHub Issue 归档。当用户想要规划重构、创建重构 RFC 或将重构拆分为安全的增量步骤时使用。
 ---

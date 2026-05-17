@@ -1,4 +1,4 @@
-﻿---
+---
 name: brand
 description: 品牌语调、视觉识别、信息框架、资产管理、品牌一致性。用于品牌内容、语调风格、营销素材、品牌合规、风格指南。
 argument-hint: "[update|review|create] [args]"

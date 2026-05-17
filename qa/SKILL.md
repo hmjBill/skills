@@ -1,4 +1,4 @@
-﻿---
+---
 name: qa
 description: 交互式 QA 会话，用户以对话方式报告 Bug 或问题，代理在后台探索代码库以获取上下文和领域语言，并提交 GitHub Issue。
 ---

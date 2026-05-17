@@ -1,4 +1,4 @@
-﻿---
+---
 name: frontend-design
 description: 创建独特的、生产级的前端界面，具有高设计质量。用于构建 Web 组件、页面、制品、海报或应用程序时。生成富有创意的精致代码和 UI 设计。
 license: Complete terms in LICENSE.txt

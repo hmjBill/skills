@@ -1,4 +1,4 @@
-﻿---
+---
 name: git-guardrails-claude-code
 description: 设置 Claude Code 钩子，在危险 Git 命令（push、reset --hard、clean、branch -D 等）执行前阻止它们。当用户想要防止破坏性 Git 操作时使用。
 ---

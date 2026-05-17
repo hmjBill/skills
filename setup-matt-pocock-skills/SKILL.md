@@ -1,4 +1,4 @@
-﻿---
+---
 name: setup-matt-pocock-skills
 description: 在 AGENTS.md/CLAUDE.md 中设置代理技能块和 docs/agents/ 目录，使工程技能了解仓库的 Issue 追踪器、分诊标签词汇和领域文档布局。
 disable-model-invocation: true

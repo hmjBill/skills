@@ -1,4 +1,4 @@
-﻿---
+---
 name: ui-styling
 description: 使用 shadcn/ui 组件（基于 Radix UI + Tailwind）、Tailwind CSS 实用优先样式和基于画布的视觉设计，创建美观、可访问的用户界面。
 argument-hint: "[component or layout]"
