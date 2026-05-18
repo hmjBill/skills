@@ -90,6 +90,17 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [writing-fragments](writing-fragments/SKILL.md) | 写作片段 |
 | [writing-shape](writing-shape/SKILL.md) | 写作塑形 |
 
+### 知识管理
+
+| Skill | 说明 |
+|-------|------|
+| [wiki-config](wiki-config/SKILL.md) | 交互式 Wiki 配置和架构管理 |
+| [wiki-crystallize](wiki-crystallize/SKILL.md) | 将聊天会话提炼为结构化 Wiki 页面 |
+| [wiki-ingest](wiki-ingest/SKILL.md) | 将源文件处理为合成后的 Wiki 页面 |
+| [wiki-integrate](wiki-integrate/SKILL.md) | 将 Wiki 页面编织到知识图谱 |
+| [wiki-lint](wiki-lint/SKILL.md) | Wiki 健康检查和链接验证 |
+| [wiki-query](wiki-query/SKILL.md) | 使用 Wiki 知识库回答问题 |
+
 ### 环境 / 工具
 
 | Skill | 说明 |
@@ -118,11 +129,11 @@ cp -r */ ~/.claude/skills/
 
 本仓库的所有 `SKILL.md` 已完成中文翻译：
 
-- YAML frontmatter（`name`、`description`）保留英文，确保工具兼容性
+- YAML frontmatter 的 `name` 保留英文，确保工具兼容性；`description` 已翻译为中文
 - Markdown 正文内容全部翻译为中文
 - 代码块保持不变
 
-本地化内容在 [`feature/localization`](https://github.com/hmjBill/skills/tree/feature/localization) 分支。
+本地化内容在 [`feature/full-localization`](https://github.com/hmjBill/skills/tree/feature/full-localization) 分支。
 
 ## 致谢与归属
 
