@@ -1,134 +1,133 @@
 ---
 name: wiki-crystallize
-description: "将聊天记录、研究会话或工作文档提炼为结构化的 wiki 页面，记录当前知识状态。当用户说 /wiki-crawlize、"保存到我的 wiki"、"把梳理的结果记录下来"、"写成 wiki 页面"、"更新我的 wiki"、"这个会话很有收获"、"在我关闭这个聊天之前"时使用。也可主动在对话覆盖大量内容、将发现记录到 wiki 可为后续会话提供指导时使用。需要文件系统读写权限。"
+description: "将聊天记录、研究会话或工作文档提炼为结构化的 wiki 页面，记录当前知识状态。当用户说 /wiki-crystallize、"保存到我的 wiki"、"把梳理的结果记录下来"、"写成 wiki 页面"、"更新我的 wiki"、"这个会话很有收获"、"在我关闭这个聊天之前"时使用。也可主动在对话覆盖大量内容、将发现记录到 wiki 可为后续会话提供指导时使用。需要文件系统读写权限。"
 metadata:
   version: "3.13"
 ---
 
 # Wiki 结晶
 
-Distils ephemeral conversation into durable, structured wiki knowledge.
+将短暂的对话提炼为持久、结构化的 wiki 知识。
 
 ---
 
-## Config Discovery
+## 配置发现
 
-**Every invocation starts here.** Wiki root is the directory containing `wiki-config.md`. Skills derive it at runtime. Pages this skill writes follow the structure in `wiki-schema.md` - both files need to be present.
+**每次调用从这里开始。** Wiki 根目录是包含 `wiki-config.md` 的目录。各 skill 在运行时推导它。本 skill 写入的页面遵循 `wiki-schema.md` 中的结构 — 这两个文件都必须存在。
 
-1. **Identify scope**: Determine your filesystem scope root - the top-level directory your filesystem tool can access.
+1. **识别范围**：确定你的文件系统范围根目录 — 你的文件系统工具能访问的顶级目录。
 
-2. **Scope check - MANDATORY STOP**: If scope is bare drive root (`C:\`, `D:\`, `/`), OS root, or user home (`C:\Users\X`, `/home/X`, `/Users/X`) → **stop immediately. Do not search. Do not attempt to locate wiki-config.md.** Go directly to step 6.
+2. **范围检查 — 强制停止**：如果范围是裸盘根目录（`C:\`、`D:\`、`/`）、操作系统根目录或用户主目录（`C:\Users\X`、`/home/X`、`/Users/X`）→ **立即停止。不要搜索。不要尝试定位 wiki-config.md。** 直接跳到第 6 步。
 
-3. **Scan `<available_skills>` for `wiki-config`.** Note whether it's available - this shapes the recommendations below. The bundled `references/setup-help.md` is also available; read it if the user needs orientation or if you get stuck.
+3. **扫描 `<available_skills>` 查找 `wiki-config`。** 记录它是否可用 — 这影响下面的建议。捆绑的 `references/setup-help.md` 也可用；如果用户需要了解背景或你遇到困难，可以阅读它。
 
-4. **Locate and read `wiki-config.md`**: Search recursively (first-match, max 5 levels). If found, read it (`blacklist`, `index_excludes`, `ingested_folder`, `ingested_subdirs`, `log_format`). If not found, skip to step 6.
+4. **定位并读取 `wiki-config.md`**：递归搜索（首次匹配，最多 5 层）。如果找到，读取它（`blacklist`、`index_excludes`、`ingested_folder`、`ingested_subdirs`、`log_format`）。如果未找到，跳到第 6 步。
 
-5. **Locate and read `wiki-schema.md` - mandatory check**: In the same directory as `wiki-config.md`, verify `wiki-schema.md` exists and parses as YAML. **Do not proceed to the Workflow below until you have a definite verdict** (present / missing / malformed). Then:
+5. **定位并读取 `wiki-schema.md` — 强制检查**：在 `wiki-config.md` 所在目录中，验证 `wiki-schema.md` 存在且可正确解析为 YAML。**在得到明确结论（存在 / 缺失 / 格式错误）之前不要继续下面的工作流。** 然后：
 
-   - **Present and parses cleanly** → read the schema (`mandatory_fields`, `conditional_fields`, `enums`) and proceed to the Workflow.
-   
-   - **Missing** → STOP. Do not proceed. Do not deploy. Response depends on whether `wiki-config` is in `<available_skills>` (from step 3):
-     
-     - **wiki-config available:** Output exactly this pattern - *"Your wiki is missing `wiki-schema.md`. Run `/wiki-config` to deploy it and complete setup. I'll wait for that to be done before proceeding."* End of turn. Do not offer bundled deployment; do not present alternatives. wiki-config's guided flow is the correct path when wiki-config is available.
-     
-     - **wiki-config not available:** Offer bundled fallback - *"Your wiki is missing `wiki-schema.md` and the wiki-config skill is not installed. I can deploy a default from my bundled reference, but I'd recommend installing wiki-config for the guided setup. Deploy bundled default?"* Wait for explicit confirmation. On OK, deploy from `references/wiki-schema.md`.
-   
-   - **Malformed** → STOP. Same structure:
-     
-     - **wiki-config available:** *"Your `wiki-schema.md` is malformed. Run `/wiki-config` - it has a guided repair flow that preserves any customizations you've made. I'll wait."* End of turn. Do not attempt repair or bundled overwrite.
-     
-     - **wiki-config not available:** Point to `references/setup-help.md` for manual repair guidance. If the user explicitly instructs a reset (not as an automatic fallback), warn that it overwrites any customizations, then deploy the default on explicit OK.
+   - **存在且解析正常** → 读取 schema（`mandatory_fields`、`conditional_fields`、`enums`）并继续工作流。
 
-   The same two-branch structure applies if `wiki-config.md` itself was found malformed in step 4: wiki-config available → stop and recommend `/wiki-config`, end of turn; unavailable → guided manual repair via setup-help.md.
+   - **缺失** → 停止。不要继续。不要部署。响应取决于 `wiki-config` 是否在 `<available_skills>` 中（来自第 3 步）：
 
-6. **Config not found at all**: Ask the user for their wiki root path, search there (bounded, max 5 levels). If still nothing, they don't have a wiki yet - follow the "Missing" branch above (recommend `/wiki-config`; offer bundled deployment if unavailable).
+     - **wiki-config 可用：** 输出以下模式 — *"你的 wiki 缺少 `wiki-schema.md`。运行 `/wiki-config` 来部署它并完成设置。我会等你完成后再继续。"* 本轮结束。不要提供捆绑部署；不要提供替代方案。当 wiki-config 可用时，wiki-config 的引导流程是正确的路径。
 
+     - **wiki-config 不可用：** 提供捆绑回退方案 — *"你的 wiki 缺少 `wiki-schema.md`，且 wiki-config skill 未安装。我可以从我捆绑的参考文件中部署默认版本，但我建议安装 wiki-config 以进行引导设置。要部署捆绑的默认版本吗？"* 等待明确确认。确认后，从 `references/wiki-schema.md` 部署。
 
----
+   - **格式错误** → 停止。相同结构：
 
-## Capability Requirements
+     - **wiki-config 可用：** *"你的 `wiki-schema.md` 格式错误。运行 `/wiki-config` — 它有引导修复流程，可以保留你做的任何自定义。我会等待。"* 本轮结束。不要尝试修复或捆绑覆盖。
 
-This skill requires **filesystem read and write access**. If unavailable on the current surface (web, mobile), offer to produce the wiki page as an artifact that the user can save manually.
+     - **wiki-config 不可用：** 指向 `references/setup-help.md` 获取手动修复指导。如果用户明确指示重置（非自动回退），警告这会覆盖任何自定义，然后在明确确认后部署默认版本。
+
+   如果第 4 步中发现 `wiki-config.md` 本身格式错误，同样适用以上双分支结构：wiki-config 可用 → 停止并推荐 `/wiki-config`，本轮结束；不可用 → 通过 setup-help.md 引导手动修复。
+
+6. **完全找不到配置**：询问用户的 wiki 根目录路径，在那里搜索（限定，最多 5 层）。如果仍然没有，用户还没有 wiki — 按照上面的"缺失"分支处理（推荐 `/wiki-config`；如果不可用则提供捆绑部署）。
 
 ---
 
-## Purpose
+## 能力要求
 
-Crystallize compresses the durable signal from a chat (decisions, findings, patterns, open questions) into a structured wiki page that orients any future session faster than re-reading the thread.
+本 skill 需要**文件系统读和写权限**。如果在当前环境（Web、移动端）上不可用，则提供将 wiki 页面生成为工件供用户手动保存。
 
-Use it liberally - any time something meaningful has happened. It is not reserved for heavy or exhausted threads. It is the session management mechanism: the wiki is the memory that persists across chat cycles; chat history is scaffolding. Crystallize before retiring a chat, not as a cleanup step afterward.
+---
 
-**Keep:** Decisions made, patterns established, lessons learned, open questions, current understanding, key findings.
-**Discard:** Exploratory back-and-forth, dead ends, process chat, superseded drafts.
+## 目的
 
-| Level | When to use | Closing posture |
+结晶将聊天中的持久信号（决策、发现、模式、开放问题）压缩为结构化的 wiki 页面，使任何后续会话都能比重新阅读对话记录更快地获得指导。
+
+自由使用它 — 任何时候发生了有意义的事情。它不限于繁重或耗尽的对话。它是会话管理机制：wiki 是跨聊天周期持久存在的记忆；聊天历史是脚手架。在结束聊天之前结晶，而不是事后才清理。
+
+**保留：** 做出的决策、建立的模式、学到的教训、开放问题、当前理解、关键发现。
+**丢弃：** 探索性的来回讨论、死胡同、过程性聊天、被取代的草稿。
+
+| 级别 | 何时使用 | 关闭姿态 |
 |---|---|---|
-| **Single session** | End of a working session; context still valuable | Pause, not close |
-| **Topic thread** | Thread getting heavy across sessions | Recommend fresh start |
-| **Whole chat** | Thread exhausted or explicitly archived | Strong close |
+| **单次会话** | 工作会话结束时；上下文仍有价值 | 暂停，不关闭 |
+| **主题对话** | 跨会话的对话变得繁重 | 建议重新开始 |
+| **整个聊天** | 对话耗尽或明确归档 | 强关闭 |
 
 ---
 
-## Input
+## 输入
 
-Provide one of:
-1. A summary of the thread (your own words)
-2. A pasted transcript or export of the conversation
-3. A description of what was accomplished and what was decided
+提供以下之一：
+1. 对话的摘要（你自己的话）
+2. 粘贴的转录或对话导出
+3. 关于完成了什么和决定了什么的描述
 
-If none are provided, ask the user to describe what this crystallization should capture before proceeding.
+如果以上都未提供，在继续之前询问用户描述这次结晶应该捕获什么。
 
 ---
 
-## Workflow
+## 工作流
 
-Config Discovery has already loaded `wiki-config.md` and `wiki-schema.md` into context. Do not re-read them; proceed from here assuming both are available.
+配置发现已将 `wiki-config.md` 和 `wiki-schema.md` 加载到上下文中。不要重新读取它们；从这里继续，假设两者都可用。
 
-### Step 1 - Read Overview.md
+### 步骤 1 - 读取 Overview.md
 
-Read `Overview.md` to understand the current state of knowledge; crystallize adds to the wiki, does not duplicate it.
+读取 `Overview.md` 以了解知识的当前状态；结晶是添加到 wiki，而不是复制它。
 
-### Step 2 - Analyse the input
+### 步骤 2 - 分析输入
 
-Identify durable knowledge (decisions, findings, patterns, open questions, current best understanding) and discard conversational scaffolding (exploratory back-and-forth, superseded drafts, process steps, corrections already incorporated).
+识别持久知识（决策、发现、模式、开放问题、当前最佳理解）并丢弃对话脚手架（探索性来回讨论、被取代的草稿、过程步骤、已纳入的更正）。
 
-### Step 3 - Find an existing home for this knowledge
+### 步骤 3 - 为这些知识找到现有归属
 
-Before scanning candidates, check whether the topic belongs to an existing domain. If a Domain Home exists for that domain, it is the presumptive target - scan to confirm fit, not to find alternatives. Prefer updating a hub over creating a new file.
+在扫描候选页面之前，检查该主题是否属于现有领域。如果该领域存在领域主页，它就是假定的目标 — 扫描以确认适合性，而非寻找替代方案。优先更新枢纽页面而非创建新文件。
 
-Read `index.md` and scan for:
-- A Domain Home covering this ground (check first)
-- A page whose title matches the topic
-- A "Current State" or summary page for this area
+读取 `index.md` 并扫描：
+- 覆盖此领域的领域主页（首先检查）
+- 标题匹配该主题的页面
+- 该领域的"当前状态"或摘要页面
 
-**Strong match found:** update it. Proceed to Step 4a.
+**找到强匹配：** 更新它。继续到步骤 4a。
 
-**Multiple candidates or unclear:** ask the user: *"I found these pages that might be the right home: [list]. Update one, or create new?"* Wait for their answer.
+**多个候选或不明确：** 询问用户：*"我找到了这些可能是合适归属的页面：[列表]。更新其中一个，还是创建新的？"* 等待他们的回答。
 
-**No existing page fits:** confirm with the user before creating, unless the content is clearly self-contained.
+**没有现有页面适合：** 在创建前与用户确认，除非内容明显是自包含的。
 
-**Key rule:** When in doubt, update a hub rather than create. New pages fragment the graph; rich hubs compound it.
+**关键规则：** 当有疑问时，更新枢纽而非创建。新页面会分散图谱；丰富的枢纽会积累它。
 
-### Step 4a - Update an existing page
+### 步骤 4a - 更新现有页面
 
-Read the full current content of the target page. Integrate the crystallized knowledge:
-- Add new decisions, findings, or open questions to the appropriate sections
-- Update any sections that are now out of date
-- Do not duplicate content already present; synthesise and merge
-- **`description:` rewrite** - rewrite the `description:` field if the page's section structure has changed, the scope has shifted, or substantial new content was added. For incremental additions to existing sections, leave `description:` unchanged. Agent judgment.
-- Update the frontmatter `version:`, `changes:`, and `updated:` fields. Leave `date:` unchanged - it is the creation date. Increment `crystallize_count:`: read the current value and add 1; if the field is absent, write 1.
+读取目标页面的完整当前内容。整合结晶的知识：
+- 将新的决策、发现或开放问题添加到适当的章节
+- 更新任何现在已经过时的章节
+- 不要复制已经存在的内容；合成和合并
+- **`description:` 重写** — 如果页面的章节结构已改变、范围已转移或添加了大量新内容，则重写 `description:` 字段。对于对现有章节的增量添加，保持 `description:` 不变。由代理判断。
+- 更新 frontmatter 的 `version:`、`changes:` 和 `updated:` 字段。保持 `date:` 不变 — 它是创建日期。递增 `crystallize_count:`：读取当前值并加 1；如果字段不存在，写入 1。
 
-- **Page_type check:** Confirm `page_type` is present in the page's frontmatter and still accurate. If missing, infer from the page's content and structure, then confirm with the user before writing it. If present but the page appears to have outgrown its current type (e.g. a `knowledge` page now functions as a domain hub, or a `knowledge` page has grown into a comparative survey), offer a promotion: *"This page is typed as `<type>` but reads more like a `<better-type>` now. Want me to update `page_type` while I'm here?"* Never auto-promote; always confirm.
+- **page_type 检查：** 确认 `page_type` 存在于页面 frontmatter 中且仍然准确。如果缺失，根据页面内容和结构推断，然后在写入前与用户确认。如果存在但页面似乎已超出了当前类型（例如一个 `knowledge` 页面现在作为领域枢纽运行，或一个 `knowledge` 页面已成长为比较性调查），提议升级：*"这个页面当前类型为 `<type>`，但现在读起来更像 `<更合适的类型>`。要我在更新时一并修改 `page_type` 吗？"* 绝不自动提升；始终确认。
 
-### Step 4b - Write a new page
+### 步骤 4b - 写入新页面
 
-**Determine `page_type` and load template:**
+**确定 `page_type` 并加载模板：**
 
-Choose a `page_type` from the schema enum. Typical crystallize outputs: `knowledge` (single-topic findings), `domain-home` (domain hub being bootstrapped), `overview` (vault-level synthesis), `survey` (comparative findings across multiple items). When the type is not obvious, ask the user before proceeding. Validate against the schema enum (already in context).
+从 schema enum 中选择 `page_type`。典型的结晶输出：`knowledge`（单一主题发现）、`domain-home`（正在引导的领域枢纽）、`overview`（知识库级合成）、`survey`（跨多个项目的比较性发现）。当类型不明显时，在继续前询问用户。对照 schema enum（已在上下文中）验证。
 
-Read `templates_folder` from wiki-config.md (already in context). If present, attempt to read `<wiki_root>/<templates_folder>/<page_type>.md`. If found, use it as the body scaffold - substitute `{{TITLE}}`, `{{DATE}}`, `{{PAGE_TYPE}}`, `{{DESCRIPTION}}` and populate sections with crystallised content. If the template file is missing, emit one line: *"No template found for `<page_type>` - using default structure."* and use the hardcoded template below. If `templates_folder` is absent from the config, skip the lookup silently and use the hardcoded template below.
+从 wiki-config.md 读取 `templates_folder`（已在上下文中）。如果存在，尝试读取 `<wiki_root>/<templates_folder>/<page_type>.md`。如果找到，将其用作正文脚手架 — 替换 `{{TITLE}}`、`{{DATE}}`、`{{PAGE_TYPE}}`、`{{DESCRIPTION}}` 并用结晶内容填充各章节。如果模板文件缺失，输出一行：*"未找到 `<page_type>` 的模板 — 使用默认结构。"* 并使用下面的硬编码模板。如果配置中 `templates_folder` 不存在，则静默跳过查找并使用下面的硬编码模板。
 
-**Fallback template (used when no vault-side template is found):**
+**回退模板（当未找到知识库端模板时使用）：**
 
 ```markdown
 ---
@@ -137,84 +136,82 @@ version: 1.0
 date: YYYY-MM-DD
 updated: YYYY-MM-DD
 crystallize_count: 1
-description: "~200 char synthesis of what this page covers"
-changes: "Crystallized from [source chat / session description]"
+description: "约 200 字描述本页覆盖内容"
+changes: "从 [源聊天 / 会话描述] 结晶"
 ---
 
-# Topic - Current State
+# 主题 - 当前状态
 
-## What Was Established
-[2-4 sentences: the core finding or current understanding]
+## 已确立的内容
+[2-4 句话：核心发现或当前理解]
 
-## Key Decisions
-[Decisions made, with brief rationale]
+## 关键决策
+[做出的决策，附简要理由]
 
-## Current Understanding
-[The substantive content, structured as appropriate: prose, tables, lists]
+## 当前理解
+[实质性内容，按需结构化：散文、表格、列表]
 
-## Open Questions
-[What remains unresolved. Be specific.]
+## 开放问题
+[尚未解决的内容。要具体。]
 
-## Related Pages
-[[Related Page 1]], [[Related Page 2]]
+## 相关页面
+[[相关页面1]]、[[相关页面2]]
 
-## Sources
+## 来源
 
-| Title | Publisher | Date | Links |
+| 标题 | 发布者 | 日期 | 链接 |
 |---|---|---|---|
 ```
 
-Choose the most specific placement using the folder structure from `index.md`. Do not place in blacklisted paths, raw/, archive/, or Projects/. Confirm with the user if the location is not obvious.
+使用 `index.md` 中的文件夹结构选择最具体的位置。不要放在黑名单路径、raw/、archive/ 或 Projects/ 中。如果位置不明显，与用户确认。
 
-### Step 5 - Update index.md (new pages only)
+### 步骤 5 - 更新 index.md（仅新页面）
 
-If a new page was created in Step 4b, add an entry in the correct section of `index.md`. If an existing page was updated in Step 4a, no index change is needed.
+如果在步骤 4b 中创建了新页面，在 `index.md` 的正确章节中添加条目。如果在步骤 4a 中更新了现有页面，不需要索引更改。
 
-### Step 6 - Update Overview.md if warranted
+### 步骤 6 - 必要时更新 Overview.md
 
-Update the relevant domain section in Overview.md only if the crystallization represents a significant shift: a major decision reached, a research phase completed, or a new domain established. Do not update for incremental additions.
+仅在结晶代表重大转变时更新 Overview.md 中的相关领域章节：达成了重大决策、完成了研究阶段或建立了新领域。不要为增量添加而更新。
 
-### Step 7 - Prepend to log.md
+### 步骤 7 - 追加到 log.md
 
-Add the new entry at the top of log.md, below the header line, above all existing entries.
+在 log.md 顶部、标题行之下、所有现有条目之上添加新条目。
 
 ```
-## [YYYY-MM-DD] crystallize | <Topic or Chat Name>
-Updated [[Existing Page]] with new findings. [or: Created [[New Page]].]
-[Brief note on what was captured. Updated Overview.md: yes/no.]
+## [YYYY-MM-DD] crystallize | <主题或聊天名称>
+用新发现更新了 [[现有页面]]。[或：创建了 [[新页面]]。]
+[简要说明捕获了什么。更新了 Overview.md：是/否。]
 ```
 
-### Step 8 - Choose a closing posture
+### 步骤 8 - 选择关闭姿态
 
-Read two signals to decide which closing to deliver:
+读取两个信号来决定交付哪种关闭：
 
-**Signal 1: stated intent.** Did the user invoke crystallize with explicit whole-chat language ("before I close this", "wrapping up this thread", "archiving")? If yes, deliver a strong close.
+**信号 1：明确意图。** 用户是否以明确的整聊语言调用了结晶（"在我关闭这个之前"、"收尾这个对话"、"归档"）？如果是，交付强关闭。
 
-**Signal 2: thread weight.** Check log.md for prior crystallize entries on this same topic. Multiple prior entries mean the thread has been accumulating across sessions and a fresh start is warranted; deliver a strong close. A first crystallize on a topic, or a session that was focused and light, calls for a session wrap.
+**信号 2：对话权重。** 检查 log.md 中同一主题的先前结晶条目。多个先前条目意味着对话已在多个会话中积累，应该重新开始；交付强关闭。一个主题的首次结晶，或一个专注且轻松的会话，适合会话收尾。
 
-Note: context window fullness cannot be precisely measured from within the skill. This is a qualitative judgment based on observable signals.
+注意：上下文窗口的充满程度无法从 skill 内部精确测量。这是基于可观察信号的定性判断。
 
-**Session wrap** - thread still has value, established context worth keeping:
-> "Captured. [[Topic]] reflects today's decisions and findings. Continue this chat or start a new one; both work. If you continue, the context here still has value; if you start fresh, read [[Topic]] first."
+**会话收尾** — 对话仍有价值，已建立的上下文值得保留：
+> "已捕获。[[主题]] 反映了今天的决策和发现。继续这个聊天或开始新的都可以。如果继续，这里的上下文仍有价值；如果重新开始，先阅读 [[主题]]。"
 
-**Strong close** - thread is heavy or explicitly being archived:
-> "This chat can now be closed. [[Topic]] captures everything worth keeping. Start your next session by reading that page; it will orient a fresh context faster than carrying this thread forward."
+**强关闭** — 对话繁重或正在被明确归档：
+> "这个聊天现在可以关闭了。[[主题]] 捕获了所有值得保留的内容。在下一个会话开始时阅读该页面；它将比继续这个对话更快地为新上下文提供指导。"
 
 ---
 
-## Key Rules
+## 关键规则
 
-1. **Distil, do not transcribe:** the wiki page should be significantly shorter and more structured than the source
-2. **Keep the durable, discard the scaffolding:** be ruthless about what compounds value
-3. **Frontmatter on every page:** title, version, date (creation, immutable), updated (today), crystallize_count (1 on create; read-then-increment on update), changes: "Crystallized from [source]"
-4. **Never write to blacklisted paths**
-5. **Update Overview.md sparingly:** only for genuinely significant knowledge shifts
-6. **Wikilinks make it searchable:** always add links to related pages
+1. **提炼，而非转录：** wiki 页面应比源材料显著更短和更有结构
+2. **保留持久内容，丢弃脚手架：** 对什么积累价值要有取舍
+3. **每个页面都要有 frontmatter：** title、version、date（创建日期，不可变）、updated（今天）、crystallize_count（创建时写 1；更新时读取后递增）、changes: "从 [源] 结晶"
+4. **绝不写入黑名单路径**
+5. **谨慎更新 Overview.md：** 仅在真正重要的知识转变时才更新
+6. **wikilink 使其可搜索：** 始终添加指向相关页面的链接
 
 ---
 
-## What this skill does not do
+## 本 skill 不做什么
 
-This skill does wiki work: ingesting, synthesising, organising, and querying `.md` pages to compound knowledge over time. It does not modify tool or plugin settings, shell out to manipulate application state, or replicate behaviours that belong to whatever app the user reads their notes in. If a request cannot be satisfied by reading and writing `.md` files inside the wiki root, decline and explain why.
-
-
+本 skill 做 wiki 工作：摄入、合成、组织和查询 `.md` 页面以随时间积累知识。它不修改工具或插件设置，不通过 shell 操纵应用程序状态，也不复制属于用户阅读笔记的应用程序的行为。如果请求无法通过读写 wiki 根目录内的 `.md` 文件来满足，则拒绝并说明原因。
