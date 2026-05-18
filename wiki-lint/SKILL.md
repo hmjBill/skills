@@ -7,266 +7,266 @@ metadata:
 
 # Wiki 检查
 
-Health-checks the wiki and produces a report. Never modifies wiki content.
+健康检查 wiki 并生成报告。从不修改 wiki 内容。
 
 ---
 
-## Config Discovery
+## 配置发现
 
-**Every invocation starts here.** Wiki root is the directory containing `wiki-config.md`. Skills derive it at runtime. Pages this skill lints are checked against the structure in `wiki-schema.md` - both files need to be present.
+**每次调用从这里开始。** Wiki 根目录是包含 `wiki-config.md` 的目录。各 skill 在运行时推导它。本 skill 检查的页面对照 `wiki-schema.md` 中的结构进行验证 — 这两个文件都必须存在。
 
-1. **Identify scope**: Determine your filesystem scope root - the top-level directory your filesystem tool can access.
+1. **识别范围**：确定你的文件系统范围根目录 — 你的文件系统工具能访问的顶级目录。
 
-2. **Scope check - MANDATORY STOP**: If scope is bare drive root (`C:\`, `D:\`, `/`), OS root, or user home (`C:\Users\X`, `/home/X`, `/Users/X`) → **stop immediately. Do not search. Do not attempt to locate wiki-config.md.** Go directly to step 6.
+2. **范围检查 — 强制停止**：如果范围是裸盘根目录（`C:\`、`D:\`、`/`）、操作系统根目录或用户主目录（`C:\Users\X`、`/home/X`、`/Users/X`）→ **立即停止。不要搜索。不要尝试定位 wiki-config.md。** 直接跳到第 6 步。
 
-3. **Scan `<available_skills>` for `wiki-config`.** Note whether it's available - this shapes the recommendations below. The bundled `references/setup-help.md` is also available; read it if the user needs orientation or if you get stuck.
+3. **扫描 `<available_skills>` 查找 `wiki-config`。** 记录它是否可用 — 这影响下面的建议。捆绑的 `references/setup-help.md` 也可用；如果用户需要了解背景或你遇到困难，可以阅读它。
 
-4. **Locate and read `wiki-config.md`**: Search recursively (first-match, max 5 levels). If found, read it (`blacklist`, `index_excludes`, `ingested_folder`, `ingested_subdirs`, `log_format`). If not found, skip to step 6.
+4. **定位并读取 `wiki-config.md`**：递归搜索（首次匹配，最多 5 层）。如果找到，读取它（`blacklist`、`index_excludes`、`ingested_folder`、`ingested_subdirs`、`log_format`）。如果未找到，跳到第 6 步。
 
-5. **Locate and read `wiki-schema.md` - mandatory check**: In the same directory as `wiki-config.md`, verify `wiki-schema.md` exists and parses as YAML. **Do not proceed to the Workflow below until you have a definite verdict** (present / missing / malformed). Then:
+5. **定位并读取 `wiki-schema.md` — 强制检查**：在 `wiki-config.md` 所在目录中，验证 `wiki-schema.md` 存在且可正确解析为 YAML。**在得到明确结论（存在 / 缺失 / 格式错误）之前不要继续下面的工作流。** 然后：
 
-   - **Present and parses cleanly** → read the schema (`mandatory_fields`, `conditional_fields`, `enums`) and proceed to the Workflow.
-   
-   - **Missing** → STOP. Do not proceed. Do not deploy. Response depends on whether `wiki-config` is in `<available_skills>` (from step 3):
-     
-     - **wiki-config available:** Output exactly this pattern - *"Your wiki is missing `wiki-schema.md`. Run `/wiki-config` to deploy it and complete setup. I'll wait for that to be done before proceeding."* End of turn. Do not offer bundled deployment; do not present alternatives. wiki-config's guided flow is the correct path when wiki-config is available.
-     
-     - **wiki-config not available:** Offer bundled fallback - *"Your wiki is missing `wiki-schema.md` and the wiki-config skill is not installed. I can deploy a default from my bundled reference, but I'd recommend installing wiki-config for the guided setup. Deploy bundled default?"* Wait for explicit confirmation. On OK, deploy from `references/wiki-schema.md`.
-   
-   - **Malformed** → STOP. Same structure:
-     
-     - **wiki-config available:** *"Your `wiki-schema.md` is malformed. Run `/wiki-config` - it has a guided repair flow that preserves any customizations you've made. I'll wait."* End of turn. Do not attempt repair or bundled overwrite.
-     
-     - **wiki-config not available:** Point to `references/setup-help.md` for manual repair guidance. If the user explicitly instructs a reset (not as an automatic fallback), warn that it overwrites any customizations, then deploy the default on explicit OK.
+   - **存在且解析正常** → 读取 schema（`mandatory_fields`、`conditional_fields`、`enums`）并继续工作流。
 
-   The same two-branch structure applies if `wiki-config.md` itself was found malformed in step 4: wiki-config available → stop and recommend `/wiki-config`, end of turn; unavailable → guided manual repair via setup-help.md.
+   - **缺失** → 停止。不要继续。不要部署。响应取决于 `wiki-config` 是否在 `<available_skills>` 中（来自第 3 步）：
 
-6. **Config not found at all**: Ask the user for their wiki root path, search there (bounded, max 5 levels). If still nothing, they don't have a wiki yet - follow the "Missing" branch above (recommend `/wiki-config`; offer bundled deployment if unavailable).
+     - **wiki-config 可用：** 输出以下模式 — *"你的 wiki 缺少 `wiki-schema.md`。运行 `/wiki-config` 来部署它并完成设置。我会等你完成后再继续。"* 本轮结束。不要提供捆绑部署；不要提供替代方案。当 wiki-config 可用时，wiki-config 的引导流程是正确的路径。
+
+     - **wiki-config 不可用：** 提供捆绑回退方案 — *"你的 wiki 缺少 `wiki-schema.md`，且 wiki-config skill 未安装。我可以从我捆绑的参考文件中部署默认版本，但我建议安装 wiki-config 以进行引导设置。要部署捆绑的默认版本吗？"* 等待明确确认。确认后，从 `references/wiki-schema.md` 部署。
+
+   - **格式错误** → 停止。相同结构：
+
+     - **wiki-config 可用：** *"你的 `wiki-schema.md` 格式错误。运行 `/wiki-config` — 它有引导修复流程，可以保留你做的任何自定义。我会等待。"* 本轮结束。不要尝试修复或捆绑覆盖。
+
+     - **wiki-config 不可用：** 指向 `references/setup-help.md` 获取手动修复指导。如果用户明确指示重置（非自动回退），警告这会覆盖任何自定义，然后在明确确认后部署默认版本。
+
+   如果第 4 步中发现 `wiki-config.md` 本身格式错误，同样适用以上双分支结构：wiki-config 可用 → 停止并推荐 `/wiki-config`，本轮结束；不可用 → 通过 setup-help.md 引导手动修复。
+
+6. **完全找不到配置**：询问用户的 wiki 根目录路径，在那里搜索（限定，最多 5 层）。如果仍然没有，用户还没有 wiki — 按照上面的"缺失"分支处理（推荐 `/wiki-config`；如果不可用则提供捆绑部署）。
 
 ---
 
-## Capability Requirements
+## 能力要求
 
-This skill requires **filesystem read access** (to scan all pages) and **write access to `archive/`** (to file the lint report). If read access is unavailable, this skill cannot proceed.---
+本 skill 需要**文件系统读权限**（扫描所有页面）和**对 `archive/` 的写权限**（写入 lint 报告）。如果读权限不可用，本 skill 无法继续。---
 
-## Workflow
+## 工作流
 
-Config Discovery has already loaded `wiki-config.md` and `wiki-schema.md` into context. Do not re-read them; proceed from here assuming both are available.
+配置发现已将 `wiki-config.md` 和 `wiki-schema.md` 加载到上下文中。不要重新读取它们；从这里继续，假设两者都可用。
 
-### Step 1 - Build the page inventory
+### 步骤 1 - 构建页面清单
 
-List all `.md` files in the vault recursively. Exclude paths in `blacklist` entirely; do not scan content inside them. Paths in `index_excludes` (`raw\`, `archive\`, `ingested\`) are excluded from being treated as wiki pages, but remain readable for link target validation: if a live wiki page links to a file in `archive/` or `ingested/`, that link must resolve to a real file. Build the **in-scope page set** from files outside both blacklist and index_excludes. Also list all non-markdown files outside blacklisted paths, raw\, archive\, and ingested\ as potential orphaned binary assets.
+递归列出知识库中的所有 `.md` 文件。完全排除 `blacklist` 中的路径；不扫描其内部内容。`index_excludes` 中的路径（`raw\`、`archive\`、`ingested\`）被排除不被视为 wiki 页面，但仍然可读以进行链接目标验证：如果活跃的 wiki 页面链接到 `archive/` 或 `ingested/` 中的文件，该链接必须解析为真实文件。从同时不在 blacklist 和 index_excludes 中的文件构建**范围内页面集**。同时将黑名单路径、raw\、archive\ 和 ingested\ 之外的所有非 Markdown 文件列为潜在的孤立二进制资源。
 
-### Step 2 - Read index.md
+### 步骤 2 - 读取 index.md
 
-Read `index.md`. Parse all wikilink references and file paths. Build a set of pages listed in index.md and their referenced paths.
+读取 `index.md`。解析所有 wikilink 引用和文件路径。构建 index.md 中列出的页面及其引用路径的集合。
 
-### Step 3 - Check for broken wikilinks
+### 步骤 3 - 检查损坏的 wikilink
 
-For each in-scope wiki page, extract all `[[wikilinks]]`. Attempt to resolve each to an actual file. If no matching file is found: flag as a **broken wikilink** with the page where found, the broken link text, and a suggested correction if obvious.
+对每个范围内的 wiki 页面，提取所有 `[[wikilinks]]`。尝试将每个链接解析为实际文件。如果未找到匹配文件：标记为**损坏的 wikilink**，附带所在页面、损坏的链接文本和（如果明显）建议的更正。
 
-Also flag: any wiki page containing a link that points into `raw/`. Once wiki-ingest moves files to `ingested/`, raw/ source links will break. Flag these as **future breakage warnings**: "[[Page]] links to raw/<filename>: will break after ingestion. Update to ingested/<subdir>/<filename> once ingest is complete." These are not yet broken but are guaranteed to become so.
+同时标记：任何包含指向 `raw/` 链接的 wiki 页面。一旦 wiki-ingest 将文件移动到 `ingested/`，raw/ 源链接将损坏。将这些标记为**未来损坏警告**："[[页面]]链接到 raw/<文件名>：摄入后将损坏。在摄入完成后更新为 ingested/<子目录>/<文件名>。" 这些尚未损坏但注定会损坏。
 
-### Step 4 - Check for orphan pages
+### 步骤 4 - 检查孤立页面
 
-For each page in the in-scope set, check:
-- Is it listed in `index.md`?
-- Is it referenced by any wikilink in any other in-scope page?
+对范围内集中的每个页面检查：
+- 它是否列在 `index.md` 中？
+- 它是否被任何其他范围内页面中的 wikilink 引用？
 
-If neither: flag as an **orphan page**. New pages may be legitimate orphans; flag anyway, the human decides.
+如果两者都不满足：标记为**孤立页面**。新页面可能是合法的孤立页面；仍然标记，由人类决定。
 
-### Step 5 - Check for stale index entries
+### 步骤 5 - 检查过时索引条目
 
-For each page listed in `index.md`, check whether the referenced file exists. If not: flag as a **stale index entry**.
+对 `index.md` 中列出的每个页面，检查引用的文件是否存在。如果不存在：标记为**过时索引条目**。
 
-### Step 6 - Qualitative and structural passes
+### 步骤 6 - 定性和结构化检查
 
-**Conceptual issues:** Read `Overview.md` and scan for obvious contradictions or staleness; claims that appear to contradict specific wiki pages, or pages that seem significantly out of date. Qualitative pass only, not a full content review.
+**概念性问题：** 读取 `Overview.md` 并扫描明显的矛盾或过时内容；看起来与特定 wiki 页面矛盾的主张，或似乎显著过时的页面。仅定性检查，不是完整的内容审查。
 
-**Missing connections:** Scan `index.md` descriptions for significant term overlap between page pairs that do not link to each other. Pages that share multiple key concepts in their index descriptions but have no mutual wikilinks are candidates for missing connections. Flag pairs with meaningful overlap; do not flag tenuous keyword coincidences. This is a lightweight heuristic pass; wiki-integrate handles the actual linking if the user agrees a connection is genuine.
+**缺失连接：** 扫描 `index.md` 的描述，查找未互相链接的页面对之间显著的术语重叠。在索引描述中共享多个关键概念但没有互相 wikilink 的页面是缺失连接的候选。标记有有意义重叠的页面对；不标记微弱的巧合关键词。这是轻量级的启发式检查；如果用户同意连接是真实的，则由 wiki-integrate 处理实际链接。
 
-### Step 6b - Check for em-dash in page titles and filenames
+### 步骤 6b - 检查页面标题和文件名中的破折号
 
-Em-dashes (`—`) in page filenames and `title:` frontmatter fields are a persistent LLM output artifact. They break wikilinks (a link to `[[Topic - Subtopic]]` will not resolve a file named `Topic — Subtopic.md`), make pages unsearchable by their intended name, and violate the vault's em-dash convention.
+页面文件名和 `title:` frontmatter 字段中的破折号（`—`）是 LLM 输出的持久痕迹。它们会破坏 wikilink（指向 `[[主题 - 子主题]]` 的链接无法解析名为 `主题 — 子主题.md` 的文件），使页面无法按预期名称搜索，并违反知识库的破折号约定。
 
-For each in-scope page:
-1. Check the filename for any `—` character
-2. Read the `title:` frontmatter field and check for any `—` character
+对每个范围内页面：
+1. 检查文件名中是否有 `—` 字符
+2. 读取 `title:` frontmatter 字段并检查是否有 `—` 字符
 
-Flag each occurrence as an **em-dash violation** with the file path, where it was found (filename / title field), the offending string, and the suggested fix: replace `—` with ` - ` (space-hyphen-space).
+将每个出现标记为**破折号违规**，附上文件路径、发现位置（文件名 / title 字段）、违规字符串和建议修复：将 `—` 替换为 ` - `（空格-连字符-空格）。
 
-### Step 6c - Check for stale pages
+### 步骤 6c - 检查过时页面
 
-For each in-scope page, check for the following conditions:
+对每个范围内页面检查以下条件：
 
-**Missing date fields (error):** If a page has neither `date:` nor `updated:` in its frontmatter, flag as a **missing date fields error**. Both fields absent suggests something went wrong at creation - the page was not written by a skill or the frontmatter is malformed.
+**缺失日期字段（错误）：** 如果页面的 frontmatter 中既没有 `date:` 也没有 `updated:`，标记为**缺失日期字段错误**。两个字段都缺失表明创建时出了问题 — 页面不是由 skill 写入的，或 frontmatter 格式错误。
 
-**Stale (soft warning):** If a page has an `updated:` field and it is more than 90 days before today, flag as a **stale page**. Exempt from this check:
-- `status: artefact`, `status: snapshot`, `status: archived` - frozen by definition
-- `page_type: reference` - reference pages have mostly static content and infrequent updates are expected
+**过时（软警告）：** 如果页面有 `updated:` 字段且距今超过 90 天，标记为**过时页面**。此检查豁免：
+- `status: artefact`、`status: snapshot`、`status: archived` — 定义为冻结状态
+- `page_type: reference` — 参考页面内容大多静态，不频繁更新符合预期
 
-Pages without an `updated:` field (but with `date:`) are silently skipped - absence of `updated:` is not an error.
+没有 `updated:` 字段（但有 `date:`）的页面静默跳过 — 缺少 `updated:` 不是错误。
 
-Flag each stale page with: path, `updated:` date, days since last touch.
-Flag each missing-date-fields error with: path, which fields are absent.
+标记每个过时页面：路径、`updated:` 日期、距上次接触的天数。
+标记每个缺失日期字段错误：路径、缺失哪些字段。
 
-### Step 6d - Schema compliance check (provenance fields)
+### 步骤 6d - 架构合规检查（来源字段）
 
-For each in-scope page, validate the four provenance fields (`status:`, `description:`, `source:`, `reliability:`). Two classes of finding:
+对每个范围内页面验证四个来源字段（`status:`、`description:`、`source:`、`reliability:`）。两类发现：
 
-**Errors (hard flag):**
+**错误（硬标记）：**
 
-- **`source:` without `reliability:`** - `source:` is present but `reliability:` is absent. These fields are coupled; one without the other is an internal inconsistency. Flag as a **schema error** with: path, field pair affected.
-- **Invalid `status:` value** - `status:` is present but its value is not one of the valid enum values (`active`, `stub`, `artefact`, `archived`, `snapshot`). Flag as a **schema error** with: path, field, invalid value found, valid values.
-- **Invalid `reliability:` value** - `reliability:` is present but its value is not one of (`high`, `medium`, `low`). Flag as a **schema error** with: path, field, invalid value found, valid values.
-- **Invalid `page_type:` value** - `page_type:` is present but its value is not in the valid enum list from wiki-schema.md. Flag as a **schema error** with: path, field, invalid value found, and the valid values from the schema.
+- **有 `source:` 但无 `reliability:`** — `source:` 存在但 `reliability:` 不存在。这些字段是耦合的；一个有而另一个无是内部不一致。标记为**架构错误**，附上：路径、受影响的字段对。
+- **无效的 `status:` 值** — `status:` 存在但其值不在有效枚举值中（`active`、`stub`、`artefact`、`archived`、`snapshot`）。标记为**架构错误**，附上：路径、字段、找到的无效值、有效值。
+- **无效的 `reliability:` 值** — `reliability:` 存在但其值不在（`high`、`medium`、`low`）中。标记为**架构错误**，附上：路径、字段、找到的无效值、有效值。
+- **无效的 `page_type:` 值** — `page_type:` 存在但其值不在 wiki-schema.md 的有效枚举列表中。标记为**架构错误**，附上：路径、字段、找到的无效值和 schema 中的有效值。
 
-**Soft warnings (informational):**
+**软警告（信息性）：**
 
-- **Skill-touched page missing `status:` or `description:`** - page has `updated:` (meaning a skill has written to it post-3b) and `page_type:` is `knowledge`, `research-note`, or `survey`, but `status:` or `description:` is absent. Old pages without `updated:` are silently skipped - they predate 3b and will pick up fields on next touch. Flag as a **missing provenance field** with: path, which field(s) absent.
-- **`source:` present but no `## Sources` section** - `source:` in frontmatter implies an ingested origin; the body should have a `## Sources` section for enrichment tracking. Absence is not a hard error but is worth flagging. Flag as a **missing Sources section** with: path.
-- **Skill-touched page missing `page_type:`** - page has `updated:` (meaning a skill has written to it) but `page_type:` is absent. Pages without `updated:` are silently skipped - they predate the feature and will pick up the field on next touch. Flag as a **missing page_type** with: path.
+- **Skill 接触过的页面缺少 `status:` 或 `description:`** — 页面有 `updated:`（意味着 skill 在 3b 之后写入过）且 `page_type:` 是 `knowledge`、`research-note` 或 `survey`，但 `status:` 或 `description:` 缺失。没有 `updated:` 的旧页面静默跳过 — 它们早于 3b，将在下次接触时获取字段。标记为**缺失来源字段**，附上：路径、缺失哪些字段。
+- **有 `source:` 但没有 `## Sources` 章节** — frontmatter 中的 `source:` 意味着摄入来源；正文应有 `## Sources` 章节用于充实跟踪。缺失不是硬错误但值得标记。标记为**缺失 Sources 章节**，附上：路径。
+- **Skill 接触过的页面缺少 `page_type:`** — 页面有 `updated:`（意味着 skill 已写入）但 `page_type:` 缺失。没有 `updated:` 的页面静默跳过 — 它们早于该特性，将在下次接触时获取字段。标记为**缺失 page_type**，附上：路径。
 
-### Step 7 - Check for orphaned binary assets
+### 步骤 7 - 检查孤立的二进制资源
 
-For each non-markdown file outside blacklisted paths, raw\, archive\, and ingested\: search all in-scope pages for any reference to this filename. If none found: flag as an **orphaned binary asset**. A file contextually placed alongside related content (e.g. a PDF in a domain subfolder referenced by domain pages) is not an orphan; only flag files with no wiki references anywhere.
+对黑名单路径、raw\、archive\ 和 ingested\ 之外的每个非 Markdown 文件：在所有范围内页面中搜索对该文件名的任何引用。如果未找到：标记为**孤立的二进制资源**。在与相关内容上下文中放置的文件（例如领域子文件夹中被领域页面引用的 PDF）不是孤立资源；仅标记在任何地方都没有 wiki 引用的文件。
 
-### Step 7a - Check for orphaned sources in ingested/
+### 步骤 7a - 检查 ingested/ 中的孤立来源
 
-Every file in `ingested/` should have at least one wiki page that references it; via a Sources section in the page body containing the `ingested/` path. A source with no wiki reference has been processed but left no trace in the knowledge graph.
+`ingested/` 中的每个文件应至少有一个引用它的 wiki 页面；通过页面正文中包含 `ingested/` 路径的 Sources 章节。没有 wiki 引用的来源已被处理但在知识图谱中未留下痕迹。
 
-For each file in `ingested/` (all subdirs, including assets/):
-1. Search all in-scope wiki pages for the file's relative path (e.g. `ingested/documentation/foo.md`). Check the full page content: `## Sources` section body, `changes:` frontmatter field, or anywhere else a path reference might appear. Treat any match as a valid reference regardless of where it appears.
-2. If no match found: flag as an **orphaned source**: "ingested/[subdir]/filename has no wiki page referencing it"
+对 `ingested/` 中的每个文件（所有子目录，包括 assets/）：
+1. 在所有范围内 wiki 页面中搜索该文件的相对路径（如 `ingested/documentation/foo.md`）。检查完整页面内容：`## Sources` 章节正文、`changes:` frontmatter 字段或路径引用可能出现的任何其他地方。无论出现在哪里，任何匹配都视为有效引用。
+2. 如果未找到匹配：标记为**孤立的来源**："ingested/[子目录]/文件名 没有引用它的 wiki 页面"
 
-A source in `ingested/assets/` with no reference is expected (it was unreadable at ingest time); flag it at lower severity as a **note** rather than a warning, so the user knows it exists and can re-attempt ingestion if capabilities have improved.
+`ingested/assets/` 中没有引用的来源是预期的（在摄入时不可读）；以较低严重性标记为**注记**而非警告，以便用户知道它存在，并在能力提升时可以重新尝试摄入。
 
-### Step 8 - Write the lint report
+### 步骤 8 - 写入 lint 报告
 
-Create `[wiki-root]/archive/lint-YYYY-MM-DD.md`:
+创建 `[wiki-root]/archive/lint-YYYY-MM-DD.md`：
 
 ```markdown
 ---
-title: Lint Report YYYY-MM-DD
+title: Lint 报告 YYYY-MM-DD
 date: YYYY-MM-DD
 ---
 
-# Lint Report - YYYY-MM-DD
+# Lint 报告 - YYYY-MM-DD
 
-## Summary
-- Broken wikilinks: N
-- Future breakage warnings (raw/ links): N
-- Orphan pages: N
-- Stale index entries: N
-- Missing connections (candidates): N
-- Em-dash violations (titles/filenames): N
-- Missing date fields (errors): N
-- Stale pages (updated: > 90 days): N
-- Schema errors (invalid enum values, missing field pairs): N
-- Missing provenance fields (skill-touched pages): N
-- Missing page_type: (skill-touched pages): N
-- Missing Sources sections: N
-- Orphaned binary assets: N
-- Orphaned sources in ingested/: N (+ N notes in assets/)
-- Conceptual flags: N
+## 摘要
+- 损坏 wikilink：N
+- 未来损坏警告（raw/ 链接）：N
+- 孤立页面：N
+- 过时索引条目：N
+- 缺失连接（候选）：N
+- 破折号违规（标题/文件名）：N
+- 缺失日期字段（错误）：N
+- 过时页面（updated: > 90 天）：N
+- 架构错误（无效枚举值、缺失字段对）：N
+- 缺失来源字段（skill 接触过的页面）：N
+- 缺失 page_type（skill 接触过的页面）：N
+- 缺失 Sources 章节：N
+- 孤立二进制资源：N
+- ingested/ 中的孤立来源：N（+ N 条 assets/ 中的注记）
+- 概念性标记：N
 
-## Broken Wikilinks
-[page where found, broken link, suggested fix]
+## 损坏 Wikilink
+[发现位置页面、损坏的链接、建议修复]
 
-## Future Breakage Warnings
-[page where found, raw/ link, suggested post-ingest destination]
+## 未来损坏警告
+[发现位置页面、raw/ 链接、建议摄入后目标]
 
-## Orphan Pages
-[page path, reason it may be orphaned]
+## 孤立页面
+[页面路径、可能孤立的原因]
 
-## Stale Index Entries
-[index entry, the path that no longer resolves]
+## 过时索引条目
+[索引条目、不再解析的路径]
 
-## Missing Connections
-[page pair, overlapping terms, suggested action: run wiki-integrate]
+## 缺失连接
+[页面对、重叠术语、建议操作：运行 wiki-integrate]
 
-## Em-dash Violations
-[file path, where found (filename / title field), suggested fix: replace — with ' - ']
+## 破折号违规
+[文件路径、发现位置（文件名 / 标题字段）、建议修复：将 — 替换为 ' - ']
 
-## Missing Date Fields
-[file path, which of date: / updated: are absent; likely indicates malformed frontmatter or non-skill creation]
+## 缺失日期字段
+[文件路径、date: / updated: 中哪些缺失；可能表明 frontmatter 格式错误或非 skill 创建]
 
-## Stale Pages
-[file path, updated: date, days since last touch; not flagged if status: artefact/snapshot/archived or page_type: reference]
+## 过时页面
+[文件路径、updated: 日期、距上次接触的天数；status: artefact/snapshot/archived 或 page_type: reference 未标记]
 
-## Schema Errors
-[file path, field(s) affected, nature of error (invalid enum value / source: without reliability: / invalid page_type: value)]
+## 架构错误
+[文件路径、受影响的字段、错误性质（无效枚举值 / 有 source: 无 reliability: / 无效 page_type: 值）]
 
-## Missing Provenance Fields
-[file path, which of status: / description: are absent; page has updated: and is a fact-establishing page_type]
+## 缺失来源字段
+[文件路径、status: / description: 中哪些缺失；页面有 updated: 且是事实性 page_type]
 
-## Missing page_type:
-[file path, page has updated: but page_type: is absent; add page_type: using values from wiki-schema.md, or run wiki-integrate to infer and confirm]
+## 缺失 page_type:
+[文件路径、页面有 updated: 但 page_type: 缺失；使用 wiki-schema.md 中的值添加 page_type:，或运行 wiki-integrate 推断并确认]
 
-## Missing Sources Sections
-[file path, has source: in frontmatter but no ## Sources section in body]
+## 缺失 Sources 章节
+[文件路径、frontmatter 中有 source: 但正文中没有 ## Sources 章节]
 
-## Orphaned Binary Assets
-[file path, reason it has no wiki references]
+## 孤立二进制资源
+[文件路径、没有 wiki 引用的原因]
 
-## Orphaned Sources in ingested/
-[file path, no wiki page references this source; consider re-ingesting or archiving]
+## ingested/ 中的孤立来源
+[文件路径、没有 wiki 页面引用此来源；考虑重新摄入或归档]
 
-## Notes: ingested/assets/
-[file path, was unreadable at ingest time; re-attempt if capabilities have improved]
+## 注记：ingested/assets/
+[文件路径、在摄入时不可读；如果能力提升可重新尝试]
 
-## Conceptual Flags
-[page, nature of potential issue]
+## 概念性标记
+[页面、潜在问题性质]
 ```
 
-### Step 9 - Prepend to log.md
+### 步骤 9 - 追加到 log.md
 
-Add the new entry at the top of log.md, below the header line, above all existing entries.
+在 log.md 顶部、标题行之下、所有现有条目之上添加新条目。
 
 ```
-## [YYYY-MM-DD] lint | Full wiki pass
-Summary: N broken links, N orphans, N stale entries, N missing connections, N date-field errors, N stale pages, N schema errors, N missing provenance/page_type fields, N orphaned assets.
-Report: archive/lint-YYYY-MM-DD.md
+## [YYYY-MM-DD] lint | 全 wiki 检查
+摘要：N 个损坏链接、N 个孤立页面、N 个过时条目、N 个缺失连接、N 个日期字段错误、N 个过时页面、N 个架构错误、N 个缺失来源/page_type 字段、N 个孤立资源。
+报告：archive/lint-YYYY-MM-DD.md
 ```
 
-### Step 10 - Present findings
+### 步骤 10 - 呈现发现
 
-Report the summary. Do not offer to auto-fix anything. Suggest follow-up:
-- Broken wikilinks -> fix manually or run wiki-integrate on affected pages
-- Future breakage warnings -> update raw/ links to ingested/ paths after the next ingest run
-- Orphan pages -> run wiki-integrate, or move to archive/ if deprecated
-- Stale index entries -> remove from index.md or update the path
-- Missing connections -> run wiki-integrate on the flagged page pairs
-- Em-dash violations -> rename the file (replace `—` with ` - `) and update its `title:` field; search for any wikilinks pointing to the old name and update them
-- Missing date fields -> inspect the page; if skill-written, the frontmatter is malformed and should be repaired manually
-- Stale pages -> review and update; or set `status: artefact`, `snapshot`, or `archived` if the page is intentionally frozen
-- Schema errors -> repair frontmatter manually: add missing `reliability:` when `source:` is present, correct invalid enum values for `status:`, `reliability:`, or `page_type:`
-- Missing provenance fields -> re-run wiki-ingest or wiki-crystallize on the page to pick up `status:` and `description:`; or add manually following the schema
-- Missing page_type: -> add `page_type:` to the page frontmatter using values from the enum in wiki-schema.md; or run wiki-integrate which will infer and confirm the type
-- Missing Sources sections -> add a `## Sources` section to the page body referencing the path in `source:`
-- Orphaned binary assets -> move to an appropriate location or delete if unwanted
-- Orphaned sources in ingested/ -> re-ingest the source file (drop back into raw/ and run wiki-ingest), or investigate why no wiki page was created
-- Notes in ingested/assets/ -> retry ingestion if new tools or capabilities are available
+报告摘要。不要提供自动修复任何内容。建议后续操作：
+- 损坏 wikilink → 手动修复或在受影响页面上运行 wiki-integrate
+- 未来损坏警告 → 在下次摄入运行后将 raw/ 链接更新为 ingested/ 路径
+- 孤立页面 → 运行 wiki-integrate，或如果已弃用则移到 archive/
+- 过时索引条目 → 从 index.md 中删除或更新路径
+- 缺失连接 → 在标记的页面对上运行 wiki-integrate
+- 破折号违规 → 重命名文件（将 `—` 替换为 ` - `）并更新其 `title:` 字段；搜索指向旧名称的 wikilink 并更新它们
+- 缺失日期字段 → 检查页面；如果由 skill 写入，frontmatter 格式错误，应手动修复
+- 过时页面 → 审查和更新；或如果页面有意冻结，设置为 `status: artefact`、`snapshot` 或 `archived`
+- 架构错误 → 手动修复 frontmatter：当 `source:` 存在时添加缺失的 `reliability:`，修正 `status:`、`reliability:` 或 `page_type:` 的无效枚举值
+- 缺失来源字段 → 在页面上重新运行 wiki-ingest 或 wiki-crystallize 以获取 `status:` 和 `description:`；或按 schema 手动添加
+- 缺失 page_type: → 使用 wiki-schema.md 枚举中的值向页面 frontmatter 添加 `page_type:`；或运行 wiki-integrate 将推断并确认类型
+- 缺失 Sources 章节 → 在页面正文中添加引用 `source:` 中路径的 `## Sources` 章节
+- 孤立二进制资源 → 移到适当位置或如果不需要则删除
+- ingested/ 中的孤立来源 → 重新摄入源文件（放回 raw/ 并运行 wiki-ingest），或调查为何未创建 wiki 页面
+- ingested/assets/ 中的注记 → 如果有新工具或能力可用，重新尝试摄入
 
 ---
 
-## Key Rules
+## 关键规则
 
-1. **Never modify wiki pages** - read-only except for writing the lint report to archive/
-2. **Never delete files** - flag only; the human decides
-3. **Do not flag contextually-placed files** - a file with wiki references in its domain is not an orphan
-4. **Blacklisted paths are skipped entirely** - lint does not scan content inside blacklisted directories
-5. **index_excludes are not wiki pages but are valid link targets** - archive/ and ingested/ are readable for link resolution even though they are excluded from the page inventory
-6. **Report is filed in archive/, not the wiki root**
-
----
-
-## What this skill does not do
-
-This skill does wiki work: ingesting, synthesising, organising, and querying `.md` pages to compound knowledge over time. It does not modify tool or plugin settings, shell out to manipulate application state, or replicate behaviours that belong to whatever app the user reads their notes in. If a request cannot be satisfied by reading and writing `.md` files inside the wiki root, decline and explain why.
+1. **绝不修改 wiki 页面** — 除了将 lint 报告写入 archive/ 外只读
+2. **绝不删除文件** — 只标记；由人类决定
+3. **不标记上下文放置的文件** — 在其领域内有 wiki 引用的文件不是孤立资源
+4. **黑名单路径被完全跳过** — lint 不扫描黑名单目录内的内容
+5. **index_excludes 不是 wiki 页面但是有效的链接目标** — archive/ 和 ingested/ 即使被排除在页面清单外，也可读取以进行链接解析
+6. **报告存放到 archive/ 中，而非 wiki 根目录**
 
 ---
 
-## Cloud-Synced Vaults
+## 本 skill 不做什么
 
-Vaults stored in cloud sync services may have files not locally downloaded, appearing as zero-byte placeholders. If a file read returns empty unexpectedly, flag it as a possible sync issue and ask the user to confirm before retrying. Do not treat a zero-byte file as a successfully processed empty file.
+本 skill 做 wiki 工作：摄入、合成、组织和查询 `.md` 页面以随时间积累知识。它不修改工具或插件设置，不通过 shell 操纵应用程序状态，也不复制属于用户阅读笔记的应用程序的行为。如果请求无法通过读写 wiki 根目录内的 `.md` 文件来满足，则拒绝并说明原因。
+
+---
+
+## 云同步知识库
+
+存储在云同步服务中的知识库可能有未本地下载的文件，呈现为零字节占位符。如果文件读取意外返回空，将其标记为可能的同步问题，并在重试前请用户确认。不要将零字节文件视为成功处理的空文件。

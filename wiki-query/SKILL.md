@@ -7,124 +7,122 @@ metadata:
 
 # Wiki 查询
 
-Answers questions by reading and synthesising knowledge from the compiled wiki.
+通过阅读和合成已编译 wiki 中的知识来回答问题。
 
 ---
 
-## Config Discovery
+## 配置发现
 
-**Every invocation starts here.** Wiki root is the directory containing `wiki-config.md`. Skills derive it at runtime. Pages this skill writes (if you choose to file an answer) follow the structure in `wiki-schema.md` - both files need to be present.
+**每次调用从这里开始。** Wiki 根目录是包含 `wiki-config.md` 的目录。各 skill 在运行时推导它。本 skill 写入的页面（如果你选择保存答案）遵循 `wiki-schema.md` 中的结构 — 这两个文件都必须存在。
 
-1. **Identify scope**: Determine your filesystem scope root - the top-level directory your filesystem tool can access.
+1. **识别范围**：确定你的文件系统范围根目录 — 你的文件系统工具能访问的顶级目录。
 
-2. **Scope check - MANDATORY STOP**: If scope is bare drive root (`C:\`, `D:\`, `/`), OS root, or user home (`C:\Users\X`, `/home/X`, `/Users/X`) → **stop immediately. Do not search. Do not attempt to locate wiki-config.md.** Go directly to step 6.
+2. **范围检查 — 强制停止**：如果范围是裸盘根目录（`C:\`、`D:\`、`/`）、操作系统根目录或用户主目录（`C:\Users\X`、`/home/X`、`/Users/X`）→ **立即停止。不要搜索。不要尝试定位 wiki-config.md。** 直接跳到第 6 步。
 
-3. **Scan `<available_skills>` for `wiki-config`.** Note whether it's available - this shapes the recommendations below. The bundled `references/setup-help.md` is also available; read it if the user needs orientation or if you get stuck.
+3. **扫描 `<available_skills>` 查找 `wiki-config`。** 记录它是否可用 — 这影响下面的建议。捆绑的 `references/setup-help.md` 也可用；如果用户需要了解背景或你遇到困难，可以阅读它。
 
-4. **Locate and read `wiki-config.md`**: Search recursively (first-match, max 5 levels). If found, read it (`blacklist`, `index_excludes`, `ingested_folder`, `ingested_subdirs`, `log_format`). If not found, skip to step 6.
+4. **定位并读取 `wiki-config.md`**：递归搜索（首次匹配，最多 5 层）。如果找到，读取它（`blacklist`、`index_excludes`、`ingested_folder`、`ingested_subdirs`、`log_format`）。如果未找到，跳到第 6 步。
 
-5. **Locate and read `wiki-schema.md` - mandatory check**: In the same directory as `wiki-config.md`, verify `wiki-schema.md` exists and parses as YAML. **Do not proceed to the Workflow below until you have a definite verdict** (present / missing / malformed). Then:
+5. **定位并读取 `wiki-schema.md` — 强制检查**：在 `wiki-config.md` 所在目录中，验证 `wiki-schema.md` 存在且可正确解析为 YAML。**在得到明确结论（存在 / 缺失 / 格式错误）之前不要继续下面的工作流。** 然后：
 
-   - **Present and parses cleanly** → read the schema (`mandatory_fields`, `conditional_fields`, `enums`) and proceed to the Workflow.
-   
-   - **Missing** → STOP. Do not proceed. Do not deploy. Response depends on whether `wiki-config` is in `<available_skills>` (from step 3):
-     
-     - **wiki-config available:** Output exactly this pattern - *"Your wiki is missing `wiki-schema.md`. Run `/wiki-config` to deploy it and complete setup. I'll wait for that to be done before proceeding."* End of turn. Do not offer bundled deployment; do not present alternatives. wiki-config's guided flow is the correct path when wiki-config is available.
-     
-     - **wiki-config not available:** Offer bundled fallback - *"Your wiki is missing `wiki-schema.md` and the wiki-config skill is not installed. I can deploy a default from my bundled reference, but I'd recommend installing wiki-config for the guided setup. Deploy bundled default?"* Wait for explicit confirmation. On OK, deploy from `references/wiki-schema.md`.
-   
-   - **Malformed** → STOP. Same structure:
-     
-     - **wiki-config available:** *"Your `wiki-schema.md` is malformed. Run `/wiki-config` - it has a guided repair flow that preserves any customizations you've made. I'll wait."* End of turn. Do not attempt repair or bundled overwrite.
-     
-     - **wiki-config not available:** Point to `references/setup-help.md` for manual repair guidance. If the user explicitly instructs a reset (not as an automatic fallback), warn that it overwrites any customizations, then deploy the default on explicit OK.
+   - **存在且解析正常** → 读取 schema（`mandatory_fields`、`conditional_fields`、`enums`）并继续工作流。
 
-   The same two-branch structure applies if `wiki-config.md` itself was found malformed in step 4: wiki-config available → stop and recommend `/wiki-config`, end of turn; unavailable → guided manual repair via setup-help.md.
+   - **缺失** → 停止。不要继续。不要部署。响应取决于 `wiki-config` 是否在 `<available_skills>` 中（来自第 3 步）：
 
-6. **Config not found at all**: Ask the user for their wiki root path, search there (bounded, max 5 levels). If still nothing, they don't have a wiki yet - follow the "Missing" branch above (recommend `/wiki-config`; offer bundled deployment if unavailable).
+     - **wiki-config 可用：** 输出以下模式 — *"你的 wiki 缺少 `wiki-schema.md`。运行 `/wiki-config` 来部署它并完成设置。我会等你完成后再继续。"* 本轮结束。不要提供捆绑部署；不要提供替代方案。当 wiki-config 可用时，wiki-config 的引导流程是正确的路径。
 
----
+     - **wiki-config 不可用：** 提供捆绑回退方案 — *"你的 wiki 缺少 `wiki-schema.md`，且 wiki-config skill 未安装。我可以从我捆绑的参考文件中部署默认版本，但我建议安装 wiki-config 以进行引导设置。要部署捆绑的默认版本吗？"* 等待明确确认。确认后，从 `references/wiki-schema.md` 部署。
 
-## Capability Requirements
+   - **格式错误** → 停止。相同结构：
 
-This skill requires **filesystem read access**. Write access is only needed if the user chooses to file the answer as a new wiki page.
+     - **wiki-config 可用：** *"你的 `wiki-schema.md` 格式错误。运行 `/wiki-config` — 它有引导修复流程，可以保留你做的任何自定义。我会等待。"* 本轮结束。不要尝试修复或捆绑覆盖。
 
-If running on a surface without filesystem tools (web, mobile), inform the user that this skill cannot access the local knowledge base. Offer to answer from general model knowledge instead, with the caveat that it will not draw on wiki-specific context.
+     - **wiki-config 不可用：** 指向 `references/setup-help.md` 获取手动修复指导。如果用户明确指示重置（非自动回退），警告这会覆盖任何自定义，然后在明确确认后部署默认版本。
+
+   如果第 4 步中发现 `wiki-config.md` 本身格式错误，同样适用以上双分支结构：wiki-config 可用 → 停止并推荐 `/wiki-config`，本轮结束；不可用 → 通过 setup-help.md 引导手动修复。
+
+6. **完全找不到配置**：询问用户的 wiki 根目录路径，在那里搜索（限定，最多 5 层）。如果仍然没有，用户还没有 wiki — 按照上面的"缺失"分支处理（推荐 `/wiki-config`；如果不可用则提供捆绑部署）。
 
 ---
 
-## Workflow
+## 能力要求
 
-Config Discovery has already loaded `wiki-config.md` and `wiki-schema.md` into context. Do not re-read them; proceed from here assuming both are available.
+本 skill 需要**文件系统读权限**。只有用户选择将答案保存为新的 wiki 页面时才需要写权限。
 
-### Step 1 - Read the index for orientation
-
-Read `index.md` from the wiki root. Scan the full catalogue to identify pages likely to be relevant to the query. Do not read every page; use the one-line descriptions to target your search.
-
-Also read `Overview.md` if the query is broad or cross-domain; it provides a fast orientation to the current state of knowledge.
-
-### Step 2 - Identify target pages
-
-Select the 2-6 pages most likely to contain information relevant to the query. Consider:
-- Direct topic match (page title or description mentions the subject)
-- Domain relevance (if the query is about FASD, read FASD pages)
-- Cross-domain connections (the query may span multiple sections)
-
-If the query is highly specific, prefer targeted pages. If broad, start with Overview.md and follow backlinks.
-
-### Step 3 - Read target pages
-
-Read each identified page in full. Note: direct answers to the query, related context, wikilinks to other relevant pages, and gaps or open questions flagged in the notes.
-
-### Step 4 - Follow backlinks if needed
-
-If initial pages reference others that seem directly relevant, read those too. Limit follow-up to 2-3 additional pages. Stop when new pages are not adding information relevant to the query.
-
-### Step 5 - Synthesise the answer
-
-Write a clear answer to the query:
-- Ground every claim in specific wiki pages using `[[wikilink]]` citations
-- Distinguish between: well-evidenced claims, claims requiring nuance, open questions or gaps
-- Use the language and framing of the wiki
-- Be honest about what the wiki does and does not contain; do not fill gaps with general model knowledge without flagging it
-
-Format: prose for narrative answers; tables or lists for comparative or structured information.
-
-### Step 6 - Offer to file the answer
-
-After delivering the answer, offer: *"This answer could be filed as a new wiki page for future reference. Would you like me to create a page for it?"*
-
-If the user agrees:
-- Create a new wiki page in the appropriate section
-- Include frontmatter (title, version, date, changes: "Created by wiki-query")
-- Add `[[backlinks]]` to the source pages cited
-- Run wiki-integrate to weave it into the knowledge graph
-- Append to log.md: `## [YYYY-MM-DD] query | <query summary>`
-
-If the user declines, do not modify any files.
+如果在没有文件系统工具的环境中运行（Web、移动端），告知用户本 skill 无法访问本地知识库。提供使用通用模型知识来回答的方案，但需说明不会利用 wiki 专属的上下文。
 
 ---
 
-## Query Scope
+## 工作流
 
-**In scope:** All wiki pages in the wiki root except paths in the blacklist.
-**Out of scope:** `raw/` source files; the wiki is the synthesised view, not the raw sources.
+配置发现已将 `wiki-config.md` 和 `wiki-schema.md` 加载到上下文中。不要重新读取它们；从这里继续，假设两者都可用。
 
-If a query requires information only available in raw source files, note this and suggest running wiki-ingest first if the source hasn't been processed.
+### 步骤 1 - 阅读索引以获取概览
+
+从 wiki 根目录读取 `index.md`。扫描完整目录以识别可能与查询相关的页面。不要阅读每个页面；使用单行描述来定位搜索目标。
+
+如果查询是宽泛的或跨领域的，也阅读 `Overview.md`；它提供了知识当前状态的快速概览。
+
+### 步骤 2 - 识别目标页面
+
+选择 2-6 个最可能包含与查询相关信息的页面。考虑：
+- 直接主题匹配（页面标题或描述提及该主题）
+- 领域相关性（如果查询关于某个领域，阅读该领域的页面）
+- 跨领域连接（查询可能跨越多个章节）
+
+如果查询高度具体，优先选择定向页面。如果宽泛，从 Overview.md 开始并跟随反向链接。
+
+### 步骤 3 - 阅读目标页面
+
+完整阅读每个识别出的页面。注意：对查询的直接回答、相关上下文、指向其他相关页面的 wikilink，以及笔记中标记的空白或开放问题。
+
+### 步骤 4 - 必要时跟随反向链接
+
+如果初始页面引用了其他看起来直接相关的页面，也阅读它们。限制跟进 2-3 个额外页面。当新页面不再添加与查询相关的信息时停止。
+
+### 步骤 5 - 合成答案
+
+为查询撰写清晰的答案：
+- 每个主张都基于具体的 wiki 页面，使用 `[[wikilink]]` 引用
+- 区分：充分论证的主张、需要细微理解的主张、开放问题或空白
+- 使用 wiki 的语言和框架
+- 诚实地说明 wiki 包含和不包含什么；不要用通用模型知识填补空白而不加标注
+
+格式：叙述性回答用散文；对比或结构化信息用表格或列表。
+
+### 步骤 6 - 提供保存答案的选项
+
+在交付答案后，提供选项：*"这个答案可以保存为新的 wiki 页面以便将来参考。要我为你创建一个页面吗？"*
+
+如果用户同意：
+- 在适当的章节创建新的 wiki 页面
+- 包含 frontmatter（title、version、date、changes: "Created by wiki-query"）
+- 向引用的源页面添加 `[[backlinks]]`
+- 运行 wiki-integrate 将其编织到知识图谱中
+- 追加到 log.md：`## [YYYY-MM-DD] query | <查询摘要>`
+
+如果用户拒绝，不要修改任何文件。
 
 ---
 
-## Key Rules
+## 查询范围
 
-1. **Cite the wiki, not general knowledge:** every factual claim should trace to a specific wiki page
-2. **Flag gaps honestly:** if the wiki doesn't contain the answer, say so clearly
-3. **Do not modify files unless the user explicitly asks:** reading is always safe; writing requires consent
-4. **Do not access blacklisted paths:** even for reading in query context
+**范围内：** wiki 根目录中除黑名单路径外的所有 wiki 页面。
+**范围外：** `raw/` 源文件；wiki 是合成后的视图，而非原始来源。
+
+如果查询需要仅在原始源文件中可用的信息，注明这一点并建议先运行 wiki-ingest（如果源文件尚未处理）。
 
 ---
 
-## What this skill does not do
+## 关键规则
 
-This skill does wiki work: ingesting, synthesising, organising, and querying `.md` pages to compound knowledge over time. It does not modify tool or plugin settings, shell out to manipulate application state, or replicate behaviours that belong to whatever app the user reads their notes in. If a request cannot be satisfied by reading and writing `.md` files inside the wiki root, decline and explain why.
+1. **引用 wiki，而非通用知识：** 每个事实性主张应追溯到具体的 wiki 页面
+2. **诚实标注空白：** 如果 wiki 不包含答案，清楚地说明
+3. **除非用户明确要求，否则不修改文件：** 阅读始终安全；写入需要同意
+4. **不访问黑名单路径：** 即使在查询上下文中也不读取
 
+---
 
+## 本 skill 不做什么
+
+本 skill 做 wiki 工作：摄入、合成、组织和查询 `.md` 页面以随时间积累知识。它不修改工具或插件设置，不通过 shell 操纵应用程序状态，也不复制属于用户阅读笔记的应用程序的行为。如果请求无法通过读写 wiki 根目录内的 `.md` 文件来满足，则拒绝并说明原因。

@@ -7,137 +7,134 @@ metadata:
 
 # Wiki 集成
 
-Connects a new or updated wiki page into the knowledge graph by adding backlinks and an index entry.
+通过添加反向链接和索引条目，将新的或更新的 wiki 页面连接到知识图谱中。
 
 ---
 
-## Config Discovery
+## 配置发现
 
-**Every invocation starts here.** Wiki root is the directory containing `wiki-config.md`. Skills derive it at runtime. Pages this skill writes to follow the structure in `wiki-schema.md` - both files need to be present.
+**每次调用从这里开始。** Wiki 根目录是包含 `wiki-config.md` 的目录。各 skill 在运行时推导它。本 skill 写入的页面遵循 `wiki-schema.md` 中的结构 — 这两个文件都必须存在。
 
-1. **Identify scope**: Determine your filesystem scope root - the top-level directory your filesystem tool can access.
+1. **识别范围**：确定你的文件系统范围根目录 — 你的文件系统工具能访问的顶级目录。
 
-2. **Scope check - MANDATORY STOP**: If scope is bare drive root (`C:\`, `D:\`, `/`), OS root, or user home (`C:\Users\X`, `/home/X`, `/Users/X`) → **stop immediately. Do not search. Do not attempt to locate wiki-config.md.** Go directly to step 6.
+2. **范围检查 — 强制停止**：如果范围是裸盘根目录（`C:\`、`D:\`、`/`）、操作系统根目录或用户主目录（`C:\Users\X`、`/home/X`、`/Users/X`）→ **立即停止。不要搜索。不要尝试定位 wiki-config.md。** 直接跳到第 6 步。
 
-3. **Scan `<available_skills>` for `wiki-config`.** Note whether it's available - this shapes the recommendations below. The bundled `references/setup-help.md` is also available; read it if the user needs orientation or if you get stuck.
+3. **扫描 `<available_skills>` 查找 `wiki-config`。** 记录它是否可用 — 这影响下面的建议。捆绑的 `references/setup-help.md` 也可用；如果用户需要了解背景或你遇到困难，可以阅读它。
 
-4. **Locate and read `wiki-config.md`**: Search recursively (first-match, max 5 levels). If found, read it (`blacklist`, `index_excludes`, `ingested_folder`, `ingested_subdirs`, `log_format`). If not found, skip to step 6.
+4. **定位并读取 `wiki-config.md`**：递归搜索（首次匹配，最多 5 层）。如果找到，读取它（`blacklist`、`index_excludes`、`ingested_folder`、`ingested_subdirs`、`log_format`）。如果未找到，跳到第 6 步。
 
-5. **Locate and read `wiki-schema.md` - mandatory check**: In the same directory as `wiki-config.md`, verify `wiki-schema.md` exists and parses as YAML. **Do not proceed to the Workflow below until you have a definite verdict** (present / missing / malformed). Then:
+5. **定位并读取 `wiki-schema.md` — 强制检查**：在 `wiki-config.md` 所在目录中，验证 `wiki-schema.md` 存在且可正确解析为 YAML。**在得到明确结论（存在 / 缺失 / 格式错误）之前不要继续下面的工作流。** 然后：
 
-   - **Present and parses cleanly** → read the schema (`mandatory_fields`, `conditional_fields`, `enums`) and proceed to the Workflow.
-   
-   - **Missing** → STOP. Do not proceed. Do not deploy. Response depends on whether `wiki-config` is in `<available_skills>` (from step 3):
-     
-     - **wiki-config available:** Output exactly this pattern - *"Your wiki is missing `wiki-schema.md`. Run `/wiki-config` to deploy it and complete setup. I'll wait for that to be done before proceeding."* End of turn. Do not offer bundled deployment; do not present alternatives. wiki-config's guided flow is the correct path when wiki-config is available.
-     
-     - **wiki-config not available:** Offer bundled fallback - *"Your wiki is missing `wiki-schema.md` and the wiki-config skill is not installed. I can deploy a default from my bundled reference, but I'd recommend installing wiki-config for the guided setup. Deploy bundled default?"* Wait for explicit confirmation. On OK, deploy from `references/wiki-schema.md`.
-   
-   - **Malformed** → STOP. Same structure:
-     
-     - **wiki-config available:** *"Your `wiki-schema.md` is malformed. Run `/wiki-config` - it has a guided repair flow that preserves any customizations you've made. I'll wait."* End of turn. Do not attempt repair or bundled overwrite.
-     
-     - **wiki-config not available:** Point to `references/setup-help.md` for manual repair guidance. If the user explicitly instructs a reset (not as an automatic fallback), warn that it overwrites any customizations, then deploy the default on explicit OK.
+   - **存在且解析正常** → 读取 schema（`mandatory_fields`、`conditional_fields`、`enums`）并继续工作流。
 
-   The same two-branch structure applies if `wiki-config.md` itself was found malformed in step 4: wiki-config available → stop and recommend `/wiki-config`, end of turn; unavailable → guided manual repair via setup-help.md.
+   - **缺失** → 停止。不要继续。不要部署。响应取决于 `wiki-config` 是否在 `<available_skills>` 中（来自第 3 步）：
 
-6. **Config not found at all**: Ask the user for their wiki root path, search there (bounded, max 5 levels). If still nothing, they don't have a wiki yet - follow the "Missing" branch above (recommend `/wiki-config`; offer bundled deployment if unavailable).
+     - **wiki-config 可用：** 输出以下模式 — *"你的 wiki 缺少 `wiki-schema.md`。运行 `/wiki-config` 来部署它并完成设置。我会等你完成后再继续。"* 本轮结束。不要提供捆绑部署；不要提供替代方案。当 wiki-config 可用时，wiki-config 的引导流程是正确的路径。
 
+     - **wiki-config 不可用：** 提供捆绑回退方案 — *"你的 wiki 缺少 `wiki-schema.md`，且 wiki-config skill 未安装。我可以从我捆绑的参考文件中部署默认版本，但我建议安装 wiki-config 以进行引导设置。要部署捆绑的默认版本吗？"* 等待明确确认。确认后，从 `references/wiki-schema.md` 部署。
 
----
+   - **格式错误** → 停止。相同结构：
 
-## Capability Requirements
+     - **wiki-config 可用：** *"你的 `wiki-schema.md` 格式错误。运行 `/wiki-config` — 它有引导修复流程，可以保留你做的任何自定义。我会等待。"* 本轮结束。不要尝试修复或捆绑覆盖。
 
-This skill requires **filesystem read and write access**. If unavailable, inform the user and stop.
+     - **wiki-config 不可用：** 指向 `references/setup-help.md` 获取手动修复指导。如果用户明确指示重置（非自动回退），警告这会覆盖任何自定义，然后在明确确认后部署默认版本。
+
+   如果第 4 步中发现 `wiki-config.md` 本身格式错误，同样适用以上双分支结构：wiki-config 可用 → 停止并推荐 `/wiki-config`，本轮结束；不可用 → 通过 setup-help.md 引导手动修复。
+
+6. **完全找不到配置**：询问用户的 wiki 根目录路径，在那里搜索（限定，最多 5 层）。如果仍然没有，用户还没有 wiki — 按照上面的"缺失"分支处理（推荐 `/wiki-config`；如果不可用则提供捆绑部署）。
 
 ---
 
-## When to Use This Skill
+## 能力要求
 
-Run wiki-integrate when:
-- A new wiki page has been created directly in a chat (not via wiki-ingest)
-- An existing page has been significantly revised and may have new connection opportunities
-- Pages exist in the vault that are orphaned from the knowledge graph
-
-**wiki-ingest** processes raw source material into wiki pages and links them automatically. **wiki-integrate** links pages that already exist as wiki content. Do not use one as a substitute for the other.
+本 skill 需要**文件系统读和写权限**。如果不可用，告知用户并停止。
 
 ---
 
-## Input
+## 何时使用本 Skill
 
-Wiki-integrate operates on a **target page**. Provide the path to the newly created or updated page. If no path is provided, ask the user which page to integrate before proceeding.
+在以下情况运行 wiki-integrate：
+- 在聊天中直接创建了新的 wiki 页面（非通过 wiki-ingest）
+- 现有页面经过了显著修订，可能有了新的连接机会
+- 知识库中存在与知识图谱孤立断开的页面
+
+**wiki-ingest** 将原始源材料处理为 wiki 页面并自动链接它们。**wiki-integrate** 链接已经作为 wiki 内容存在的页面。不要用其中一个替代另一个。
 
 ---
 
-## Workflow
+## 输入
 
-Config Discovery has already loaded `wiki-config.md` and `wiki-schema.md` into context. Do not re-read them; proceed from here assuming both are available.
+Wiki-integrate 操作于一个**目标页面**。提供新创建或更新的页面的路径。如果没有提供路径，在继续前询问用户要集成哪个页面。
 
-### Step 1 - Read the target page
+---
 
-Read the full content of the target page. Identify the main topic, key concepts, existing `[[wikilinks]]`, and the frontmatter title.
+## 工作流
 
-**Page_type check:** Read the `page_type` field from the page's frontmatter.
-- **Missing:** infer from the page's content and structure using the schema enum (already in context). Present the inferred type to the user and confirm before writing: *"This page doesn't have a `page_type`. Based on the content it looks like a `<type>` - does that match, or would you like a different type?"* Record the confirmed value; it will be written in Step 6 alongside `updated:`.
-- **Present but appears outgrown:** if the page's current `page_type` no longer matches its actual scope (e.g. a `knowledge` page that has grown into a comparative survey, or a `stub` that is now substantive), offer a promotion: *"This page is typed as `<type>` but reads more like a `<better-type>` now. Want me to update `page_type` while I'm here?"* Never auto-promote; wait for explicit confirmation.
+配置发现已将 `wiki-config.md` 和 `wiki-schema.md` 加载到上下文中。不要重新读取它们；从这里继续，假设两者都可用。
 
-### Step 2 - Check the blacklist
+### 步骤 1 - 阅读目标页面
 
-Confirm the target page is not in a blacklisted path. If it is, stop; wiki skills cannot modify blacklisted paths.
+完整阅读目标页面的内容。识别主要主题、关键概念、现有的 `[[wikilinks]]` 和 frontmatter 标题。
 
-### Step 3 - Check and update index.md
+**page_type 检查：** 从页面 frontmatter 读取 `page_type` 字段。
+- **缺失：** 使用 schema enum（已在上下文中）根据页面内容和结构推断类型。向用户展示推断的类型并在写入前确认：*"这个页面没有 `page_type`。根据内容它看起来像一个 `<type>` — 这匹配吗，还是你想要不同的类型？"* 记录确认的值；它将在步骤 6 中与 `updated:` 一起写入。
+- **存在但似乎已过时：** 如果页面当前的 `page_type` 不再匹配其实际范围（例如一个 `knowledge` 页面已经成长为比较性调查，或一个 `stub` 现在已经充实），提议升级：*"这个页面当前类型为 `<type>`，但现在读起来更像 `<更合适的类型>`。要我在更新时一并修改 `page_type` 吗？"* 绝不自动提升；等待明确确认。
 
-Read `index.md`. If the target page is not listed, add an entry in the correct section:
-`- [[Page Title]]: One sentence description. \`relative/path/to/page.md\``
+### 步骤 2 - 检查黑名单
 
-If already listed, verify the description is still accurate. Update if significantly stale.
+确认目标页面不在黑名单路径中。如果在，停止；wiki skill 无法修改黑名单路径。
 
-### Step 4 - Find related pages
+### 步骤 3 - 检查并更新 index.md
 
-From the index catalogue, select 3-8 candidate pages with genuine topic overlap. Connections should be meaningful, not just keyword matches.
+读取 `index.md`。如果目标页面未列出，在正确的章节添加条目：
+`- [[Page Title]]: 一句话描述。\`relative/path/to/page.md\``
 
-### Step 5 - Read candidate pages
+如果已列出，验证描述是否仍然准确。如果明显过时则更新。
 
-Read each candidate in full. Confirm a genuine connection exists: shared concepts, one builds on the other, or a reader would benefit from knowing both. Discard candidates where no real connection exists.
+### 步骤 步骤 4 - 查找相关页面
 
-### Step 6 - Add backlinks
+从索引目录中选择 3-8 个有真实主题重叠的候选页面。连接应该是有意义的，而不仅仅是关键词匹配。
 
-For each confirmed pair, add links in both directions:
-- In the target page: add `[[Candidate Page Title]]` where it fits naturally
-- In the candidate page: add `[[Target Page Title]]` where it fits naturally
+### 步骤 5 - 阅读候选页面
 
-Write only the new wikilink; do not restructure or rewrite candidate page content. Check each candidate is not blacklisted before writing.
+完整阅读每个候选页面。确认存在真实连接：共享概念、一个建立在另一个之上，或读者会从了解两者中受益。丢弃没有真实连接的候选。
 
-For every page written to (target and each candidate that received a link), also update the `updated:` frontmatter field to today's date. If a `page_type` value was inferred and confirmed in Step 1, write it to the target page's frontmatter now. Leave all other frontmatter fields unchanged.
+### 步骤 6 - 添加反向链接
 
-### Step 7 - Prepend to log.md
+对每个确认的配对，在双向添加链接：
+- 在目标页面中：在自然的位置添加 `[[候选页面标题]]`
+- 在候选页面中：在自然的位置添加 `[[目标页面标题]]`
 
-Add the new entry at the top of log.md, below the header line, above all existing entries.
+仅写入新的 wikilink；不要重构或改写候选页面内容。在写入前检查每个候选页面不在黑名单中。
+
+对每个被写入的页面（目标和每个收到链接的候选页面），同时将 frontmatter 的 `updated:` 字段更新为今天的日期。如果在步骤 1 中推断并确认了 `page_type` 值，现在将其写入目标页面的 frontmatter。保持所有其他 frontmatter 字段不变。
+
+### 步骤 7 - 追加到 log.md
+
+在 log.md 顶部、标题行之下、所有现有条目之上添加新条目。
 
 ```
-## [YYYY-MM-DD] integrate | <Target Page Title>
-Added to index.md. Linked from: [[Page A]], [[Page B]]. Linked to: [[Page C]].
+## [YYYY-MM-DD] integrate | <目标页面标题>
+已添加到 index.md。被链接自：[[页面A]]、[[页面B]]。链接到：[[页面C]]。
 ```
 
-### Step 8 - Summarise
+### 步骤 8 - 总结
 
-Report: whether the target was added to index.md, which pages now link to it, which pages it now links to, and any connections ruled out with brief reasoning.
-
----
-
-## Key Rules
-
-1. **Content is unchanged:** only adds wikilinks and index entries; never rewrites or restructures
-2. **Never write to blacklisted paths**
-3. **Links must be genuine:** only add links where a real connection exists
-4. **Minimal footprint in candidate pages:** add only the new wikilink
-5. **One target per run**
-6. **Do not integrate archive/ or assets/ pages**
+报告：目标是否已添加到 index.md，哪些页面现在链接到它，它现在链接到哪些页面，以及任何被排除的连接及简要原因。
 
 ---
 
-## What this skill does not do
+## 关键规则
 
-This skill does wiki work: ingesting, synthesising, organising, and querying `.md` pages to compound knowledge over time. It does not modify tool or plugin settings, shell out to manipulate application state, or replicate behaviours that belong to whatever app the user reads their notes in. If a request cannot be satisfied by reading and writing `.md` files inside the wiki root, decline and explain why.
+1. **内容不变：** 只添加 wikilink 和索引条目；从不改写或重构
+2. **永远不写入黑名单路径**
+3. **链接必须真实：** 只在存在真实连接的地方添加链接
+4. **在候选页面中的最小痕迹：** 只添加新的 wikilink
+5. **每次运行一个目标**
+6. **不集成 archive/ 或 assets/ 页面**
 
+---
 
+## 本 skill 不做什么
+
+本 skill 做 wiki 工作：摄入、合成、组织和查询 `.md` 页面以随时间积累知识。它不修改工具或插件设置，不通过 shell 操纵应用程序状态，也不复制属于用户阅读笔记的应用程序的行为。如果请求无法通过读写 wiki 根目录内的 `.md` 文件来满足，则拒绝并说明原因。
