@@ -1,8 +1,6 @@
 ---
 name: wiki-lint
-description: "健康检查 wiki：扫描所有页面的损坏 wiki 链接、孤立页面、过时索引条目、缺失连接、破折号违规、孤立资源和架构错误。生成带日期的 lint 报告。当用户说 /wiki-lint、提到损坏链接、孤立页面、「我的 wiki 有什么问题」、「链接是否正常」时使用。仅报告，从不自动修复。需要文件系统读权限和对 archive/ 的写权限。"
-metadata:
-  version: "3.12"
+description: 健康检查 wiki，报告损坏链接、孤立页面、过时索引、缺失连接和 schema 错误。
 ---
 
 # Wiki 检查

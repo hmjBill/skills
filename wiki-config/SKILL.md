@@ -1,8 +1,6 @@
 ---
 name: wiki-config
-description: "交互式设置、验证和维护 llm-wiki skill 套件。当用户说 /wiki-config、要求「设置 wiki」、「配置 wiki」、「初始化 wiki 配置」、提到「页面结构问题」、「架构问题」、「缺少模板」、「wiki 帮助」、「wiki 如何工作」，或任何 wiki skill 报告配置缺失或无效时使用。同时当用户想了解有哪些 wiki skill、对 wiki 系统工作方式感到困惑，或询问某个 skill 为何行为不符合预期时也使用。拥有 wiki 系统的交互式配置流程、架构管理和模板管理功能。"
-metadata:
-  version: "1.10"
+description: 交互式设置、验证和维护 llm-wiki skill 套件，管理 wiki 配置、schema 和模板。
 ---
 
 # Wiki 配置
