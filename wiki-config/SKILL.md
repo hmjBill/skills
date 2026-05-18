@@ -40,7 +40,7 @@ description: 交互式设置、验证和维护 llm-wiki skill 套件，管理 wi
 | wiki-crystallize | [✓/✗] | Distil conversations into wiki pages |
 ```
 
-如果有任何缺失："请从 https://github.com/vanillaflava/llm-wiki-skills 安装完整生态。"
+如果有任何缺失："请从本仓库补齐 `wiki-config`、`wiki-crystallize`、`wiki-ingest`、`wiki-integrate`、`wiki-lint`、`wiki-query` 六个目录。"
 
 捆绑的 `references/setup-help.md` 在整个会话中都可用。如果需要更多导向上下文、用户询问 wiki 系统的详细问题，或你卡住了，请读取它。
 
