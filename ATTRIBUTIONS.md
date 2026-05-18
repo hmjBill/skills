@@ -34,6 +34,17 @@
 | tdd | https://github.com/x-zheng16/cc-pocock-picks（上游: mattpocock/skills） | MIT |
 | zoom-out | https://github.com/x-zheng16/cc-pocock-picks（上游: mattpocock/skills） | MIT |
 
+### LLM Wiki Skills 系列
+
+| Skill | 来源仓库 | 许可证 |
+|-------|---------|--------|
+| wiki-config | https://github.com/vanillaflava/llm-wiki-skills | MIT |
+| wiki-crystallize | https://github.com/vanillaflava/llm-wiki-skills | MIT |
+| wiki-ingest | https://github.com/vanillaflava/llm-wiki-skills | MIT |
+| wiki-integrate | https://github.com/vanillaflava/llm-wiki-skills | MIT |
+| wiki-lint | https://github.com/vanillaflava/llm-wiki-skills | MIT |
+| wiki-query | https://github.com/vanillaflava/llm-wiki-skills | MIT |
+
 ### Apache 2.0 系列（带 LICENSE.txt）
 
 | Skill | 来源仓库 | 许可证 |

@@ -4,9 +4,9 @@
 
 ## 什么是 Skill
 
-Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件为 `SKILL.md`。
+Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录的 Skills（53 个）
+## 收录条目（58 个，57 个含 SKILL.md）
 
 ### 开发与架构
 
@@ -106,7 +106,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | Skill | 说明 |
 |-------|------|
 | [env-bootstrap](env-bootstrap/SKILL.md) | 环境引导配置 |
-| [gstack](gstack/SKILL.md) | 技术栈管理 |
+| [gstack](gstack/llms.txt) | 技术栈管理 |
 | [setup-matt-pocock-skills](setup-matt-pocock-skills/SKILL.md) | 安装 Matt Pocock Skills |
 | [setup-pre-commit](setup-pre-commit/SKILL.md) | 配置 pre-commit 钩子 |
 | [write-a-skill](write-a-skill/SKILL.md) | 创建新的 Skill |
@@ -123,7 +123,7 @@ cp -r simplify ~/.claude/skills/
 cp -r */ ~/.claude/skills/
 ```
 
-每个 Skill 目录下的 `SKILL.md` 是核心指令文件，AI 助手加载后会自动识别并应用。
+每个含 `SKILL.md` 的 Skill 目录都以该文件作为核心指令文件，AI 助手加载后会自动识别并应用。
 
 ## 中文本地化
 

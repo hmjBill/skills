@@ -4,8 +4,8 @@ Agent Skills 收集与汉化仓库。无构建系统、无测试、无 CI。纯�
 
 ## 目录结构
 
-- 每个子目录是一个 Skill，核心文件为 `SKILL.md`
-- 52 个目录：51 个含 SKILL.md，`gstack` 仅有 `llms.txt`
+- 每个子目录是一个 Skill 条目，核心文件通常为 `SKILL.md`
+- 58 个目录：57 个含 SKILL.md，`gstack` 仅有 `llms.txt`
 - 部分目录含参考文件（如 `tdd/tests.md`、`prototype/UI.md`）
 
 ## SKILL.md 格式约束（重要）
@@ -17,10 +17,6 @@ Agent Skills 收集与汉化仓库。无构建系统、无测试、无 CI。纯�
 - **description 字段**：可为中文
 - **标题和正文**：可为中文
 - 专有名词保留英文原名（如 Playwright、Shoehorn）
-
-## 已知的 README 不一致
-
-README.md 第 121 行声称 description 保留英文，实际已全部汉化为中文。第 125 行引用的 `feature/localization` 分支不存在，实际使用的是 `feature/full-localization`。
 
 ## 工作流
 
