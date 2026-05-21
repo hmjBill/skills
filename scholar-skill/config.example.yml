@@ -1,0 +1,167 @@
+# ScholarSkill 配置模板
+
+# ===== Obsidian 配置 =====
+obsidian:
+  # 你的 Obsidian 仓库路径（必填）
+  # 运行配置脚本后会自动填充此路径
+  vault_path: <YOUR_OBSIDIAN_VAULT_PATH>
+  
+  # 笔记文件夹（可选，默认如下）
+  inbox_folder: 0-Inbox
+  paper_notes_folder: 1-Papers
+  paper_by_topic_folder: 1-Papers/By-Topic
+  paper_by_year_folder: 1-Papers/By-Year
+  paper_queue_folder: 1-Papers/To-Process
+  knowledge_folder: 2-Knowledge
+  concepts_folder: 2-Knowledge/Concepts
+  insights_folder: 2-Knowledge/Insights
+  methods_folder: 2-Knowledge/Methods
+  questions_folder: 2-Knowledge/Questions
+  people_folder: 2-Knowledge/People
+  moc_folder: 3-MOCs
+  applications_folder: 4-Applications
+  surveys_folder: 4-Surveys
+  outputs_folder: 4-Outputs
+  reflections_folder: 4-Outputs/Reflections
+  confirmation_records_folder: 4-Outputs/Confirmation-Records
+  templates_folder: 9-Templates/zh-CN
+  
+  # 记忆文件夹（可选，默认如下）
+  memory:
+    semantic_folder: memory/semantic
+    episodic_folder: memory/episodic
+    procedural_file: memory/procedural.md
+    inbox_folder: memory/inbox
+
+# ===== 阅读配置 =====
+reading:
+  # 默认阅读级别 (L1/L2/L3)
+  default_level: L2
+  
+  # 是否启用记忆抽取
+  enable_memory_extraction: true
+  
+  # 是否启用知识巩固
+  enable_knowledge_consolidation: true
+  
+  # 记忆抽取数量配置
+  memory_counts:
+    l2_semantic: 3-5
+    l2_episodic: 1-2
+    l2_procedural: 1
+    l3_semantic: 5-8
+    l3_episodic: 2-3
+    l3_procedural: 2-3
+  
+  # 优先级判定规则
+  # 根据你的研究方向修改这些关键词
+  priority:
+    p0_keywords:
+      - "CAD Generation"
+      - "Physical AI"
+      - "World Model"
+    p1_keywords:
+      - "LLM Agent"
+      - "Reasoning"
+      - "3D Generation"
+    p2_keywords:
+      - "其他方向"
+
+# ===== 通知配置 =====
+notification:
+  # 飞书推送（可选）
+  feishu_enabled: false
+  feishu_user_id: ""  # 你的飞书用户 ID
+  
+  # 推送时机
+  push_on:
+    l1_complete: false
+    l2_complete: true
+    l3_complete: true
+    l3_milestone: true  # 25%/50%/75% 进度推送
+
+# ===== 知识巩固配置 =====
+consolidation:
+  # 巩固周期 (daily/weekly/monthly)
+  schedule: weekly
+  
+  # 自动合并重复记忆
+  auto_merge: true
+  
+  # 冲突解决策略 (auto/manual)
+  conflict_resolution: manual
+  
+  # 生成周报
+  output_report: true
+  
+  # 周报时间（周几）
+  report_day: Sunday
+
+# ===== 模板配置 =====
+templates:
+  # 论文笔记模板（可选，使用内置模板则留空）
+  paper_note_l1: ""
+  paper_note_l2: ""
+  paper_note_l3: ""
+  reflection_l1: 9-Templates/zh-CN/Template-Reflection-L1.md
+  reflection_l2: 9-Templates/zh-CN/Template-Reflection-L2.md
+  reflection_l3: 9-Templates/zh-CN/Template-Reflection-L3.md
+  confirmation_request: 9-Templates/zh-CN/Template-Confirmation-Request.md
+  concept: 9-Templates/zh-CN/Template-Concept.md
+  insight: 9-Templates/zh-CN/Template-Insight.md
+  method: 9-Templates/zh-CN/Template-Method.md
+  question: 9-Templates/zh-CN/Template-Question.md
+  person: 9-Templates/zh-CN/Template-Person.md
+  moc: 9-Templates/zh-CN/Template-MOC.md
+  
+  # 记忆模板（可选）
+  semantic_memory: ""
+  episodic_memory: ""
+  procedural_memory: ""
+
+# ===== 反思机制 =====
+reflection:
+  enable_reflection: true
+  l1_after_each_paper: true
+  l2_schedule: weekly
+  l2_report_day: Sunday
+  l3_schedule: monthly
+  l3_requires_confirmation: true
+
+# ===== 人工确认机制 =====
+confirmation:
+  enable_human_confirmation: true
+  high_priority_timeout_hours: 48
+  trigger_on_new_moc: true
+  trigger_on_core_paper: true
+  trigger_on_many_new_concepts: true
+  trigger_on_cognitive_conflict: true
+  trigger_on_direction_shift: true
+
+# ===== 日志配置 =====
+logging:
+  # 日志级别 (debug/info/warning/error)
+  level: info
+  
+  # 日志文件路径
+  file: ~/.openclaw/workspace/logs/scholar.log
+  
+  # 是否输出详细进度
+  verbose: false
+
+# ===== 高级配置 =====
+advanced:
+  # 并发读取论文数量（批量处理时）
+  batch_size: 3
+  
+  # 单篇论文最大读取时间（分钟）
+  max_reading_time: 180
+  
+  # API 重试次数
+  api_retry_count: 3
+  
+  # 是否使用缓存
+  use_cache: true
+  
+  # 缓存目录
+  cache_dir: ~/.openclaw/workspace/cache/scholar
