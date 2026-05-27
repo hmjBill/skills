@@ -129,6 +129,26 @@
 - writing-fragments
 - writing-shape
 
+### AI-Wiki 适配 Skills
+
+以下 Skills 基于上述原始版本为 AI-Wiki（PARA 变体 Obsidian 笔记库）进行了完整重写：
+
+| Skill | 基于原始版本 | 许可证 |
+|-------|------------|--------|
+| ai-wiki-config | wiki-config (vanillaflava/llm-wiki-skills) | MIT |
+| ai-wiki-query | wiki-query (vanillaflava/llm-wiki-skills) | MIT |
+| ai-wiki-ingest | wiki-ingest (vanillaflava/llm-wiki-skills) | MIT |
+| ai-wiki-integrate | wiki-integrate (vanillaflava/llm-wiki-skills) | MIT |
+| ai-wiki-lint | wiki-lint (vanillaflava/llm-wiki-skills) | MIT |
+| ai-wiki-crystallize | wiki-crystallize (vanillaflava/llm-wiki-skills) | MIT |
+| ai-wiki-vault | obsidian-vault (raja-patnaik/obsidian-agent) | 未明确 |
+| ai-wiki-scholar | scholar-skill (EESJGong/scholar-skill) | MIT |
+| ai-wiki-tutor-setup | tutor-setup (bevibing/tutor-skills) | MIT |
+| ai-wiki-tutor | tutor (bevibing/tutor-skills) | MIT |
+| ai-wiki-to-prd | to-prd | 未明确 |
+| ai-wiki-obsidian-cli | obsidian-cli (kepano/obsidian-skills) | MIT |
+| ai-wiki-canvas-creator | obsidian-canvas-creator (axtonliu/axton-obsidian-visual-skills) | MIT |
+
 ---
 
 > 如你是某 Skill 的作者且希望调整归属方式或移除，请通过 GitHub Issues 联系。
