@@ -1,11 +1,13 @@
 ---
 name: obsidian-canvas-creator
-description: 将文本内容转换为 Obsidian Canvas 画布，支持思维导图和自由布局
+description: 在 AI-Wiki 中创建 Obsidian Canvas 画布，支持思维导图和可视化
 ---
 
-# Obsidian Canvas 创建器
+# Obsidian Canvas 创建器（AI-Wiki 适配版）
 
 将文本内容转换为结构化的 Obsidian Canvas 文件，支持思维导图和自由布局。
+
+本技能在原 obsidian-canvas-creator 基础上增加了 AI-Wiki 笔记库的存放位置、链接规范和典型场景说明。
 
 ## 使用场景
 
@@ -209,3 +211,30 @@ description: 将文本内容转换为 Obsidian Canvas 画布，支持思维导�
 - 节点中文本过多（长内容应使用文件节点）
 - ID 重复（每个 ID 必须唯一）
 - 孤立节点未连接（除非是故意为之）
+
+## AI-Wiki 画布应用
+
+### 存放位置
+Canvas 文件（.canvas）在 AI-Wiki 中按内容性质存放：
+- 知识结构图 → 05_资源/ 对应子目录
+- 项目架构图 → 03_项目/ 对应项目目录
+- 领域关系图 → 04_领域/ 对应领域目录
+- 读书思维导图 → 06_媒体/读书/ 对应笔记旁
+- 如果不确定 → 放到笔记所在目录
+
+### 创建后操作
+- Canvas 文件不需要 frontmatter
+- 如果 Canvas 是某笔记的附属可视化，在笔记的 ## 相关链接 中添加链接
+- 如果 Canvas 是独立知识可视化，在目录 README 的 ## 导航入口 中添加链接
+- 链接格式：`[[路径/文件名.canvas|显示名]]`
+
+### 典型场景
+1. **论文结构图**: 展示论文各章节关系和核心论点链 → 存入 06_媒体/读书/
+2. **项目架构图**: 展示项目组件/里程碑关系 → 存入 03_项目/进行中/
+3. **知识体系图**: 展示领域内概念关系网络 → 存入 04_领域/
+4. **OKR 分解图**: 展示 OKR 层级关系（只读展示，不替代 DataviewJS）→ 存入 02_日常/OKR/
+
+### 注意事项
+- Canvas 文件中引用笔记使用 wikilink 节点类型（type: "link"）
+- 不要为 Canvas 创建新的顶层目录
+- 不要在 00_系统/ 或 09_受控信息/ 中创建 Canvas
