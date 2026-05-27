@@ -40,10 +40,13 @@
 |-------|---------|--------|
 | wiki-config | https://github.com/vanillaflava/llm-wiki-skills | MIT |
 | wiki-crystallize | https://github.com/vanillaflava/llm-wiki-skills | MIT |
-| wiki-ingest | https://github.com/vanillaflava/llm-wiki-skills | MIT |
+| wiki-ingest | https://github.com/vanillaflava/llm-wiki-skills（含 tutor-setup 合并） | MIT |
+| wiki-ingest-web | 基于社区需求原创 | MIT |
 | wiki-integrate | https://github.com/vanillaflava/llm-wiki-skills | MIT |
 | wiki-lint | https://github.com/vanillaflava/llm-wiki-skills | MIT |
 | wiki-query | https://github.com/vanillaflava/llm-wiki-skills | MIT |
+| wiki-review | 基于社区需求原创 | MIT |
+| wiki-write | 基于社区需求原创 | MIT |
 
 ### Axton Obsidian Visual Skills 系列
 
@@ -64,8 +67,9 @@
 
 | Skill | 来源仓库 | 许可证 |
 |-------|---------|--------|
-| tutor-setup | https://github.com/bevibing/tutor-skills | MIT |
 | tutor | https://github.com/bevibing/tutor-skills | MIT |
+
+注：tutor-setup 已合并到 wiki-ingest（learn 模式）。
 
 ### Scholar Skill 系列（已适配 AI-Wiki）
 
