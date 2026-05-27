@@ -6,7 +6,7 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（66 个，65 个含 SKILL.md）
+## 收录条目（79 个，78 个含 SKILL.md）
 
 ### 开发与架构
 
@@ -117,6 +117,26 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [scholar-skill](scholar-skill/SKILL.md) | 学术论文深度阅读和知识内化 |
 | [tutor-setup](tutor-setup/SKILL.md) | 将文档或代码库转换为 StudyVault |
 | [tutor](tutor/SKILL.md) | 基于 StudyVault 的交互式测验辅导 |
+
+### AI-Wiki 适配
+
+以下 Skills 为上述原始版本的 AI-Wiki 适配版，针对 PARA 变体 Obsidian 笔记库重写：
+
+| Skill | 原始版本 | 说明 |
+|-------|---------|------|
+| [ai-wiki-config](ai-wiki-config/SKILL.md) | wiki-config | 检查和展示 AI-Wiki 系统配置与架构状态 |
+| [ai-wiki-query](ai-wiki-query/SKILL.md) | wiki-query | 基于全库内容回答问题，带 wikilink 引用 |
+| [ai-wiki-ingest](ai-wiki-ingest/SKILL.md) | wiki-ingest | 将外部内容摄入并按 PARA 结构路由 |
+| [ai-wiki-integrate](ai-wiki-integrate/SKILL.md) | wiki-integrate | 建立语义链接并更新目录导航 |
+| [ai-wiki-lint](ai-wiki-lint/SKILL.md) | wiki-lint | 笔记库健康检查和 schema 合规校验 |
+| [ai-wiki-crystallize](ai-wiki-crystallize/SKILL.md) | wiki-crystallize | 将对话提炼为持久笔记并按 PARA 归档 |
+| [ai-wiki-vault](ai-wiki-vault/SKILL.md) | obsidian-vault | 在 AI-Wiki 中搜索、创建和管理笔记 |
+| [ai-wiki-scholar](ai-wiki-scholar/SKILL.md) | scholar-skill | 学术论文阅读输出到 AI-Wiki 结构 |
+| [ai-wiki-tutor-setup](ai-wiki-tutor-setup/SKILL.md) | tutor-setup | 将学习材料导入 AI-Wiki 生成结构化笔记 |
+| [ai-wiki-tutor](ai-wiki-tutor/SKILL.md) | tutor | 基于 AI-Wiki 笔记进行交互式测验 |
+| [ai-wiki-to-prd](ai-wiki-to-prd/SKILL.md) | to-prd | 将需求整理为项目文档归档到 AI-Wiki |
+| [ai-wiki-obsidian-cli](ai-wiki-obsidian-cli/SKILL.md) | obsidian-cli | AI-Wiki 环境下的 Obsidian CLI 操作 |
+| [ai-wiki-canvas-creator](ai-wiki-canvas-creator/SKILL.md) | obsidian-canvas-creator | AI-Wiki 中创建 Canvas 画布和可视化 |
 
 ### 环境 / 工具
 
