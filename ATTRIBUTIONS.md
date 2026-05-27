@@ -45,6 +45,34 @@
 | wiki-lint | https://github.com/vanillaflava/llm-wiki-skills | MIT |
 | wiki-query | https://github.com/vanillaflava/llm-wiki-skills | MIT |
 
+### Axton Obsidian Visual Skills 系列
+
+| Skill | 来源仓库 | 许可证 |
+|-------|---------|--------|
+| excalidraw-diagram | https://github.com/axtonliu/axton-obsidian-visual-skills | MIT |
+| mermaid-visualizer | https://github.com/axtonliu/axton-obsidian-visual-skills | MIT |
+| obsidian-canvas-creator | https://github.com/axtonliu/axton-obsidian-visual-skills | MIT |
+
+### Obsidian Skills 系列
+
+| Skill | 来源仓库 | 许可证 |
+|-------|---------|--------|
+| defuddle | https://github.com/kepano/obsidian-skills | MIT |
+| obsidian-cli | https://github.com/kepano/obsidian-skills | MIT |
+
+### Tutor Skills 系列
+
+| Skill | 来源仓库 | 许可证 |
+|-------|---------|--------|
+| tutor-setup | https://github.com/bevibing/tutor-skills | MIT |
+| tutor | https://github.com/bevibing/tutor-skills | MIT |
+
+### Scholar Skill 系列
+
+| Skill | 来源仓库 | 许可证 |
+|-------|---------|--------|
+| scholar-skill | https://github.com/EESJGong/scholar-skill | MIT |
+
 ### Apache 2.0 系列（带 LICENSE.txt）
 
 | Skill | 来源仓库 | 许可证 |
