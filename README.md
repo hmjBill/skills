@@ -6,7 +6,7 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（66 个，65 个含 SKILL.md）
+## 收录条目（68 个，67 个含 SKILL.md）
 
 ### 开发与架构
 
@@ -106,10 +106,13 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 |-------|------|
 | [wiki-config](wiki-config/SKILL.md) | 检查和展示 AI-Wiki 系统配置与架构状态 |
 | [wiki-crystallize](wiki-crystallize/SKILL.md) | 将对话提炼为持久笔记，按 PARA 结构归档 |
-| [wiki-ingest](wiki-ingest/SKILL.md) | 将外部内容摄入笔记库，按 PARA 结构路由到正确目录 |
+| [wiki-ingest](wiki-ingest/SKILL.md) | 将外部内容或学习材料导入笔记库，支持归档和学习两种模式 |
+| [wiki-ingest-web](wiki-ingest-web/SKILL.md) | 从 URL 提取干净内容并摄入笔记库 |
 | [wiki-integrate](wiki-integrate/SKILL.md) | 为笔记建立语义链接并更新目录导航 |
 | [wiki-lint](wiki-lint/SKILL.md) | 笔记库健康检查，验证 schema 合规和链接完整性 |
 | [wiki-query](wiki-query/SKILL.md) | 基于全库内容回答问题，带 wikilink 引用 |
+| [wiki-review](wiki-review/SKILL.md) | 周/月/季度复盘辅助，汇总日记事件待办、对齐 OKR 进度 |
+| [wiki-write](wiki-write/SKILL.md) | 基于库内笔记素材的写作辅助，支持初稿生成、扩写和改写 |
 | [obsidian-cli](obsidian-cli/SKILL.md) | AI-Wiki 环境下的 Obsidian CLI 操作 |
 
 ### 学习与科研
@@ -119,7 +122,6 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | Skill | 说明 |
 |-------|------|
 | [scholar-skill](scholar-skill/SKILL.md) | 学术论文深度阅读，输出到 AI-Wiki 读书和资源目录 |
-| [tutor-setup](tutor-setup/SKILL.md) | 将学习材料导入 AI-Wiki，生成结构化学习笔记 |
 | [tutor](tutor/SKILL.md) | 基于 AI-Wiki 学习笔记进行交互式测验和知识巩固 |
 
 ### 环境 / 工具
