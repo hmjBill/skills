@@ -1,11 +1,13 @@
 ---
 name: obsidian-cli
-description: 使用 Obsidian CLI 读取、创建、搜索和管理 Obsidian 仓库内容及插件开发流程
+description: 在 AI-Wiki 环境中使用 Obsidian CLI 操作笔记库
 ---
 
-# Obsidian CLI
+# Obsidian CLI（AI-Wiki 适配版）
 
 使用 `obsidian` CLI 与运行中的 Obsidian 实例交互。需要 Obsidian 处于打开状态。
+
+本技能在原 obsidian-cli 基础上增加了 AI-Wiki 笔记库的操作规范，确保 CLI 操作符合 AI-Wiki 的目录结构、模板系统和 frontmatter 约束。
 
 ## 命令参考
 
@@ -104,3 +106,53 @@ obsidian dev:mobile on
 ```
 
 运行 `obsidian help` 查看更多开发命令，包括 CDP 和调试器控制。
+
+## AI-Wiki 操作规范
+
+在 AI-Wiki 笔记库中使用 obsidian CLI 时，遵循以下规则。
+
+### 笔记创建
+- 创建笔记前先确认目标目录和对应模板
+- 使用 template 参数指定 00_系统/模板/ 中的模板：
+  ```bash
+  obsidian create name="新笔记" template="资源模板" silent
+  ```
+- 创建后必须更新目标目录 README 的 ## 导航入口
+
+### Frontmatter 修改
+- 使用 property:set 修改单个字段：
+  ```bash
+  obsidian property:set name="状态" value="进行中" file="项目名"
+  ```
+- 枚举字段只能使用合法值：
+  - type: book/area/media/person/project/inbox/resource/single/recurring
+  - 状态(项目): 进行中/已完成/废弃/暂停/搁置
+  - 状态(收件箱): 待处理/已归档
+  - 收件类型: 灵感/摘录/待处理
+  - 媒体类型: 电影/剧集/动画/视频/游戏
+  - 优先级(OKR): High/Middle/Low
+
+### 常用 AI-Wiki 操作
+```bash
+# 查看今日日记
+obsidian daily:read
+
+# 追加内容到日记
+obsidian daily:append content="- [ ] 今日待办"
+
+# 搜索特定目录下的内容
+obsidian search query="tag:#项目" limit=20
+
+# 查看反向链接
+obsidian backlinks file="某个笔记"
+
+# 设置 OKR 进度
+obsidian property:set name="完成进度" value=75 file="某个OKR"
+```
+
+### 注意事项
+- 不要创建新的顶层目录（00-09 以外的）
+- 不要自动删除或移动文件
+- 使用模板创建笔记，不凭记忆手写格式
+- 知识型笔记添加 1-3 个高置信 wikilink
+- 执行型笔记链接到最近的相关 README/MOC
