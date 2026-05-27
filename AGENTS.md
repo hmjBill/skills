@@ -4,7 +4,7 @@ Agent Skills 收集与汉化仓库；无构建系统、无测试、无 CI，改�
 
 ## 仓库形状
 
-- 79 个顶层 skill 条目；78 个含 `SKILL.md`，`gstack` 只有 `llms.txt`。
+- 66 个顶层 skill 条目；65 个含 `SKILL.md`，`gstack` 只有 `llms.txt`。
 - `SKILL.md` 是核心文件；部分 skill 还有按需加载的参考文件，如 `tdd/tests.md`、`prototype/UI.md`、`wiki-config/assets/`、`scholar-skill/scripts/`。
 - 新增或同步外部 skill 时，同步更新 `README.md` 分类/数量和 `ATTRIBUTIONS.md` 来源/许可证。
 - 面向用户的安装/缺失提示应指向本仓库或本地 skill 目录；上游 GitHub 链接只用于 `ATTRIBUTIONS.md` 等来源归属。
