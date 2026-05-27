@@ -6,7 +6,7 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（58 个，57 个含 SKILL.md）
+## 收录条目（66 个，65 个含 SKILL.md）
 
 ### 开发与架构
 
@@ -46,6 +46,14 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [slides](slides/SKILL.md) | 幻灯片制作 |
 | [ui-styling](ui-styling/SKILL.md) | UI 样式 |
 | [ui-ux-pro-max](ui-ux-pro-max/SKILL.md) | UI/UX 专业增强 |
+
+### 可视化
+
+| Skill | 说明 |
+|-------|------|
+| [excalidraw-diagram](excalidraw-diagram/SKILL.md) | 生成 Excalidraw 手绘风图表 |
+| [mermaid-visualizer](mermaid-visualizer/SKILL.md) | 将文本转换为 Mermaid 图表 |
+| [obsidian-canvas-creator](obsidian-canvas-creator/SKILL.md) | 生成 Obsidian Canvas 画布 |
 
 ### 浏览器自动化
 
@@ -100,12 +108,22 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [wiki-integrate](wiki-integrate/SKILL.md) | 将 Wiki 页面编织到知识图谱 |
 | [wiki-lint](wiki-lint/SKILL.md) | Wiki 健康检查和链接验证 |
 | [wiki-query](wiki-query/SKILL.md) | 使用 Wiki 知识库回答问题 |
+| [obsidian-cli](obsidian-cli/SKILL.md) | 通过 Obsidian CLI 管理仓库内容 |
+
+### 学习与科研
+
+| Skill | 说明 |
+|-------|------|
+| [scholar-skill](scholar-skill/SKILL.md) | 学术论文深度阅读和知识内化 |
+| [tutor-setup](tutor-setup/SKILL.md) | 将文档或代码库转换为 StudyVault |
+| [tutor](tutor/SKILL.md) | 基于 StudyVault 的交互式测验辅导 |
 
 ### 环境 / 工具
 
 | Skill | 说明 |
 |-------|------|
 | [env-bootstrap](env-bootstrap/SKILL.md) | 环境引导配置 |
+| [defuddle](defuddle/SKILL.md) | 从网页提取干净 Markdown 内容 |
 | [gstack](gstack/llms.txt) | 技术栈管理 |
 | [setup-matt-pocock-skills](setup-matt-pocock-skills/SKILL.md) | 安装 Matt Pocock Skills |
 | [setup-pre-commit](setup-pre-commit/SKILL.md) | 配置 pre-commit 钩子 |
