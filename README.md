@@ -6,7 +6,7 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（68 个，67 个含 SKILL.md）
+## 收录条目（69 个，68 个含 SKILL.md）
 
 ### 开发与架构
 
@@ -134,6 +134,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [setup-matt-pocock-skills](setup-matt-pocock-skills/SKILL.md) | 安装 Matt Pocock Skills |
 | [setup-pre-commit](setup-pre-commit/SKILL.md) | 配置 pre-commit 钩子 |
 | [write-a-skill](write-a-skill/SKILL.md) | 创建新的 Skill |
+| [wechat-cli](wechat-cli/SKILL.md) | 查询本地微信数据（聊天记录、联系人、会话、收藏、统计等） |
 
 ## 使用方式
 

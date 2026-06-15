@@ -114,6 +114,7 @@
 | triage | https://github.com/monte-carlo-data/mc-agent-toolkit | 未明确 |
 | ubiquitous-language | https://github.com/tsipotU/glossary-skill | 未明确 |
 | write-a-skill | https://github.com/DurdeuVlad/easyskillz | 未明确 |
+| wechat-cli | 原创；调用 [freestylefly/wechat-cli](https://github.com/freestylefly/wechat-cli)（npm `@canghe_ai/wechat-cli` / pip `wechat-cli`） | MIT（原创）/ Apache-2.0（依赖） |
 
 ## 未溯源的 Skills
 
