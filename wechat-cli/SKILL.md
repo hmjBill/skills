@@ -5,7 +5,7 @@ description: 查询本地微信数据（聊天记录、联系人、会话、收�
 
 # WeChat CLI Skill
 
-通过 [`wechat-cli`](https://github.com/freestylefly/wechat-cli) 查询本地微信数据。所有数据完全本地处理，SQLCipher 即时解密，不联网。
+通过 [`wechat-cli`](https://github.com/huohuoer/wechat-cli) 查询本地微信数据。所有数据完全本地处理，SQLCipher 即时解密，不联网。
 
 ## 平台与系统要求
 
@@ -30,7 +30,7 @@ pip install wechat-cli
 **备选（源码）**：
 
 ```bash
-git clone https://github.com/freestylefly/wechat-cli.git
+git clone https://github.com/huohuoer/wechat-cli.git
 cd wechat-cli
 pip install -e .
 ```
@@ -249,7 +249,7 @@ wechat-cli new-messages --format text
 如果以 `pip install -e .` 从临时目录安装且该目录被系统清理，会出现 `ModuleNotFoundError: No module named 'wechat_cli'`。修复方法：把源码移到持久位置后重装：
 
 ```bash
-git clone https://github.com/freestylefly/wechat-cli.git "<持久目录>/wechat-cli"
+git clone https://github.com/huohuoer/wechat-cli.git "<持久目录>/wechat-cli"
 cd "<持久目录>/wechat-cli" && pip install -e .
 ```
 
