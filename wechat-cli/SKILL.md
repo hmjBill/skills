@@ -21,13 +21,25 @@ description: 查询本地微信数据（聊天记录、联系人、会话、收�
 
 ## 安装
 
-**推荐（pip，跨平台）**：
+> ⚠️ **PyPI 上没有 `wechat-cli`**（404，2026-10 实测）。上游 README 写的 `pip install wechat-cli` 装不上，一律从 GitHub 源码安装。
+
+**推荐（uv tool，隔离环境，Windows 已验证）**：
 
 ```bash
-pip install wechat-cli
+uv tool install git+https://github.com/huohuoer/wechat-cli
 ```
 
-**备选（源码）**：
+装完自带 `wechat-cli` 可执行文件（uv shim 目录，通常在 PATH）。
+
+**备选（pip from git）**：
+
+```bash
+pip install git+https://github.com/huohuoer/wechat-cli
+```
+
+注意：uv 管理的 Python（PEP 668 externally-managed）会拒绝直接 `pip install`，用上面的 `uv tool` 方式或放进 venv。
+
+**备选（editable 源码）**：
 
 ```bash
 git clone https://github.com/huohuoer/wechat-cli.git
@@ -35,7 +47,7 @@ cd wechat-cli
 pip install -e .
 ```
 
-**npm（不推荐）**：`@canghe_ai/wechat-cli` 已标记 deprecated，且仅提供 macOS arm64 二进制，Windows/Linux 无预编译。Windows 用户**不要用 npm 版**。
+**npm（不推荐）**：`@canghe_ai/wechat-cli` 仅提供 macOS arm64 预编译二进制，Windows/Linux 无二进制，勿用。
 
 验证安装：
 
@@ -73,7 +85,7 @@ wechat-cli sessions --limit 10
 
 ### PATH 冲突排错（重要）
 
-如果 `wechat-cli --version` 报类似 `Cannot find module '@canghe_ai/wechat-cli-win32-x64/package.json'` 的错误，说明 PATH 里的 npm 版（`@canghe_ai/wechat-cli`）优先于 pip 版，而 npm 版在你的平台没有二进制。任选一种方式解决：
+如果 `wechat-cli --version` 报类似 `Cannot find module '@canghe_ai/wechat-cli-win32-x64/package.json'` 的错误，说明 PATH 里的 npm 版（`@canghe_ai/wechat-cli`）优先于 git 安装版，而 npm 版在你的平台没有二进制。任选一种方式解决：
 
 **方式 A — 用本 skill 自带的包装脚本**（在 skill 目录下运行）：
 
@@ -96,7 +108,7 @@ wx() { python -c "from wechat_cli.main import cli; cli()" -- "$@"; }
 wx sessions --limit 10
 ```
 
-**方式 C — 根治**（卸载 npm 版，可能因文件锁 EBUSY 失败，失败也不影响 pip 版使用）：
+**方式 C — 根治**（卸载 npm 版，可能因文件锁 EBUSY 失败，失败也不影响 git 安装版使用）：
 
 ```bash
 npm uninstall -g @canghe_ai/wechat-cli
@@ -124,7 +136,7 @@ wechat-cli history "张三" --type link                # 只看链接
 wechat-cli history "张三" --format text              # 纯文本输出
 ```
 
-选项：`--limit`, `--offset`, `--start-time`, `--end-time`, `--type`, `--format`
+选项：`--limit`, `--offset`, `--start-time`, `--end-time`, `--type`, `--format`, `--media`（解析图片/文件/视频/语音的本地路径）
 
 ### search — 搜索消息
 
@@ -239,7 +251,7 @@ wechat-cli new-messages --format text
 
 1. **必须先 init**：所有查询命令依赖 `~/.wechat-cli/all_keys.json`
 2. **微信必须运行**：`init` 时需要从微信进程提取密钥
-3. **npm 版勿用**：已 deprecated 且 Windows/Linux 无二进制，统一用 pip 版（`pip install wechat-cli`）或源码安装
+3. **npm 版勿用**：Windows/Linux 无二进制。PyPI 无 `wechat-cli` 包，统一用 `uv tool install git+https://github.com/huohuoer/wechat-cli`（或 pip from git）安装
 4. **PATH 冲突**：若 `wechat-cli` 命令报 `Cannot find module '...win32-x64...'`，按"调用方式 → PATH 冲突排错"处理
 5. **数据安全**：所有数据本地处理，SQLCipher 即时解密，不联网
 6. **维护状态**：单人维护，跟进新版微信可能滞后（macOS > 4.1.8.100 暂不支持）
