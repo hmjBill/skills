@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# jq 是必需依赖：缺失时无法解析 stdin JSON，检测循环会空匹配并放行，必须 fail-closed。
+if ! command -v jq >/dev/null 2>&1; then
+  echo "BLOCKED: jq is required by this hook but was not found on PATH." >&2
+  echo "Install jq first, e.g.: winget install jqlang.jq / scoop install jq / brew install jq" >&2
+  exit 2
+fi
+
 INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command')
 

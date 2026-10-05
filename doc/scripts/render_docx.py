@@ -6,6 +6,7 @@ import tempfile
 import xml.etree.ElementTree as ET
 from os import makedirs, replace
 from os.path import abspath, basename, exists, expanduser, join, splitext
+from pathlib import Path
 from shutil import which
 import sys
 from typing import Sequence, cast
@@ -113,10 +114,12 @@ def convert_to_pdf(
     convert_tmp_dir: str,
     stem: str,
 ) -> str:
+    profile_uri = Path(user_profile).resolve().as_uri()
+
     # Try direct DOC(X) -> PDF
     cmd_pdf = [
         "soffice",
-        "-env:UserInstallation=file://" + user_profile,
+        "-env:UserInstallation=" + profile_uri,
         "--invisible",
         "--headless",
         "--norestore",
@@ -135,7 +138,7 @@ def convert_to_pdf(
     # Fallback: DOCX -> ODT, then ODT -> PDF
     cmd_odt = [
         "soffice",
-        "-env:UserInstallation=file://" + user_profile,
+        "-env:UserInstallation=" + profile_uri,
         "--invisible",
         "--headless",
         "--norestore",
@@ -152,7 +155,7 @@ def convert_to_pdf(
     if exists(odt_path):
         cmd_odt_pdf = [
             "soffice",
-            "-env:UserInstallation=file://" + user_profile,
+            "-env:UserInstallation=" + profile_uri,
             "--invisible",
             "--headless",
             "--norestore",
