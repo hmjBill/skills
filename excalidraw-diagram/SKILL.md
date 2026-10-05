@@ -24,7 +24,7 @@ description: 将文本内容生成 Excalidraw 图表，支持 Obsidian、标准 
 3. 选择图表类型（见下方图表类型）
 4. 生成 Excalidraw JSON（Animated 模式需添加动画顺序）
 5. 按对应模式输出正确格式
-6. **自动保存到当前工作目录**
+6. **自动保存**（默认当前工作目录；在笔记库中使用时，按用户或笔记库约定选择目录）
 7. 向用户报告文件路径和使用方法
 
 ## 输出格式
@@ -60,21 +60,7 @@ tags: [excalidraw]
 
 ### 模式 2：标准 Excalidraw 格式
 
-直接输出纯 JSON 文件，可在 excalidraw.com 打开：
-
-```json
-{
-  "type": "excalidraw",
-  "version": 2,
-  "source": "https://excalidraw.com",
-  "elements": [...],
-  "appState": {
-    "gridSize": null,
-    "viewBackgroundColor": "#ffffff"
-  },
-  "files": {}
-}
-```
+直接输出纯 JSON 文件，可在 excalidraw.com 打开。文件级结构见下文「JSON 结构」中的 Standard 变体。
 
 **关键要点：**
 - `source` 使用 `https://excalidraw.com`（不是 Obsidian 插件）
@@ -109,6 +95,8 @@ tags: [excalidraw]
 1. 生成 `.excalidraw` 文件
 2. 拖到 https://dai-shi.github.io/excalidraw-animate/
 3. 点击 Animate 预览，然后导出 SVG 或 WebM
+
+> 注意：该站点为第三方服务，需联网使用；不可用时跳过动画步骤。
 
 **文件扩展名**：`.excalidraw`
 
@@ -192,28 +180,20 @@ tags: [excalidraw]
 - 浅色填充上用深色变体文字（如浅绿底用 `#15803d`，不用 `#22c55e`）
 - 避免浅灰色文字（`#b0b0b0`、`#999`）出现在白底上
 
-参考：[references/excalidraw-schema.md](references/excalidraw-schema.md)
+参考：[references/excalidraw-schema.md](references/excalidraw-schema.md)（相对技能目录，在技能目录下运行时可访问）
 
 ## JSON 结构
 
-**Obsidian 模式：**
-```json
-{
-  "type": "excalidraw",
-  "version": 2,
-  "source": "https://github.com/zsviczian/obsidian-excalidraw-plugin",
-  "elements": [...],
-  "appState": { "gridSize": null, "viewBackgroundColor": "#ffffff" },
-  "files": {}
-}
-```
+两种模式的骨架相同，仅 `source` 不同：
 
-**Standard / Animated 模式：**
+- **Obsidian 模式**：`source` 为 `https://github.com/zsviczian/obsidian-excalidraw-plugin`
+- **Standard / Animated 模式**：`source` 为 `https://excalidraw.com`
+
 ```json
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "https://excalidraw.com",
+  "source": "<按模式取值>",
   "elements": [...],
   "appState": { "gridSize": null, "viewBackgroundColor": "#ffffff" },
   "files": {}
@@ -282,7 +262,7 @@ tags: [excalidraw]
 }
 ```
 
-完整元素类型参见 [references/excalidraw-schema.md](references/excalidraw-schema.md)。
+完整元素类型参见 [references/excalidraw-schema.md](references/excalidraw-schema.md)（相对技能目录）。
 
 ---
 
@@ -300,63 +280,15 @@ tags: [excalidraw]
 
 ### 所有元素的必填字段
 
-**重要**：不要包含 `frameId`、`index`、`versionNonce` 或 `rawText` 字段。使用 `boundElements: null`（不是 `[]`），`updated: 1`（不是时间戳）。
-
-```json
-{
-  "id": "unique-identifier",
-  "type": "rectangle|text|arrow|ellipse|diamond",
-  "x": 100, "y": 100,
-  "width": 200, "height": 50,
-  "angle": 0,
-  "strokeColor": "#color-hex",
-  "backgroundColor": "transparent|#color-hex",
-  "fillStyle": "solid",
-  "strokeWidth": 2,
-  "strokeStyle": "solid|dashed|dotted",
-  "roughness": 1,
-  "opacity": 100,
-  "groupIds": [],
-  "roundness": {"type": 3},
-  "seed": 123456789,
-  "version": 1,
-  "isDeleted": false,
-  "boundElements": null,
-  "updated": 1,
-  "link": null,
-  "locked": false
-}
-```
+完整字段示例见上文「元素模板」。**重要**：不要包含 `frameId`、`index`、`versionNonce` 或 `rawText` 字段。使用 `boundElements: null`（不是 `[]`），`updated: 1`（不是时间戳）。
 
 ### 文本特有属性
 
-文本元素（type: "text"）需要额外属性（不要包含 `rawText`）：
-```json
-{
-  "text": "显示文本",
-  "fontSize": 20,
-  "fontFamily": 5,
-  "textAlign": "center",
-  "verticalAlign": "middle",
-  "containerId": null,
-  "originalText": "显示文本",
-  "autoResize": true,
-  "lineHeight": 1.25
-}
-```
+文本元素（type: "text"）的额外属性见上文「元素模板」中的文本示例（不要包含 `rawText`）。
 
-### appState 配置
-```json
-"appState": {
-  "gridSize": null,
-  "viewBackgroundColor": "#ffffff"
-}
-```
+### appState 与 files
 
-### files 字段
-```json
-"files": {}
-```
+取值见上文「JSON 结构」。
 
 ## 常见错误与避免方法
 
@@ -391,30 +323,13 @@ tags: [excalidraw]
 - 优先使用中文以提高清晰度
 
 #### 3. 使用 Write 工具自动保存文件
-- **保存位置**：当前工作目录（自动检测环境变量）
-- **完整路径**：`{current_directory}/[filename].md`
-- 这样可以实现灵活迁移，无需硬编码路径
+- **保存位置**：默认保存到当前工作目录；如在笔记库中使用，按用户或笔记库约定选择目录
+- **完整路径**：`{保存目录}/[filename].md`
+- 不硬编码路径，保持可迁移
 
 #### 4. 确保 Markdown 结构完全正确
-**必须按以下格式生成**（不能有任何修改）：
 
-```markdown
----
-excalidraw-plugin: parsed
-tags: [excalidraw]
----
-==⚠  Switch to EXCALIDRAW VIEW in the MORE OPTIONS menu of this document. ⚠== You can decompress Drawing data with the command palette: 'Decompress current Excalidraw file'. For more info check in plugin settings under 'Saving'
-
-# Excalidraw Data
-
-## Text Elements
-%%
-## Drawing
-\`\`\`json
-{完整的 JSON 数据}
-\`\`\`
-%%
-```
+Obsidian 模式必须严格按「模式 1：Obsidian 格式」中的结构输出，不得有任何修改；Standard / Animated 模式输出纯 JSON。确保 JSON 有效且结构完整。
 
 #### 5. JSON 数据要求
 - 包含完整的 Excalidraw JSON 结构
@@ -473,3 +388,5 @@ Excalidraw 动画图已生成！
 3. 预览动画效果
 4. 点击 Export 导出 SVG 或 WebM
 ```
+
+> 上述 Animated 流程依赖第三方站点 excalidraw-animate，需联网使用；不可用时跳过动画步骤。
