@@ -75,6 +75,31 @@ wechat-cli init
 wechat-cli init --force
 ```
 
+## 微信 4.1.11+ 密钥提取（Windows 必须打补丁）
+
+微信 **4.1.11 起**不再把明文数据库密钥以 `x'<64hex密钥><32hex salt>'` 形式缓存在进程内存，而是 XOR 混淆进 `com.Tencent.WCDB.Config.Cipher` 对象。上游 `huohuoer/wechat-cli` 0.2.4（自 2026-04 起停更）的 Windows 提取**只有**扫旧字面量这一条路，因此 `init` 会识别出 DB/salt 却报 `0 hex patterns`、`0/28 salts`——**这不是权限问题**（管理员终端也一样）。
+
+修复 = 上游未合并的 **PR #22**（Config.Cipher 结构体解析 + XOR 解码，纯只读、不注入；旧 SHA512 校验保留为回退）。本机已修好：
+
+- 源码（已打补丁）：`B:\Develops\Projects\vendor\wechat-cli`
+- 安装：`uv tool install --force "B:\Develops\Projects\vendor\wechat-cli"`
+
+**微信升级后若再次失效，重新打补丁：**
+
+```bash
+cd "B:\Develops\Projects\vendor\wechat-cli"
+gh pr diff 22 --repo huohuoer/wechat-cli > pr22.diff   # 若 PR 仍未合并
+git checkout -- . && git apply pr22.diff
+uv tool install --force .
+wechat-cli init --force
+```
+
+- ⚠️ **不要跑 `uv tool upgrade wechat-cli`**，会覆盖回未打补丁的版本。
+- 若 PR #22 已被合并，可直接：`uv tool install --force git+https://github.com/huohuoer/wechat-cli`。
+- 若本工具彻底失效，备选是仍维护的上游 `TANGandXUE/wcdb-key-tool`。
+
+**已验证**：微信 4.1.13.65 + Windows 管理员终端 → 28/28 salts 提取成功，`sessions` 正常。
+
 ## 调用方式
 
 ### 标准：直接用 wechat-cli
