@@ -1,68 +1,68 @@
-# CIP Design Style Guide
+# CIP 设计风格指南
 
-## Corporate Minimal
-**Industries:** Finance, Legal, Consulting, Tech
-**Colors:** Navy (#0F172A), White (#FFFFFF), Blue accents
-**Typography:** Clean sans-serif (Inter, Helvetica)
-**Materials:** Premium matte paper, subtle textures
-**Finishes:** Matte, spot UV on logo
+## 企业极简
+**行业：** 金融、法律、咨询、科技
+**颜色：** 藏青（#0F172A）、白（#FFFFFF）、蓝色点缀
+**排版：** 干净的无衬线（Inter、Helvetica）
+**材质：** 高级哑光纸、细腻纹理
+**工艺：** 哑光、Logo 局部 UV
 
-## Modern Tech
-**Industries:** Tech, SaaS, Startups, AI
-**Colors:** Purple (#6366F1), Cyan (#0EA5E9), Green (#10B981)
-**Typography:** Geometric sans (Outfit, Poppins)
-**Materials:** Smooth surfaces, gradient prints
-**Finishes:** Gloss, metallic accents
+## 现代科技
+**行业：** 科技、SaaS、初创、AI
+**颜色：** 紫（#6366F1）、青（#0EA5E9）、绿（#10B981）
+**排版：** 几何无衬线（Outfit、Poppins）
+**材质：** 光滑表面、渐变印刷
+**工艺：** 光泽、金属点缀
 
-## Luxury Premium
-**Industries:** Fashion, Jewelry, Hotels, Fine Dining
-**Colors:** Black (#1C1917), Gold (#D4AF37), White
-**Typography:** Elegant serif (Playfair), thin sans
-**Materials:** Heavy cotton paper, leather, metal
-**Finishes:** Gold foil, emboss, deboss, soft-touch
+## 奢华高级
+**行业：** 时尚、珠宝、酒店、高级餐饮
+**颜色：** 黑（#1C1917）、金（#D4AF37）、白
+**排版：** 优雅衬线（Playfair）、细无衬线
+**材质：** 重磅棉纸、皮革、金属
+**工艺：** 烫金、压凸、压凹、触感膜
 
-## Classic Traditional
-**Industries:** Law Firms, Heritage Brands, Finance
-**Colors:** Navy, Burgundy, Gold
-**Typography:** Traditional serif (Times, Garamond)
-**Materials:** Quality laid paper, wood
-**Finishes:** Letterpress, gold emboss
+## 经典传统
+**行业：** 律师事务所、传承品牌、金融
+**颜色：** 藏青、酒红、金
+**排版：** 传统衬线（Times、Garamond）
+**材质：** 优质帘纹纸、木材
+**工艺：** 凸版印刷、烫金压凸
 
-## Warm Organic
-**Industries:** Food, Organic, Wellness, Craft
-**Colors:** Brown (#8B4513), Green (#228B22), Cream
-**Typography:** Friendly serif, organic script
-**Materials:** Kraft paper, recycled materials
-**Finishes:** Uncoated, natural textures
+## 温暖有机
+**行业：** 食品、有机、健康、手作
+**颜色：** 棕（#8B4513）、绿（#228B22）、奶油
+**排版：** 友好衬线、有机手写体
+**材质：** 牛皮纸、再生材料
+**工艺：** 非涂布、自然纹理
 
-## Bold Dynamic
-**Industries:** Sports, Entertainment, Gaming
-**Colors:** Red (#DC2626), Orange (#F97316), Black
-**Typography:** Bold condensed sans
-**Materials:** High-contrast, metallic
-**Finishes:** Gloss, vibrant colors
+## 大胆动感
+**行业：** 体育、娱乐、游戏
+**颜色：** 红（#DC2626）、橙（#F97316）、黑
+**排版：** 粗体窄体无衬线
+**材质：** 高对比、金属
+**工艺：** 光泽、鲜艳色彩
 
-## Fresh Modern
-**Industries:** Healthcare, Wellness, Fintech
-**Colors:** Mint (#10B981), Sky (#0EA5E9), White
-**Typography:** Modern rounded sans
-**Materials:** Light, clean surfaces
-**Finishes:** Matte, clean minimal
+## 清新现代
+**行业：** 医疗、健康、金融科技
+**颜色：** 薄荷（#10B981）、天蓝（#0EA5E9）、白
+**排版：** 现代圆润无衬线
+**材质：** 轻盈、干净表面
+**工艺：** 哑光、干净极简
 
-## Soft Elegant
-**Industries:** Beauty, Wedding, Spa, Fashion
-**Colors:** Pink (#F472B6), Gold, White
-**Typography:** Elegant script, thin sans
-**Materials:** Soft-touch, quality paper
-**Finishes:** Rose gold foil, emboss
+## 柔和优雅
+**行业：** 美妆、婚礼、水疗、时尚
+**颜色：** 粉（#F472B6）、金、白
+**排版：** 优雅手写体、细无衬线
+**材质：** 触感膜、优质纸张
+**工艺：** 玫瑰金烫金、压凸
 
-## Color Psychology
+## 色彩心理学
 
-| Color | Meaning | Best Use |
+| 颜色 | 含义 | 最佳用途 |
 |-------|---------|----------|
-| Blue | Trust, stability | Finance, Tech, Healthcare |
-| Green | Growth, nature | Eco, Wellness, Organic |
-| Gold | Luxury, prestige | Premium, Jewelry |
-| Red | Energy, passion | Food, Sports |
-| Black | Sophistication | Luxury, Fashion |
-| White | Clean, minimal | Tech, Healthcare |
+| 蓝色 | 信任、稳定 | 金融、科技、医疗 |
+| 绿色 | 成长、自然 | 环保、健康、有机 |
+| 金色 | 奢华、声望 | 高端、珠宝 |
+| 红色 | 活力、热情 | 食品、体育 |
+| 黑色 | 精致 | 奢华、时尚 |
+| 白色 | 干净、极简 | 科技、医疗 |

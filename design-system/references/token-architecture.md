@@ -1,103 +1,103 @@
-# Token Architecture
+# 令牌架构
 
-Three-layer token system for scalable, themeable design systems.
+面向可扩展、可换肤设计系统的三层令牌体系。
 
-## Layer Overview
+## 层级概览
 
 ```
-┌─────────────────────────────────────────┐
-│  Component Tokens                       │  Per-component overrides
-│  --button-bg, --card-padding            │
-├─────────────────────────────────────────┤
-│  Semantic Tokens                        │  Purpose-based aliases
-│  --color-primary, --spacing-section     │
-├─────────────────────────────────────────┤
-│  Primitive Tokens                       │  Raw design values
-│  --color-blue-600, --space-4            │
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│  组件令牌                                       │  按组件覆盖
+│  --button-bg, --card-padding                    │
+├─────────────────────────────────────────────────┤
+│  语义令牌                                       │  基于用途的别名
+│  --color-primary, --spacing-section             │
+├─────────────────────────────────────────────────┤
+│  原始令牌                                       │  原始设计值
+│  --color-blue-600, --space-4                    │
+└─────────────────────────────────────────────────┘
 ```
 
-## Why Three Layers?
+## 为什么需要三层？
 
-| Layer | Purpose | When to Change |
+| 层级 | 用途 | 何时变更 |
 |-------|---------|----------------|
-| Primitive | Base values (colors, sizes) | Rarely - foundational |
-| Semantic | Meaning assignment | Theme switching |
-| Component | Component customization | Per-component needs |
+| 原始 | 基础值（颜色、尺寸） | 很少 - 基础层 |
+| 语义 | 赋予含义 | 主题切换 |
+| 组件 | 组件定制 | 按组件需求 |
 
-## Layer 1: Primitive Tokens
+## 第 1 层：原始令牌
 
-Raw design values without semantic meaning.
+不带语义的原始设计值。
 
 ```css
 :root {
-  /* Colors */
+  /* 颜色 */
   --color-gray-50: #F9FAFB;
   --color-gray-900: #111827;
   --color-blue-500: #3B82F6;
   --color-blue-600: #2563EB;
 
-  /* Spacing (4px base) */
+  /* 间距（4px 基准） */
   --space-1: 0.25rem;  /* 4px */
   --space-2: 0.5rem;   /* 8px */
   --space-4: 1rem;     /* 16px */
   --space-6: 1.5rem;   /* 24px */
 
-  /* Typography */
+  /* 排版 */
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.125rem;
 
-  /* Radius */
+  /* 圆角 */
   --radius-sm: 0.25rem;
   --radius-default: 0.5rem;
   --radius-lg: 0.75rem;
 
-  /* Shadows */
+  /* 阴影 */
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
   --shadow-default: 0 1px 3px rgb(0 0 0 / 0.1);
 }
 ```
 
-## Layer 2: Semantic Tokens
+## 第 2 层：语义令牌
 
-Purpose-based aliases that reference primitives.
+引用原始令牌、基于用途的别名。
 
 ```css
 :root {
-  /* Background */
+  /* 背景 */
   --color-background: var(--color-gray-50);
   --color-foreground: var(--color-gray-900);
 
-  /* Primary */
+  /* 主色 */
   --color-primary: var(--color-blue-600);
   --color-primary-hover: var(--color-blue-700);
 
-  /* Secondary */
+  /* 次要色 */
   --color-secondary: var(--color-gray-100);
   --color-secondary-foreground: var(--color-gray-900);
 
-  /* Muted */
+  /* 弱化 */
   --color-muted: var(--color-gray-100);
   --color-muted-foreground: var(--color-gray-500);
 
-  /* Destructive */
+  /* 危险 */
   --color-destructive: var(--color-red-600);
   --color-destructive-foreground: white;
 
-  /* Spacing */
+  /* 间距 */
   --spacing-component: var(--space-4);
   --spacing-section: var(--space-6);
 }
 ```
 
-## Layer 3: Component Tokens
+## 第 3 层：组件令牌
 
-Component-specific tokens referencing semantic layer.
+引用语义层的组件专用令牌。
 
 ```css
 :root {
-  /* Button */
+  /* 按钮 */
   --button-bg: var(--color-primary);
   --button-fg: white;
   --button-hover-bg: var(--color-primary-hover);
@@ -105,13 +105,13 @@ Component-specific tokens referencing semantic layer.
   --button-padding-y: var(--space-2);
   --button-radius: var(--radius-default);
 
-  /* Input */
+  /* 输入框 */
   --input-bg: var(--color-background);
   --input-border: var(--color-gray-300);
   --input-focus-ring: var(--color-primary);
   --input-padding: var(--space-2) var(--space-3);
 
-  /* Card */
+  /* 卡片 */
   --card-bg: var(--color-background);
   --card-border: var(--color-gray-200);
   --card-padding: var(--space-4);
@@ -120,9 +120,9 @@ Component-specific tokens referencing semantic layer.
 }
 ```
 
-## Dark Mode
+## 深色模式
 
-Override semantic tokens for dark theme:
+为深色主题覆盖语义令牌：
 
 ```css
 .dark {
@@ -134,21 +134,21 @@ Override semantic tokens for dark theme:
 }
 ```
 
-## Naming Convention
+## 命名规范
 
 ```
 --{category}-{item}-{variant}-{state}
 
-Examples:
---color-primary           # category-item
---color-primary-hover     # category-item-state
---button-bg-hover         # component-property-state
---space-section-sm        # category-semantic-variant
+示例：
+--color-primary           # 类别-条目
+--color-primary-hover     # 类别-条目-状态
+--button-bg-hover         # 组件-属性-状态
+--space-section-sm        # 类别-语义-变体
 ```
 
-## Categories
+## 类别
 
-| Category | Examples |
+| 类别 | 示例 |
 |----------|----------|
 | color | primary, secondary, muted, destructive |
 | space | 1, 2, 4, 8, section, component |
@@ -157,58 +157,58 @@ Examples:
 | shadow | sm, default, lg |
 | duration | fast, normal, slow |
 
-## File Organization
+## 文件组织
 
 ```
 tokens/
-├── primitives.css     # Raw values
-├── semantic.css       # Purpose aliases
-├── components.css     # Component tokens
-└── index.css          # Imports all
+├── primitives.css     # 原始值
+├── semantic.css       # 用途别名
+├── components.css     # 组件令牌
+└── index.css          # 导入全部
 ```
 
-Or single file with layer comments:
+或使用带层级注释的单文件：
 
 ```css
-/* === PRIMITIVES === */
+/* === 原始 === */
 :root { ... }
 
-/* === SEMANTIC === */
+/* === 语义 === */
 :root { ... }
 
-/* === COMPONENTS === */
+/* === 组件 === */
 :root { ... }
 
-/* === DARK MODE === */
+/* === 深色模式 === */
 .dark { ... }
 ```
 
-## Migration from Flat Tokens
+## 从扁平令牌迁移
 
-Before (flat):
+之前（扁平）：
 ```css
 --button-primary-bg: #2563EB;
 --button-secondary-bg: #F3F4F6;
 ```
 
-After (three-layer):
+之后（三层）：
 ```css
-/* Primitive */
+/* 原始 */
 --color-blue-600: #2563EB;
 --color-gray-100: #F3F4F6;
 
-/* Semantic */
+/* 语义 */
 --color-primary: var(--color-blue-600);
 --color-secondary: var(--color-gray-100);
 
-/* Component */
+/* 组件 */
 --button-bg: var(--color-primary);
 --button-secondary-bg: var(--color-secondary);
 ```
 
-## W3C DTCG Alignment
+## W3C DTCG 对齐
 
-Token JSON format (W3C Design Tokens Community Group):
+令牌 JSON 格式（W3C Design Tokens Community Group）：
 
 ```json
 {

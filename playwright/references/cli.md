@@ -1,22 +1,25 @@
-# Playwright CLI Reference
+# Playwright CLI 参考
 
-Use the wrapper script unless the CLI is already installed globally:
+除非 CLI 已全局安装，否则使用包装脚本。在技能目录（`SKILL.md` 所在目录）下运行：
 
 ```bash
-export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
+export PWCLI="$PWD/scripts/playwright_cli.sh"
 "$PWCLI" --help
 ```
 
-User-scoped skills install under `$CODEX_HOME/skills` (default: `~/.codex/skills`).
+Windows 上该脚本需要 Git Bash（或在 WSL 中运行）；在 PowerShell 7 下可直接使用等价的 `npx` 调用：
 
-Optional convenience alias:
+```powershell
+npx --yes --package @playwright/cli playwright-cli --help
+```
+
+可选便捷别名：
 
 ```bash
 alias pwcli="$PWCLI"
 ```
 
-## Core
+## 核心命令
 
 ```bash
 pwcli open https://example.com
@@ -41,7 +44,7 @@ pwcli dialog-dismiss
 pwcli resize 1920 1080
 ```
 
-## Navigation
+## 导航
 
 ```bash
 pwcli go-back
@@ -49,7 +52,7 @@ pwcli go-forward
 pwcli reload
 ```
 
-## Keyboard
+## 键盘
 
 ```bash
 pwcli press Enter
@@ -58,7 +61,7 @@ pwcli keydown Shift
 pwcli keyup Shift
 ```
 
-## Mouse
+## 鼠标
 
 ```bash
 pwcli mousemove 150 300
@@ -69,7 +72,7 @@ pwcli mouseup right
 pwcli mousewheel 0 100
 ```
 
-## Save as
+## 保存为
 
 ```bash
 pwcli screenshot
@@ -77,7 +80,7 @@ pwcli screenshot e5
 pwcli pdf
 ```
 
-## Tabs
+## 标签页
 
 ```bash
 pwcli tab-list
@@ -88,7 +91,7 @@ pwcli tab-close 2
 pwcli tab-select 0
 ```
 
-## DevTools
+## 开发者工具
 
 ```bash
 pwcli console
@@ -99,16 +102,16 @@ pwcli tracing-start
 pwcli tracing-stop
 ```
 
-## Sessions
+## 会话
 
-Use a named session to isolate work:
+使用命名会话隔离工作：
 
 ```bash
 pwcli --session todo open https://demo.playwright.dev/todomvc
 pwcli --session todo snapshot
 ```
 
-Or set an environment variable once:
+或一次性设置环境变量：
 
 ```bash
 export PLAYWRIGHT_CLI_SESSION=todo

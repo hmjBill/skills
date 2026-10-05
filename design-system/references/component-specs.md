@@ -1,32 +1,32 @@
-# Component Specifications
+# 组件规范
 
-Detailed specs for core components with states and variants.
+核心组件的详细规范，包括状态和变体。
 
-## Button
+## 按钮
 
-### Variants
+### 变体
 
-| Variant | Background | Text | Border | Use Case |
+| 变体 | 背景 | 文本 | 边框 | 使用场景 |
 |---------|------------|------|--------|----------|
-| default | primary | white | none | Primary actions |
-| secondary | gray-100 | gray-900 | none | Secondary actions |
-| outline | transparent | foreground | border | Tertiary actions |
-| ghost | transparent | foreground | none | Subtle actions |
-| link | transparent | primary | none | Navigation |
-| destructive | red-600 | white | none | Dangerous actions |
+| default | primary | white | none | 主要操作 |
+| secondary | gray-100 | gray-900 | none | 次要操作 |
+| outline | transparent | foreground | border | 第三级操作 |
+| ghost | transparent | foreground | none | 弱化操作 |
+| link | transparent | primary | none | 导航 |
+| destructive | red-600 | white | none | 危险操作 |
 
-### Sizes
+### 尺寸
 
-| Size | Height | Padding X | Padding Y | Font Size | Icon Size |
+| 尺寸 | 高度 | 水平内边距 | 垂直内边距 | 字号 | 图标尺寸 |
 |------|--------|-----------|-----------|-----------|-----------|
 | sm | 32px | 12px | 6px | 14px | 16px |
 | default | 40px | 16px | 8px | 14px | 18px |
 | lg | 48px | 24px | 12px | 16px | 20px |
 | icon | 40px | 0 | 0 | - | 18px |
 
-### States
+### 状态
 
-| State | Background | Text | Opacity | Cursor |
+| 状态 | 背景 | 文本 | 不透明度 | 光标 |
 |-------|------------|------|---------|--------|
 | default | token | token | 1 | pointer |
 | hover | darker | token | 1 | pointer |
@@ -35,42 +35,42 @@ Detailed specs for core components with states and variants.
 | disabled | muted | muted-fg | 0.5 | not-allowed |
 | loading | token | token | 0.7 | wait |
 
-### Anatomy
+### 结构
 
 ```
-┌─────────────────────────────────────┐
-│  [icon]  Label Text  [icon]         │
-└─────────────────────────────────────┘
-     ↑                      ↑
-  leading icon         trailing icon
+┌───────────────────────────────────────┐
+│  [icon]  标签文本  [icon]             │
+└───────────────────────────────────────┘
+   ↑                 ↑
+前置图标          后置图标
 ```
 
 ---
 
-## Input
+## 输入框
 
-### Variants
+### 变体
 
-| Variant | Description |
+| 变体 | 描述 |
 |---------|-------------|
-| default | Standard text input |
-| textarea | Multi-line text |
-| select | Dropdown selection |
-| checkbox | Boolean toggle |
-| radio | Single selection |
-| switch | Toggle switch |
+| default | 标准文本输入 |
+| textarea | 多行文本 |
+| select | 下拉选择 |
+| checkbox | 布尔勾选 |
+| radio | 单选 |
+| switch | 开关切换 |
 
-### Sizes
+### 尺寸
 
-| Size | Height | Padding | Font Size |
+| 尺寸 | 高度 | 内边距 | 字号 |
 |------|--------|---------|-----------|
 | sm | 32px | 8px 12px | 14px |
 | default | 40px | 8px 12px | 14px |
 | lg | 48px | 12px 16px | 16px |
 
-### States
+### 状态
 
-| State | Border | Background | Ring |
+| 状态 | 边框 | 背景 | 焦点环 |
 |-------|--------|------------|------|
 | default | gray-300 | white | none |
 | hover | gray-400 | white | none |
@@ -78,62 +78,62 @@ Detailed specs for core components with states and variants.
 | error | red-500 | white | red/20% |
 | disabled | gray-200 | gray-100 | none |
 
-### Anatomy
+### 结构
 
 ```
-Label (optional)
-┌─────────────────────────────────────┐
-│ [icon] Placeholder/Value   [action] │
-└─────────────────────────────────────┘
-Helper text or error message
+标签（可选）
+┌───────────────────────────────────────┐
+│  [icon] 占位符/值   [action]          │
+└───────────────────────────────────────┘
+辅助文本或错误消息
 ```
 
 ---
 
-## Card
+## 卡片
 
-### Variants
+### 变体
 
-| Variant | Shadow | Border | Use Case |
+| 变体 | 阴影 | 边框 | 使用场景 |
 |---------|--------|--------|----------|
-| default | sm | 1px | Standard card |
-| elevated | lg | none | Prominent content |
-| outline | none | 1px | Subtle container |
-| interactive | sm→md | 1px | Clickable card |
+| default | sm | 1px | 标准卡片 |
+| elevated | lg | none | 突出内容 |
+| outline | none | 1px | 弱化容器 |
+| interactive | sm→md | 1px | 可点击卡片 |
 
-### Anatomy
+### 结构
 
 ```
-┌─────────────────────────────────────┐
-│ Card Header                         │
-│   Title                             │
-│   Description                       │
-├─────────────────────────────────────┤
-│ Card Content                        │
-│   Main content area                 │
-│                                     │
-├─────────────────────────────────────┤
-│ Card Footer                         │
-│   Actions                           │
-└─────────────────────────────────────┘
+┌───────────────────────────────────────┐
+│  卡片页眉                             │
+│    标题                               │
+│    描述                               │
+├───────────────────────────────────────┤
+│  卡片内容                             │
+│    主要内容区域                       │
+│                                       │
+├───────────────────────────────────────┤
+│  卡片页脚                             │
+│    操作                               │
+└───────────────────────────────────────┘
 ```
 
-### Spacing
+### 间距
 
-| Area | Padding |
+| 区域 | 内边距 |
 |------|---------|
-| header | 24px 24px 0 |
-| content | 24px |
-| footer | 0 24px 24px |
-| gap | 16px |
+| 页眉 | 24px 24px 0 |
+| 内容 | 24px |
+| 页脚 | 0 24px 24px |
+| 间隙 | 16px |
 
 ---
 
-## Badge
+## 徽章
 
-### Variants
+### 变体
 
-| Variant | Background | Text |
+| 变体 | 背景 | 文本 |
 |---------|------------|------|
 | default | primary | white |
 | secondary | gray-100 | gray-900 |
@@ -142,9 +142,9 @@ Helper text or error message
 | success | green-600 | white |
 | warning | yellow-500 | gray-900 |
 
-### Sizes
+### 尺寸
 
-| Size | Padding | Font Size | Height |
+| 尺寸 | 内边距 | 字号 | 高度 |
 |------|---------|-----------|--------|
 | sm | 4px 8px | 11px | 20px |
 | default | 4px 10px | 12px | 24px |
@@ -152,85 +152,85 @@ Helper text or error message
 
 ---
 
-## Alert
+## 提示
 
-### Variants
+### 变体
 
-| Variant | Icon | Background | Border |
+| 变体 | 图标 | 背景 | 边框 |
 |---------|------|------------|--------|
 | default | info | gray-50 | gray-200 |
 | destructive | alert | red-50 | red-200 |
 | success | check | green-50 | green-200 |
 | warning | warning | yellow-50 | yellow-200 |
 
-### Anatomy
-
-```
-┌─────────────────────────────────────┐
-│ [icon]  Title                    [×]│
-│         Description text            │
-└─────────────────────────────────────┘
-```
-
----
-
-## Dialog
-
-### Sizes
-
-| Size | Max Width | Use Case |
-|------|-----------|----------|
-| sm | 384px | Simple confirmations |
-| default | 512px | Standard dialogs |
-| lg | 640px | Complex forms |
-| xl | 768px | Data-heavy dialogs |
-| full | 100% - 32px | Full-screen on mobile |
-
-### Anatomy
+### 结构
 
 ```
 ┌───────────────────────────────────────┐
-│ Dialog Header                      [×]│
-│   Title                               │
-│   Description                         │
-├───────────────────────────────────────┤
-│ Dialog Content                        │
-│   Scrollable if needed                │
-│                                       │
-├───────────────────────────────────────┤
-│ Dialog Footer                         │
-│                     [Cancel] [Confirm]│
+│  [icon]  标题                      [×]│
+│         描述文本                      │
 └───────────────────────────────────────┘
 ```
 
 ---
 
-## Table
+## 对话框
 
-### Row States
+### 尺寸
 
-| State | Background | Use Case |
+| 尺寸 | 最大宽度 | 使用场景 |
+|------|-----------|----------|
+| sm | 384px | 简单确认 |
+| default | 512px | 标准对话框 |
+| lg | 640px | 复杂表单 |
+| xl | 768px | 数据密集型对话框 |
+| full | 100% - 32px | 移动端全屏 |
+
+### 结构
+
+```
+┌───────────────────────────────────────┐
+│  对话框页眉                        [×]│
+│    标题                               │
+│    描述                               │
+├───────────────────────────────────────┤
+│  对话框内容                           │
+│    如有需要可滚动                     │
+│                                       │
+├───────────────────────────────────────┤
+│  对话框页脚                           │
+│                          [取消] [确认]│
+└───────────────────────────────────────┘
+```
+
+---
+
+## 表格
+
+### 行状态
+
+| 状态 | 背景 | 使用场景 |
 |-------|------------|----------|
-| default | white | Normal row |
-| hover | gray-50 | Mouse over |
-| selected | primary/10% | Selected row |
-| striped | gray-50/white | Alternating |
+| default | white | 普通行 |
+| hover | gray-50 | 鼠标移入 |
+| selected | primary/10% | 选中行 |
+| striped | gray-50/white | 交替行 |
 
-### Cell Alignment
+### 单元格对齐
 
-| Content Type | Alignment |
+| 内容类型 | 对齐方式 |
 |--------------|-----------|
-| Text | Left |
-| Numbers | Right |
-| Status/Badge | Center |
-| Actions | Right |
+| 文本 | 左对齐 |
+| 数字 | 右对齐 |
+| 状态/徽章 | 居中 |
+| 操作 | 右对齐 |
 
-### Spacing
+### 间距
 
-| Element | Value |
+| 元素 | 值 |
 |---------|-------|
-| cell padding | 12px 16px |
-| header padding | 12px 16px |
-| row height (compact) | 40px |
-| row height (default) | 48px |
-| row height (comfortable) | 56px |
+| 单元格内边距 | 12px 16px |
+| 表头内边距 | 12px 16px |
+| 行高（紧凑） | 40px |
+| 行高（默认） | 48px |
+| 行高（宽松） | 56px |

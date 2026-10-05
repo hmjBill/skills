@@ -1,30 +1,30 @@
-# shadcn/ui Accessibility Patterns
+# shadcn/ui 无障碍模式
 
-ARIA patterns, keyboard navigation, screen reader support, and accessible component usage.
+ARIA 模式、键盘导航、屏幕阅读器支持与可访问组件用法。
 
-## Foundation: Radix UI Primitives
+## 基础：Radix UI 原语
 
-shadcn/ui built on Radix UI primitives - unstyled, accessible components following WAI-ARIA design patterns.
+shadcn/ui 构建在 Radix UI 原语之上——无样式、可访问、遵循 WAI-ARIA 设计模式的组件。
 
-Benefits:
-- Keyboard navigation built-in
-- Screen reader announcements
-- Focus management
-- ARIA attributes automatically applied
-- Tested against accessibility standards
+优势：
+- 内置键盘导航
+- 屏幕阅读器播报
+- 焦点管理
+- 自动应用 ARIA 属性
+- 已针对无障碍标准进行测试
 
-## Keyboard Navigation
+## 键盘导航
 
-### Focus Management
+### 焦点管理
 
-**Focus visible states:**
+**焦点可见状态：**
 ```tsx
 <Button className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
   Accessible Button
 </Button>
 ```
 
-**Skip to content:**
+**跳转到内容：**
 ```tsx
 <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2">
   Skip to content
@@ -35,9 +35,9 @@ Benefits:
 </main>
 ```
 
-### Dialog/Modal Navigation
+### 对话框/模态框导航
 
-Dialogs trap focus automatically via Radix Dialog primitive:
+对话框通过 Radix Dialog 原语自动捕获焦点：
 
 ```tsx
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
@@ -53,13 +53,13 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 </Dialog>
 ```
 
-Features:
-- Focus trapped within dialog
-- Esc key closes
-- Tab cycles through focusable elements
-- Focus returns to trigger on close
+特性：
+- 焦点被限制在对话框内
+- Esc 键关闭
+- Tab 在可聚焦元素间循环
+- 关闭时焦点返回触发元素
 
-### Dropdown/Menu Navigation
+### 下拉菜单/菜单导航
 
 ```tsx
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -74,13 +74,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 </DropdownMenu>
 ```
 
-Keyboard shortcuts:
-- `Space/Enter`: Open menu
-- `Arrow Up/Down`: Navigate items
-- `Esc`: Close menu
-- `Tab`: Close and move focus
+键盘快捷键：
+- `Space/Enter`：打开菜单
+- `Arrow Up/Down`：在菜单项间导航
+- `Esc`：关闭菜单
+- `Tab`：关闭并移动焦点
 
-### Command Palette Navigation
+### 命令面板导航
 
 ```tsx
 import { Command } from "@/components/ui/command"
@@ -96,17 +96,17 @@ import { Command } from "@/components/ui/command"
 </Command>
 ```
 
-Features:
-- Type to filter
-- Arrow keys to navigate
-- Enter to select
-- Esc to close
+特性：
+- 输入以筛选
+- 方向键导航
+- Enter 选择
+- Esc 关闭
 
-## Screen Reader Support
+## 屏幕阅读器支持
 
-### Semantic HTML
+### 语义化 HTML
 
-Use proper HTML elements:
+使用正确的 HTML 元素：
 
 ```tsx
 // Good: Semantic HTML
@@ -117,9 +117,9 @@ Use proper HTML elements:
 <div onClick={handler}>Click me</div>
 ```
 
-### ARIA Labels
+### ARIA 标签
 
-**Label interactive elements:**
+**为交互元素添加标签：**
 ```tsx
 <Button aria-label="Close dialog">
   <X className="h-4 w-4" />
@@ -128,7 +128,7 @@ Use proper HTML elements:
 <Input aria-label="Email address" type="email" />
 ```
 
-**Describe elements:**
+**描述元素：**
 ```tsx
 <Button aria-describedby="delete-description">
   Delete Account
@@ -138,9 +138,9 @@ Use proper HTML elements:
 </p>
 ```
 
-### Screen Reader Only Text
+### 仅屏幕阅读器可见的文本
 
-Use `sr-only` class for screen reader only content:
+使用 `sr-only` 类提供仅屏幕阅读器可见的内容：
 
 ```tsx
 <Button>
@@ -162,9 +162,9 @@ Use `sr-only` class for screen reader only content:
 }
 ```
 
-### Live Regions
+### 实时区域
 
-Announce dynamic content:
+播报动态内容：
 
 ```tsx
 <div aria-live="polite" aria-atomic="true">
@@ -177,7 +177,7 @@ Announce dynamic content:
 </div>
 ```
 
-Toast component includes live region:
+Toast 组件内置实时区域：
 ```tsx
 const { toast } = useToast()
 
@@ -188,11 +188,11 @@ toast({
 // Announced to screen readers automatically
 ```
 
-## Form Accessibility
+## 表单无障碍
 
-### Labels and Descriptions
+### 标签与描述
 
-**Always label inputs:**
+**始终为输入添加标签：**
 ```tsx
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -203,7 +203,7 @@ import { Input } from "@/components/ui/input"
 </div>
 ```
 
-**Add descriptions:**
+**添加描述：**
 ```tsx
 import { FormDescription, FormMessage } from "@/components/ui/form"
 
@@ -219,9 +219,9 @@ import { FormDescription, FormMessage } from "@/components/ui/form"
 </FormItem>
 ```
 
-### Error Handling
+### 错误处理
 
-Announce errors to screen readers:
+向屏幕阅读器播报错误：
 
 ```tsx
 <FormField
@@ -243,9 +243,9 @@ Announce errors to screen readers:
 />
 ```
 
-### Required Fields
+### 必填字段
 
-Indicate required fields:
+标示必填字段：
 
 ```tsx
 <Label htmlFor="name">
@@ -255,9 +255,9 @@ Indicate required fields:
 <Input id="name" required />
 ```
 
-### Fieldset and Legend
+### Fieldset 与 Legend
 
-Group related fields:
+对相关字段分组：
 
 ```tsx
 <fieldset>
@@ -271,7 +271,7 @@ Group related fields:
 </fieldset>
 ```
 
-## Component-Specific Patterns
+## 组件特定模式
 
 ### Accordion
 
@@ -327,7 +327,7 @@ import { Select } from "@/components/ui/select"
 </Select>
 ```
 
-### Checkbox and Radio
+### Checkbox 与 Radio
 
 ```tsx
 import { Checkbox } from "@/components/ui/checkbox"
@@ -356,15 +356,15 @@ import { Alert } from "@/components/ui/alert"
 </Alert>
 ```
 
-## Color Contrast
+## 颜色对比度
 
-Ensure sufficient contrast between text and background.
+确保文字与背景之间有足够的对比度。
 
-**WCAG Requirements:**
-- **AA**: 4.5:1 for normal text, 3:1 for large text
-- **AAA**: 7:1 for normal text, 4.5:1 for large text
+**WCAG 要求：**
+- **AA**：正文 4.5:1，大号文字 3:1
+- **AAA**：正文 7:1，大号文字 4.5:1
 
-**Check defaults:**
+**检查默认值：**
 ```tsx
 // Good: High contrast
 <p className="text-gray-900 dark:text-gray-100">Text</p>
@@ -373,7 +373,7 @@ Ensure sufficient contrast between text and background.
 <p className="text-gray-400 dark:text-gray-600">Hard to read</p>
 ```
 
-**Muted text:**
+**弱化文字：**
 ```tsx
 // Use semantic muted foreground
 <p className="text-muted-foreground">
@@ -381,25 +381,25 @@ Ensure sufficient contrast between text and background.
 </p>
 ```
 
-## Focus Indicators
+## 焦点指示器
 
-Always provide visible focus indicators:
+始终提供可见的焦点指示器：
 
-**Default focus ring:**
+**默认焦点环：**
 ```tsx
 <Button className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
   Button
 </Button>
 ```
 
-**Custom focus styles:**
+**自定义焦点样式：**
 ```tsx
 <a href="#" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:underline">
   Link
 </a>
 ```
 
-**Don't remove focus styles:**
+**不要移除焦点样式：**
 ```tsx
 // Avoid
 <button className="focus:outline-none">Bad</button>
@@ -408,9 +408,9 @@ Always provide visible focus indicators:
 <button className="focus-visible:ring-2">Good</button>
 ```
 
-## Motion and Animation
+## 动效与动画
 
-Respect reduced motion preference:
+尊重减弱动效偏好：
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -422,40 +422,40 @@ Respect reduced motion preference:
 }
 ```
 
-In components:
+在组件中：
 ```tsx
 <div className="transition-all motion-reduce:transition-none">
   Respects user preference
 </div>
 ```
 
-## Testing Checklist
+## 测试清单
 
-- [ ] All interactive elements keyboard accessible
-- [ ] Focus indicators visible
-- [ ] Screen reader announces all content correctly
-- [ ] Form errors announced and associated
-- [ ] Color contrast meets WCAG AA
-- [ ] Semantic HTML used
-- [ ] ARIA labels provided for icon-only buttons
-- [ ] Modal/dialog focus trap works
-- [ ] Dropdown/select keyboard navigable
-- [ ] Live regions announce updates
-- [ ] Respects reduced motion preference
-- [ ] Works with browser zoom up to 200%
-- [ ] Tab order logical
-- [ ] Skip links provided for navigation
+- [ ] 所有交互元素均可通过键盘访问
+- [ ] 焦点指示器可见
+- [ ] 屏幕阅读器正确播报所有内容
+- [ ] 表单错误被播报且已关联
+- [ ] 颜色对比度符合 WCAG AA
+- [ ] 使用语义化 HTML
+- [ ] 纯图标按钮提供 ARIA 标签
+- [ ] 模态框/对话框焦点捕获正常工作
+- [ ] 下拉菜单/选择器可键盘导航
+- [ ] 实时区域播报更新
+- [ ] 尊重减弱动效偏好
+- [ ] 在浏览器缩放至 200% 时正常工作
+- [ ] Tab 顺序符合逻辑
+- [ ] 导航提供跳转链接
 
-## Tools
+## 工具
 
-**Testing tools:**
-- Lighthouse accessibility audit
-- axe DevTools browser extension
-- NVDA/JAWS screen readers
-- Keyboard-only navigation testing
-- Color contrast checkers (Contrast Ratio, WebAIM)
+**测试工具：**
+- Lighthouse 无障碍审计
+- axe DevTools 浏览器扩展
+- NVDA/JAWS 屏幕阅读器
+- 仅键盘导航测试
+- 颜色对比度检查器（Contrast Ratio、WebAIM）
 
-**Automated testing:**
+**自动化测试：**
 ```bash
 npm install -D @axe-core/react
 ```

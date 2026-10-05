@@ -1,94 +1,94 @@
-# Slide Strategies
+# 幻灯片策略
 
-15 proven deck structures with emotion arcs.
+15 种经过验证的演示结构及其情绪弧线。
 
-## Strategy Selection
+## 策略选择
 
-| Strategy | Slides | Goal | Audience |
+| 策略 | 页数 | 目标 | 受众 |
 |----------|--------|------|----------|
-| YC Seed Deck | 10-12 | Raise seed funding | VCs |
-| Guy Kawasaki | 10 | Pitch in 20 min | Investors |
-| Series A | 12-15 | Raise Series A | Growth VCs |
-| Product Demo | 5-8 | Demonstrate value | Prospects |
-| Sales Pitch | 7-10 | Close deal | Qualified leads |
-| Nancy Duarte Sparkline | Varies | Transform perspective | Any |
-| Problem-Solution-Benefit | 3-5 | Quick persuasion | Time-pressed |
-| QBR | 10-15 | Update stakeholders | Leadership |
-| Team All-Hands | 8-12 | Align team | Employees |
-| Conference Talk | 15-25 | Thought leadership | Attendees |
-| Workshop | 20-40 | Teach skills | Learners |
-| Case Study | 8-12 | Prove value | Prospects |
-| Competitive Analysis | 6-10 | Strategic decisions | Internal |
-| Board Meeting | 15-20 | Update board | Directors |
-| Webinar | 20-30 | Generate leads | Registrants |
+| YC 种子轮演示 | 10-12 | 募集种子轮资金 | 风投 |
+| Guy Kawasaki 式 | 10 | 20 分钟完成路演 | 投资人 |
+| A 轮融资 | 12-15 | 募集 A 轮资金 | 成长型风投 |
+| 产品演示 | 5-8 | 展示价值 | 潜在客户 |
+| 销售提案 | 7-10 | 促成成交 | 合格线索 |
+| Nancy Duarte 火花线 | 不定 | 转变视角 | 任何受众 |
+| 问题-方案-收益 | 3-5 | 快速说服 | 时间紧张者 |
+| QBR（季度业务回顾） | 10-15 | 向利益相关者汇报 | 管理层 |
+| 团队全员会 | 8-12 | 对齐团队 | 员工 |
+| 会议演讲 | 15-25 | 思想领导力 | 参会者 |
+| 工作坊 | 20-40 | 传授技能 | 学员 |
+| 案例研究 | 8-12 | 证明价值 | 潜在客户 |
+| 竞品分析 | 6-10 | 战略决策 | 内部 |
+| 董事会会议 | 15-20 | 向董事会汇报 | 董事 |
+| 网络研讨会 | 20-30 | 获取潜在客户 | 报名者 |
 
-## Common Structures
+## 常见结构
 
-### YC Seed Deck (10 slides)
-1. Title/Hook
-2. Problem
-3. Solution
-4. Traction
-5. Market
-6. Product
-7. Business Model
-8. Team
-9. Financials
-10. The Ask
+### YC 种子轮演示（10 页）
+1. 标题/钩子
+2. 问题
+3. 方案
+4. 进展
+5. 市场
+6. 产品
+7. 商业模式
+8. 团队
+9. 财务
+10. 诉求
 
-**Emotion arc:** curiosity→frustration→hope→confidence→trust→urgency
+**情绪弧线：** 好奇→挫败→希望→信心→信任→紧迫
 
-### Sales Pitch (9 slides)
-1. Personalized Hook
-2. Their Problem
-3. Cost of Inaction
-4. Your Solution
-5. Proof/Case Studies
-6. Differentiators
-7. Pricing/ROI
-8. Objection Handling
-9. CTA + Next Steps
+### 销售提案（9 页）
+1. 个性化钩子
+2. 对方的问题
+3. 不作为的代价
+4. 你的方案
+5. 证据/案例研究
+6. 差异化优势
+7. 定价/ROI
+8. 异议处理
+9. CTA + 下一步
 
-**Emotion arc:** connection→frustration→fear→hope→trust→confidence→urgency
+**情绪弧线：** 连接→挫败→恐惧→希望→信任→信心→紧迫
 
-### Product Demo (6 slides)
-1. Hook/Problem
-2. Solution Overview
-3. Live Demo/Screenshots
-4. Key Features
-5. Benefits/Pricing
+### 产品演示（6 页）
+1. 钩子/问题
+2. 方案概览
+3. 现场演示/截图
+4. 核心功能
+5. 收益/定价
 6. CTA
 
-**Emotion arc:** curiosity→frustration→hope→confidence→urgency
+**情绪弧线：** 好奇→挫败→希望→信心→紧迫
 
-## Duarte Sparkline Pattern
+## Duarte 火花线模式
 
-Alternate between "What Is" (current pain) and "What Could Be" (better future):
+在“现状”（当前的痛点）与“可能”（更好的未来）之间交替：
 
 ```
 What Is → What Could Be → What Is → What Could Be → New Bliss
 (pain)     (hope)         (pain)     (hope)         (resolution)
 ```
 
-Pattern breaks at 1/3 and 2/3 positions create engagement peaks.
+在 1/3 和 2/3 位置打破模式，制造参与度峰值。
 
-## Search Commands
+## 搜索命令（在 design-system 技能目录下运行）
 
 ```bash
-# Find strategy by goal
-python .claude/skills/design-system/scripts/search-slides.py "investor pitch" -d strategy
+# 按目标查找策略
+python scripts/search-slides.py "investor pitch" -d strategy
 
-# Get emotion arc
-python .claude/skills/design-system/scripts/search-slides.py "series a funding" -d strategy --json
+# 获取情绪弧线
+python scripts/search-slides.py "series a funding" -d strategy --json
 ```
 
-## Matching Strategy to Context
+## 策略与场景匹配
 
-| Context | Recommended Strategy |
+| 场景 | 推荐策略 |
 |---------|---------------------|
-| Raising money | YC Seed, Series A, Guy Kawasaki |
-| Selling product | Sales Pitch, Product Demo |
-| Internal update | QBR, All-Hands, Board Meeting |
-| Public speaking | Conference Talk, Workshop |
-| Proving value | Case Study, Competitive Analysis |
-| Lead generation | Webinar |
+| 融资 | YC 种子轮、A 轮融资、Guy Kawasaki 式 |
+| 销售产品 | 销售提案、产品演示 |
+| 内部汇报 | QBR、全员会、董事会会议 |
+| 公开演讲 | 会议演讲、工作坊 |
+| 证明价值 | 案例研究、竞品分析 |
+| 获取潜在客户 | 网络研讨会 |

@@ -1,10 +1,10 @@
-# Tailwind Integration
+# Tailwind 集成
 
-Map design system tokens to Tailwind CSS configuration.
+将设计系统令牌映射到 Tailwind CSS 配置。
 
-## CSS Variables Setup
+## CSS 变量设置
 
-### Base Layer
+### 基础层
 
 ```css
 /* globals.css */
@@ -14,10 +14,10 @@ Map design system tokens to Tailwind CSS configuration.
 
 @layer base {
   :root {
-    /* Primitives */
+    /* 原始 */
     --color-blue-600: 37 99 235;  /* HSL: 217 91% 60% */
 
-    /* Semantic */
+    /* 语义 */
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
     --primary: 217 91% 60%;
@@ -56,7 +56,7 @@ Map design system tokens to Tailwind CSS configuration.
 }
 ```
 
-## Tailwind Config
+## Tailwind 配置
 
 ### tailwind.config.ts
 
@@ -112,22 +112,22 @@ const config: Config = {
 export default config
 ```
 
-## HSL Format Benefits
+## HSL 格式优势
 
-Using HSL without function allows opacity modifiers:
+使用不带函数的 HSL 格式可以启用不透明度修饰符：
 
 ```tsx
-// With HSL format (space-separated)
-<div className="bg-primary/50">   // 50% opacity
-<div className="text-primary/80"> // 80% opacity
+// 使用 HSL 格式（空格分隔）
+<div className="bg-primary/50">   // 50% 不透明度
+<div className="text-primary/80"> // 80% 不透明度
 
-// CSS output
+// CSS 输出
 background-color: hsl(217 91% 60% / 0.5);
 ```
 
-## Component Classes
+## 组件类
 
-### Button Example
+### 按钮示例
 
 ```css
 @layer components {
@@ -164,21 +164,21 @@ background-color: hsl(217 91% 60% / 0.5);
            hover:bg-destructive/90;
   }
 
-  /* Sizes */
+  /* 尺寸 */
   .btn-sm { @apply h-8 px-3 text-xs; }
   .btn-md { @apply h-10 px-4 text-sm; }
   .btn-lg { @apply h-12 px-6 text-base; }
 }
 ```
 
-## Spacing Integration
+## 间距集成
 
 ```typescript
 // tailwind.config.ts
 theme: {
   extend: {
     spacing: {
-      // Map to CSS variables if needed
+      // 如需要，映射到 CSS 变量
       'section': 'var(--spacing-section)',
       'component': 'var(--spacing-component)',
     }
@@ -186,7 +186,7 @@ theme: {
 }
 ```
 
-## Animation Tokens
+## 动画令牌
 
 ```typescript
 // tailwind.config.ts
@@ -215,37 +215,37 @@ theme: {
 }
 ```
 
-## Dark Mode Toggle
+## 深色模式切换
 
 ```typescript
-// Toggle dark mode
+// 切换深色模式
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark')
 }
 
-// System preference
+// 系统偏好
 if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
   document.documentElement.classList.add('dark')
 }
 ```
 
-## shadcn/ui Alignment
+## shadcn/ui 对齐
 
-This configuration aligns with shadcn/ui conventions:
+此配置与 shadcn/ui 约定保持一致：
 
-- Same CSS variable naming
-- Same HSL format
-- Same color scale structure
-- Compatible with `npx shadcn@latest add` commands
+- 相同的 CSS 变量命名
+- 相同的 HSL 格式
+- 相同的色阶结构
+- 兼容 `npx shadcn@latest add` 命令
 
-### Using with shadcn/ui
+### 与 shadcn/ui 配合使用
 
 ```bash
-# Initialize (uses same token structure)
+# 初始化（使用相同的令牌结构）
 npx shadcn@latest init
 
-# Add components (styled with these tokens)
+# 添加组件（使用这些令牌进行样式设计）
 npx shadcn@latest add button card input
 ```
 
-Components will automatically use your design system tokens.
+组件将自动使用你的设计系统令牌。

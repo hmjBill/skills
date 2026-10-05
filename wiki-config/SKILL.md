@@ -35,5 +35,5 @@ AI-Wiki 拥有自己的配置体系（架构说明.md、Agent操作指南.md、t
 
 - AI-Wiki 使用 PARA 变体：`00_系统` 至 `09_受控信息`，中文目录名加数字前缀
 - 模板存放于 `00_系统/模板/`，包含中文模板（以模板属性规范.md 为准）
-- 枚举注册表定义在 `.obsidian/types.json`
+- 合法值以 `00_系统/Agent操作指南.md` 的 Frontmatter 枚举值注册表为准；`.obsidian/types.json` 仅登记字段类型
 - frontmatter 系统字段用英文（type/tags/date/completed），业务字段用中文（状态/收件类型/来源/等级）

@@ -1,95 +1,95 @@
-# CIP Deliverable Guide
+# CIP 交付物指南
 
-## Core Identity
+## 核心识别
 
-### Primary Logo
-- Vector format (SVG, AI, EPS)
-- Clear space rules defined
-- Scalable from favicon to billboard
+### 主 Logo
+- 矢量格式（SVG、AI、EPS）
+- 定义留白规则
+- 从 favicon 到广告牌均可缩放
 
-### Logo Variations
-- Horizontal, vertical, stacked
-- Icon/symbol only
-- Monochrome versions (black, white, reversed)
+### Logo 变体
+- 横版、竖版、堆叠版
+- 仅图标/符号
+- 单色版本（黑、白、反白）
 
-## Stationery Set
+## 文印套装
 
-### Business Card
-- Standard: 3.5x2 inches / 85x55mm
-- Premium paper stock (300-400gsm)
-- Finishes: matte, spot UV, foil, emboss
+### 名片
+- 标准：3.5x2 英寸 / 85x55mm
+- 高级纸张（300-400gsm）
+- 工艺：哑光、局部 UV、烫金、压凹凸
 
-### Letterhead
-- A4 or Letter size
-- Header area for logo/contact
-- Digital and print versions
+### 信纸
+- A4 或 Letter 尺寸
+- 页眉区域放置 Logo/联系方式
+- 数字版与印刷版
 
-### Envelope
-- DL, C4, C5 sizes
-- Logo on flap or front
-- Return address styling
+### 信封
+- DL、C4、C5 尺寸
+- Logo 置于封舌或正面
+- 回邮地址样式
 
-## Office Environment
+## 办公环境
 
-### Reception Signage
-- 3D dimensional letters
-- Backlit LED options
-- Materials: acrylic, metal, wood
+### 前台标识
+- 3D 立体字
+- 背光 LED 选项
+- 材质：亚克力、金属、木材
 
-### Wayfinding System
-- Consistent icon system
-- Clear hierarchy
-- ADA compliance
+### 导视系统
+- 统一的图标系统
+- 清晰的层级
+- 符合 ADA 无障碍规范
 
-### Wall Graphics
-- Mission/values displays
-- Large-scale murals
-- Window frosting
+### 墙面图形
+- 使命/价值观展示
+- 大型壁画
+- 窗户磨砂贴膜
 
-## Apparel
+## 服装
 
-### Polo Shirt
-- Embroidery preferred
-- Left chest placement
-- Quality fabric (pique cotton)
+### Polo 衫
+- 首选刺绣
+- 左胸位置
+- 优质面料（珠地棉）
 
-### Uniforms
-- Department color coding
-- Name badge integration
-- Safety requirements if applicable
+### 制服
+- 按部门配色
+- 集成姓名牌
+- 如适用，需满足安全要求
 
-## Vehicle Branding
+## 车辆品牌
 
-### Car/Sedan
-- Door panel branding
-- Partial or full wrap
-- Contact information visible
+### 轿车
+- 车门面板品牌展示
+- 局部或全车贴膜
+- 联系方式可见
 
-### Fleet Vehicles
-- Consistent design across fleet
-- High visibility contact details
-- Professional installation
+### 车队车辆
+- 全车队设计统一
+- 联系方式高可见度
+- 专业施工安装
 
-## Digital Assets
+## 数字资产
 
-### Social Media
-- Profile pictures (icon version)
-- Cover images (platform-specific)
-- Post templates
+### 社交媒体
+- 头像（图标版本）
+- 封面图（按平台适配）
+- 帖子模板
 
-### Email Signature
-- HTML responsive
-- Max 600px width
-- Essential contact only
+### 邮件签名
+- HTML 响应式
+- 最大宽度 600px
+- 仅保留必要联系方式
 
-## Events & Promotional
+## 活动与推广
 
-### Trade Show Booth
-- Modular design
-- Easy assembly
-- Key messaging visible
+### 展会摊位
+- 模块化设计
+- 易于组装
+- 关键信息可见
 
-### Promotional Items
-- Quality over quantity
-- Useful items preferred
-- Brand colors prominent
+### 推广物料
+- 重质不重量
+- 优先实用物品
+- 突出品牌色

@@ -1,10 +1,10 @@
-# Tailwind CSS Utility Reference
+# Tailwind CSS 工具类参考
 
-Core utility classes for layout, spacing, typography, colors, borders, and shadows.
+布局、间距、排版、颜色、边框和阴影的核心工具类。
 
-## Layout Utilities
+## 布局工具类
 
-### Display
+### 显示
 
 ```html
 <div class="block">Block</div>
@@ -19,7 +19,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 
 ### Flexbox
 
-**Container:**
+**容器：**
 ```html
 <div class="flex flex-row">Row (default)</div>
 <div class="flex flex-col">Column</div>
@@ -27,7 +27,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <div class="flex flex-col-reverse">Reverse column</div>
 ```
 
-**Justify (main axis):**
+**主轴对齐（justify）：**
 ```html
 <div class="flex justify-start">Start</div>
 <div class="flex justify-center">Center</div>
@@ -37,7 +37,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <div class="flex justify-evenly">Space evenly</div>
 ```
 
-**Align (cross axis):**
+**交叉轴对齐（items）：**
 ```html
 <div class="flex items-start">Start</div>
 <div class="flex items-center">Center</div>
@@ -46,21 +46,21 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <div class="flex items-stretch">Stretch</div>
 ```
 
-**Gap:**
+**间距（gap）：**
 ```html
 <div class="flex gap-4">All sides</div>
 <div class="flex gap-x-6 gap-y-2">X and Y</div>
 ```
 
-**Wrap:**
+**换行：**
 ```html
 <div class="flex flex-wrap">Wrap</div>
 <div class="flex flex-nowrap">No wrap</div>
 ```
 
-### Grid
+### 网格
 
-**Columns:**
+**列：**
 ```html
 <div class="grid grid-cols-1">1 column</div>
 <div class="grid grid-cols-2">2 columns</div>
@@ -70,25 +70,25 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <div class="grid grid-cols-[1fr_500px_2fr]">Custom</div>
 ```
 
-**Rows:**
+**行：**
 ```html
 <div class="grid grid-rows-3">3 rows</div>
 <div class="grid grid-rows-[auto_1fr_auto]">Custom</div>
 ```
 
-**Span:**
+**跨距：**
 ```html
 <div class="col-span-2">Span 2 columns</div>
 <div class="row-span-3">Span 3 rows</div>
 ```
 
-**Gap:**
+**间距：**
 ```html
 <div class="grid gap-4">All sides</div>
 <div class="grid gap-x-8 gap-y-4">X and Y</div>
 ```
 
-### Positioning
+### 定位
 
 ```html
 <div class="static">Static (default)</div>
@@ -104,7 +104,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <div class="absolute inset-y-8">Top/bottom 8</div>
 ```
 
-### Z-Index
+### Z 轴层级
 
 ```html
 <div class="z-0">z-index: 0</div>
@@ -113,9 +113,9 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <div class="z-50">z-index: 50</div>
 ```
 
-## Spacing Utilities
+## 间距工具类
 
-### Padding
+### 内边距
 
 ```html
 <div class="p-4">All sides</div>
@@ -127,7 +127,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <div class="pl-6">Left</div>
 ```
 
-### Margin
+### 外边距
 
 ```html
 <div class="m-4">All sides</div>
@@ -138,14 +138,14 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <div class="ml-auto">Push to right</div>
 ```
 
-### Space Between
+### 子元素间距
 
 ```html
 <div class="space-x-4">Horizontal spacing</div>
 <div class="space-y-6">Vertical spacing</div>
 ```
 
-### Spacing Scale
+### 间距比例
 
 - `0`: 0px
 - `px`: 1px
@@ -160,9 +160,9 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 - `16`: 4rem (64px)
 - `24`: 6rem (96px)
 
-## Typography
+## 排版
 
-### Font Size
+### 字号
 
 ```html
 <p class="text-xs">Extra small (12px)</p>
@@ -176,7 +176,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <p class="text-5xl">5XL (48px)</p>
 ```
 
-### Font Weight
+### 字重
 
 ```html
 <p class="font-thin">Thin (100)</p>
@@ -188,7 +188,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <p class="font-black">Black (900)</p>
 ```
 
-### Text Alignment
+### 文本对齐
 
 ```html
 <p class="text-left">Left</p>
@@ -197,7 +197,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <p class="text-justify">Justify</p>
 ```
 
-### Line Height
+### 行高
 
 ```html
 <p class="leading-none">1</p>
@@ -207,7 +207,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <p class="leading-loose">2</p>
 ```
 
-### Combined Font Utilities
+### 组合字体工具类
 
 ```html
 <h1 class="text-4xl/tight font-bold">
@@ -215,7 +215,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 </h1>
 ```
 
-### Text Transform
+### 文本转换
 
 ```html
 <p class="uppercase">UPPERCASE</p>
@@ -224,7 +224,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <p class="normal-case">Normal</p>
 ```
 
-### Text Decoration
+### 文本装饰
 
 ```html
 <p class="underline">Underline</p>
@@ -232,7 +232,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <p class="no-underline">No underline</p>
 ```
 
-### Text Overflow
+### 文本溢出
 
 ```html
 <p class="truncate">Truncate with ellipsis...</p>
@@ -240,9 +240,9 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <p class="text-ellipsis overflow-hidden">Ellipsis</p>
 ```
 
-## Colors
+## 颜色
 
-### Text Colors
+### 文本颜色
 
 ```html
 <p class="text-black">Black</p>
@@ -253,7 +253,7 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <p class="text-green-600">Green 600</p>
 ```
 
-### Background Colors
+### 背景颜色
 
 ```html
 <div class="bg-white">White</div>
@@ -262,16 +262,16 @@ Core utility classes for layout, spacing, typography, colors, borders, and shado
 <div class="bg-red-600">Red 600</div>
 ```
 
-### Color Scale
+### 色阶
 
-Each color has 11 shades (50-950):
-- `50`: Lightest
-- `100-400`: Light variations
-- `500`: Base color
-- `600-800`: Dark variations
-- `950`: Darkest
+每种颜色有 11 个色阶（50-950）：
+- `50`: 最浅
+- `100-400`: 浅色变体
+- `500`: 基色
+- `600-800`: 深色变体
+- `950`: 最深
 
-### Opacity Modifiers
+### 不透明度修饰符
 
 ```html
 <div class="bg-black/75">75% opacity</div>
@@ -279,7 +279,7 @@ Each color has 11 shades (50-950):
 <div class="bg-purple-500/[0.87]">87% opacity</div>
 ```
 
-### Gradients
+### 渐变
 
 ```html
 <div class="bg-gradient-to-r from-blue-500 to-purple-600">
@@ -290,11 +290,11 @@ Each color has 11 shades (50-950):
 </div>
 ```
 
-Directions: `to-t | to-tr | to-r | to-br | to-b | to-bl | to-l | to-tl`
+方向：`to-t | to-tr | to-r | to-br | to-b | to-bl | to-l | to-tl`
 
-## Borders
+## 边框
 
-### Border Width
+### 边框宽度
 
 ```html
 <div class="border">1px all sides</div>
@@ -306,7 +306,7 @@ Directions: `to-t | to-tr | to-r | to-br | to-b | to-bl | to-l | to-tl`
 <div class="border-0">No border</div>
 ```
 
-### Border Color
+### 边框颜色
 
 ```html
 <div class="border border-gray-300">Gray</div>
@@ -314,7 +314,7 @@ Directions: `to-t | to-tr | to-r | to-br | to-b | to-bl | to-l | to-tl`
 <div class="border border-red-600/50">Red with opacity</div>
 ```
 
-### Border Radius
+### 圆角
 
 ```html
 <div class="rounded">0.25rem</div>
@@ -329,7 +329,7 @@ Directions: `to-t | to-tr | to-r | to-br | to-b | to-bl | to-l | to-tl`
 <div class="rounded-br-xl">Bottom right</div>
 ```
 
-### Border Style
+### 边框样式
 
 ```html
 <div class="border border-solid">Solid</div>
@@ -337,7 +337,7 @@ Directions: `to-t | to-tr | to-r | to-br | to-b | to-bl | to-l | to-tl`
 <div class="border border-dotted">Dotted</div>
 ```
 
-## Shadows
+## 阴影
 
 ```html
 <div class="shadow-sm">Small</div>
@@ -349,15 +349,15 @@ Directions: `to-t | to-tr | to-r | to-br | to-b | to-bl | to-l | to-tl`
 <div class="shadow-none">No shadow</div>
 ```
 
-### Colored Shadows
+### 彩色阴影
 
 ```html
 <div class="shadow-lg shadow-blue-500/50">Blue shadow</div>
 ```
 
-## Width & Height
+## 宽度与高度
 
-### Width
+### 宽度
 
 ```html
 <div class="w-full">100%</div>
@@ -373,7 +373,7 @@ Directions: `to-t | to-tr | to-r | to-br | to-b | to-bl | to-l | to-tl`
 <div class="max-w-screen-xl">max-width: 1280px</div>
 ```
 
-### Height
+### 高度
 
 ```html
 <div class="h-full">100%</div>
@@ -386,9 +386,9 @@ Directions: `to-t | to-tr | to-r | to-br | to-b | to-bl | to-l | to-tl`
 <div class="max-h-96">max-height: 24rem</div>
 ```
 
-## Arbitrary Values
+## 任意值
 
-Use square brackets for custom values:
+使用方括号表示自定义值：
 
 ```html
 <!-- Spacing -->
@@ -410,7 +410,7 @@ Use square brackets for custom values:
 <div class="grid-cols-[1fr_500px_2fr]">Custom grid</div>
 ```
 
-## Aspect Ratio
+## 宽高比
 
 ```html
 <div class="aspect-square">1:1</div>
@@ -418,7 +418,7 @@ Use square brackets for custom values:
 <div class="aspect-[4/3]">4:3</div>
 ```
 
-## Overflow
+## 溢出
 
 ```html
 <div class="overflow-auto">Auto scroll</div>
@@ -428,7 +428,7 @@ Use square brackets for custom values:
 <div class="overflow-y-hidden">No vertical scroll</div>
 ```
 
-## Opacity
+## 不透明度
 
 ```html
 <div class="opacity-0">0%</div>
@@ -437,7 +437,7 @@ Use square brackets for custom values:
 <div class="opacity-100">100%</div>
 ```
 
-## Cursor
+## 光标
 
 ```html
 <div class="cursor-pointer">Pointer</div>
@@ -446,7 +446,7 @@ Use square brackets for custom values:
 <div class="cursor-default">Default</div>
 ```
 
-## User Select
+## 用户选择
 
 ```html
 <div class="select-none">No select</div>

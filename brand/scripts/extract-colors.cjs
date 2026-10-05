@@ -288,7 +288,7 @@ function main() {
       `   ${generateImageMagickCommand(resolvedPath)}`,
       "",
       "2. Or use the ai-multimodal skill:",
-      `   python .claude/skills/ai-multimodal/scripts/gemini_batch_process.py \\`,
+      `   python <ai-multimodal-skill-dir>/scripts/gemini_batch_process.py \\`,
       `     --files "${resolvedPath}" \\`,
       `     --task analyze \\`,
       `     --prompt "Extract the 10 most dominant colors as hex values"`,

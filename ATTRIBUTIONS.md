@@ -25,12 +25,27 @@
 | ui-styling | https://github.com/Dimnas/skill-ui-styling | MIT（SKILL.md 声明）/ Apache 2.0（LICENSE.txt） |
 | ui-ux-pro-max | https://github.com/Dimnas/skill-ui-ux-pro-max | 未明确 |
 
-### Matt Pocock 系列（原经 cc-pocock-picks 镜像引入，该镜像已失效）
+### Matt Pocock 系列（原经 x-zheng16/cc-pocock-picks 镜像引入；该镜像现已 404，仅作历史注记）
 
 | Skill | 来源仓库 | 许可证 |
 |-------|---------|--------|
+| codebase-design | https://github.com/mattpocock/skills | MIT |
+| design-an-interface | https://github.com/mattpocock/skills | MIT |
+| diagnose | https://github.com/mattpocock/skills | MIT |
+| grill-with-docs | https://github.com/mattpocock/skills | MIT |
+| handoff | https://github.com/mattpocock/skills | MIT |
 | improve-codebase-architecture | https://github.com/mattpocock/skills | MIT |
+| prototype | https://github.com/mattpocock/skills | MIT |
+| review | https://github.com/mattpocock/skills | MIT |
+| setup-matt-pocock-skills | https://github.com/mattpocock/skills | MIT |
 | tdd | https://github.com/mattpocock/skills | MIT |
+| to-issues | https://github.com/mattpocock/skills | MIT |
+| to-prd | https://github.com/mattpocock/skills | MIT |
+| triage | https://github.com/mattpocock/skills | MIT |
+| ubiquitous-language | https://github.com/mattpocock/skills | MIT |
+| writing-beats | https://github.com/mattpocock/skills | MIT |
+| writing-fragments | https://github.com/mattpocock/skills | MIT |
+| writing-shape | https://github.com/mattpocock/skills | MIT |
 
 ### LLM Wiki Skills 系列（已适配 AI-Wiki）
 
@@ -79,17 +94,19 @@
 
 | Skill | 来源仓库 | 许可证 |
 |-------|---------|--------|
-| doc | 未溯源 | Apache 2.0 |
-| frontend-design | 未溯源 | Apache 2.0 |
-| gh-address-comments | 未溯源 | Apache 2.0 |
-| gh-fix-ci | 未溯源 | Apache 2.0 |
-| pdf | 未溯源 | Apache 2.0 |
-| playwright | https://github.com/lackeyjb/playwright-skill | Apache 2.0 |
-| playwright-interactive | 未溯源 | Apache 2.0 |
-| screenshot | https://github.com/fltman/claude-code-skill-screenshot | Apache 2.0 |
-| security-best-practices | https://github.com/mukul975/Anthropic-Cybersecurity-Skills | Apache 2.0 |
-| security-ownership-map | 未溯源 | Apache 2.0 |
-| security-threat-model | 未溯源 | Apache 2.0 |
+| doc | https://github.com/openai/skills（`.curated/`；该条目后被上游删除） | Apache 2.0 |
+| frontend-design | https://github.com/anthropics/skills | Apache 2.0 |
+| gh-address-comments | https://github.com/openai/skills（`.curated/`） | Apache 2.0 |
+| gh-fix-ci | https://github.com/openai/skills（`.curated/`） | Apache 2.0 |
+| pdf | https://github.com/openai/skills（`.curated/`） | Apache 2.0 |
+| playwright | https://github.com/openai/skills（`.curated/`） | Apache 2.0 |
+| playwright-interactive | https://github.com/openai/skills（`.curated/`） | Apache 2.0 |
+| screenshot | https://github.com/openai/skills（`.curated/`） | Apache 2.0 |
+| security-best-practices | https://github.com/openai/skills（`.curated/`） | Apache 2.0 |
+| security-ownership-map | https://github.com/openai/skills（`.curated/`） | Apache 2.0 |
+| security-threat-model | https://github.com/openai/skills（`.curated/`） | Apache 2.0 |
+
+注：openai/skills 仓库已标记 deprecated，内容迁往 openai/plugins，上述来源以 `.curated/` 目录记录。anthropics/skills 中的 pdf 为专有许可证；本仓库 pdf 来自 openai/skills（Apache-2.0），两者未混用。
 
 ### 其他已溯源
 
@@ -98,18 +115,11 @@
 | agent-browser | https://github.com/CalebDane7/agent-browser | 未明确 |
 | caveman | https://github.com/JuliusBrussee/caveman | MIT |
 | codemap | https://github.com/camilo-acevedo/claude-skills | MIT |
-| diagnose | https://github.com/Digidai/product-manager-skills | 未明确 |
 | env-bootstrap | https://github.com/NathanMaine/memoriant-env-bootstrap-skill | 未明确 |
 | git-guardrails-claude-code | https://github.com/tombakerjr/claude-code-workflows | 未明确 |
-| handoff | 未确认 | 未明确 |
 | obsidian-vault | https://github.com/raja-patnaik/obsidian-agent | 未明确 |
-| prototype | https://github.com/nexu-io/open-design | 未明确 |
 | qa | 未确认 | 未明确 |
-| review | 未确认 | 未明确 |
-| setup-matt-pocock-skills | 未溯源 | 未明确 |
 | simplify | https://github.com/runkids/skillshare | 未明确 |
-| triage | https://github.com/monte-carlo-data/mc-agent-toolkit | 未明确 |
-| ubiquitous-language | https://github.com/tsipotU/glossary-skill | 未明确 |
 | write-a-skill | https://github.com/DurdeuVlad/easyskillz | 未明确 |
 | wechat-cli | 原创；调用 [huohuoer/wechat-cli](https://github.com/huohuoer/wechat-cli)（npm `@canghe_ai/wechat-cli` 仅 macOS arm64；Windows/Linux 从 GitHub 源码安装，PyPI 无此包） | MIT（原创）/ Apache-2.0（依赖） |
 
@@ -117,19 +127,12 @@
 
 以下 Skills 暂未确认原始出处，将逐步补充：
 
-- design-an-interface
 - edit-article
-- grill-with-docs
 - migrate-to-shoehorn
 - request-refactor-plan
 - scaffold-exercises
 - setup-pre-commit
-- to-issues
-- to-prd
 - workflow-checker
-- writing-beats
-- writing-fragments
-- writing-shape
 
 ---
 

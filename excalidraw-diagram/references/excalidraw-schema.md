@@ -1,29 +1,31 @@
-# Excalidraw JSON Schema Reference
+# Excalidraw JSON Schema 参考
 
-## Color Palette
+## 配色方案
 
-### Primary Colors
-| Purpose | Color | Hex |
+### 主色
+
+| 用途 | 颜色 | Hex |
 |---------|-------|-----|
-| Main Title | Deep Blue | `#1e40af` |
-| Subtitle | Medium Blue | `#3b82f6` |
-| Body Text | Dark Gray | `#374151` |
-| Emphasis | Orange | `#f59e0b` |
-| Success | Green | `#10b981` |
-| Warning | Red | `#ef4444` |
+| 主标题 | 深蓝 | `#1e40af` |
+| 副标题 | 中蓝 | `#3b82f6` |
+| 正文文字 | 深灰 | `#374151` |
+| 强调 | 橙色 | `#f59e0b` |
+| 成功 | 绿色 | `#10b981` |
+| 警告 | 红色 | `#ef4444` |
 
-### Background Colors
-| Purpose | Color | Hex |
+### 背景色
+
+| 用途 | 颜色 | Hex |
 |---------|-------|-----|
-| Light Blue | Background | `#dbeafe` |
-| Light Gray | Neutral | `#f3f4f6` |
-| Light Orange | Highlight | `#fef3c7` |
-| Light Green | Success | `#d1fae5` |
-| Light Purple | Accent | `#ede9fe` |
+| 浅蓝 | 背景 | `#dbeafe` |
+| 浅灰 | 中性 | `#f3f4f6` |
+| 浅橙 | 高亮 | `#fef3c7` |
+| 浅绿 | 成功 | `#d1fae5` |
+| 浅紫 | 点缀 | `#ede9fe` |
 
-## Element Types
+## 元素类型
 
-### Rectangle
+### 矩形
 ```json
 {
   "type": "rectangle",
@@ -42,7 +44,7 @@
 }
 ```
 
-### Text
+### 文本
 ```json
 {
   "type": "text",
@@ -59,7 +61,7 @@
 }
 ```
 
-### Arrow
+### 箭头
 ```json
 {
   "type": "arrow",
@@ -76,7 +78,7 @@
 }
 ```
 
-### Ellipse
+### 椭圆
 ```json
 {
   "type": "ellipse",
@@ -91,7 +93,7 @@
 }
 ```
 
-### Diamond
+### 菱形
 ```json
 {
   "type": "diamond",
@@ -106,7 +108,7 @@
 }
 ```
 
-### Line
+### 线段
 ```json
 {
   "type": "line",
@@ -119,7 +121,7 @@
 }
 ```
 
-## Full JSON Structure
+## 完整 JSON 结构
 
 ```json
 {
@@ -137,32 +139,32 @@
 }
 ```
 
-## Font Family Values
+## 字体族取值
 
-| Value | Font Name |
+| 值 | 字体名 |
 |-------|-----------|
-| 1 | Virgil (hand-drawn) |
+| 1 | Virgil（手绘） |
 | 2 | Helvetica |
 | 3 | Cascadia |
 | 4 | Assistant |
-| 5 | Excalifont (recommended) |
+| 5 | Excalifont（推荐） |
 
-## Fill Styles
+## 填充样式
 
-- `solid` - Solid fill
-- `hachure` - Hatched lines
-- `cross-hatch` - Cross-hatched
-- `dots` - Dotted pattern
+- `solid` - 实心填充
+- `hachure` - 排线填充
+- `cross-hatch` - 交叉排线
+- `dots` - 点状图案
 
-## Roundness Types
+## 圆角类型
 
-- `{ "type": 1 }` - Sharp corners
-- `{ "type": 2 }` - Slight rounding
-- `{ "type": 3 }` - Full rounding (recommended)
+- `{ "type": 1 }` - 直角
+- `{ "type": 2 }` - 轻微圆角
+- `{ "type": 3 }` - 完全圆角（推荐）
 
-## Element Binding
+## 元素绑定
 
-To connect text to a container:
+将文本连接到容器：
 
 ```json
 {
@@ -180,9 +182,9 @@ To connect text to a container:
 }
 ```
 
-## Arrow Binding
+## 箭头绑定
 
-To connect arrows to shapes:
+将箭头连接到形状：
 
 ```json
 {

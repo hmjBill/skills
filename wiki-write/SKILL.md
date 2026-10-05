@@ -100,4 +100,4 @@ description: 基于 AI-Wiki 库内笔记素材的写作辅助，支持初稿生�
 
 ## 枚举值参考
 
-所有 frontmatter 字段的合法值定义在 `.obsidian/types.json` 的枚举注册表中。
+所有 frontmatter 字段的合法值以 `00_系统/Agent操作指南.md` 的 Frontmatter 枚举值注册表为准；`.obsidian/types.json` 仅登记字段类型。
