@@ -1,24 +1,24 @@
-# Layout Algorithms for Obsidian Canvas
+# Obsidian Canvas 布局算法
 
-Detailed algorithms for positioning nodes in MindMap and Freeform layouts.
+思维导图（MindMap）和自由布局（Freeform）中节点定位的详细算法。
 
-## Layout Principles
+## 布局原则
 
-### Universal Spacing Constants
+### 通用间距常量
 
 ```
-HORIZONTAL_SPACING = 320  // Minimum horizontal space between node centers
-VERTICAL_SPACING = 200    // Minimum vertical space between node centers
-NODE_PADDING = 20         // Internal padding within nodes
+HORIZONTAL_SPACING = 320  // 节点中心之间的最小水平间距
+VERTICAL_SPACING = 200    // 节点中心之间的最小垂直间距
+NODE_PADDING = 20         // 节点内部留白
 ```
 
-### Collision Detection
+### 碰撞检测
 
-Before finalizing any node position, verify:
+在最终确定任何节点位置之前，验证：
 
 ```python
 def check_collision(node1, node2):
-    """Returns True if nodes overlap or are too close"""
+    """若节点重叠或距离过近则返回 True"""
     center1_x = node1.x + node1.width / 2
     center1_y = node1.y + node1.height / 2
     center2_x = node2.x + node2.width / 2
@@ -33,30 +33,30 @@ def check_collision(node1, node2):
     return dx < min_dx or dy < min_dy
 ```
 
-## MindMap Layout Algorithm
+## 思维导图布局算法
 
-### 1. Radial Tree Layout
+### 1. 径向树布局
 
-Place root at center, arrange children radially.
+将根节点放在中心，径向排列子节点。
 
-#### Step 1: Position Root Node
+#### 第 1 步：定位根节点
 
 ```python
 root = {
-    "x": 0 - (root_width / 2),  # Center horizontally
-    "y": 0 - (root_height / 2), # Center vertically
+    "x": 0 - (root_width / 2),  # 水平居中
+    "y": 0 - (root_height / 2), # 垂直居中
     "width": root_width,
     "height": root_height
 }
 ```
 
-#### Step 2: Calculate Primary Branch Positions
+#### 第 2 步：计算一级分支位置
 
-Distribute first-level children around root:
+将第一层子节点分布在根节点周围：
 
 ```python
 def position_primary_branches(root, children, radius=400):
-    """Position first-level children in a circle around root"""
+    """将第一层子节点排布在根节点周围的圆周上"""
     n = len(children)
     angle_step = 2 * pi / n
     
@@ -64,7 +64,7 @@ def position_primary_branches(root, children, radius=400):
     for i, child in enumerate(children):
         angle = i * angle_step
         
-        # Calculate position on circle
+        # 计算圆周上的位置
         x = root.center_x + radius * cos(angle) - child.width / 2
         y = root.center_y + radius * sin(angle) - child.height / 2
         
@@ -73,25 +73,25 @@ def position_primary_branches(root, children, radius=400):
     return positions
 ```
 
-**Radius Selection:**
-- Small canvases (≤10 children): 400px
-- Medium canvases (11-20 children): 500px
-- Large canvases (>20 children): 600px
+**半径选择：**
+- 小型画布（≤10 个子节点）：400px
+- 中型画布（11-20 个子节点）：500px
+- 大型画布（>20 个子节点）：600px
 
-#### Step 3: Position Secondary Branches
+#### 第 3 步：定位二级分支
 
-For each primary branch, arrange its children:
+对每个一级分支，排列其子节点：
 
-**Horizontal Layout** (preferred for most cases):
+**水平布局**（大多数情况下首选）：
 
 ```python
 def position_secondary_horizontal(parent, children, distance=350):
-    """Arrange children horizontally to the right of parent"""
+    """在父节点右侧水平排列子节点"""
     n = len(children)
     total_height = sum(child.height for child in children)
     total_spacing = (n - 1) * VERTICAL_SPACING
     
-    # Start position (top of vertical arrangement)
+    # 起始位置（垂直排列的顶部）
     start_y = parent.center_y - (total_height + total_spacing) / 2
     
     positions = []
@@ -107,16 +107,16 @@ def position_secondary_horizontal(parent, children, distance=350):
     return positions
 ```
 
-**Vertical Layout** (for left/right primary branches):
+**垂直布局**（用于左/右的一级分支）：
 
 ```python
 def position_secondary_vertical(parent, children, distance=250):
-    """Arrange children vertically below parent"""
+    """在父节点下方垂直排列子节点"""
     n = len(children)
     total_width = sum(child.width for child in children)
     total_spacing = (n - 1) * HORIZONTAL_SPACING
     
-    # Start position (left of horizontal arrangement)
+    # 起始位置（水平排列的左侧）
     start_x = parent.center_x - (total_width + total_spacing) / 2
     
     positions = []
@@ -132,13 +132,13 @@ def position_secondary_vertical(parent, children, distance=250):
     return positions
 ```
 
-#### Step 4: Balance and Adjust
+#### 第 4 步：平衡与调整
 
-After initial placement, check for collisions and adjust:
+初始放置后，检查碰撞并调整：
 
 ```python
 def balance_layout(nodes):
-    """Adjust nodes to prevent overlaps"""
+    """调整节点以避免重叠"""
     max_iterations = 10
     
     for iteration in range(max_iterations):
@@ -147,16 +147,16 @@ def balance_layout(nodes):
             break
         
         for node1, node2 in collisions:
-            # Move node2 away from node1
+            # 将 node2 移离 node1
             dx = node2.center_x - node1.center_x
             dy = node2.center_y - node1.center_y
             distance = sqrt(dx*dx + dy*dy)
             
-            # Calculate required distance
+            # 计算所需距离
             min_dist = calculate_min_distance(node1, node2)
             
             if distance > 0:
-                # Move proportionally
+                # 按比例移动
                 move_x = (dx / distance) * (min_dist - distance) / 2
                 move_y = (dy / distance) * (min_dist - distance) / 2
                 
@@ -164,29 +164,29 @@ def balance_layout(nodes):
                 node2.y += move_y
 ```
 
-### 2. Tree Layout (Hierarchical Top-Down)
+### 2. 树布局（自顶向下层级式）
 
-Alternative for deep hierarchies.
+深层层级结构的替代方案。
 
-#### Positioning Formula
+#### 定位公式
 
 ```python
 def position_tree_layout(root, tree):
-    """Top-down tree layout"""
-    # Level 0 (root)
+    """自顶向下的树布局"""
+    # 第 0 层（根节点）
     root.x = 0 - root.width / 2
     root.y = 0 - root.height / 2
     
-    # Process each level
+    # 逐层处理
     for level in range(1, max_depth):
         nodes_at_level = get_nodes_at_level(tree, level)
         
-        # Calculate horizontal spacing
+        # 计算水平间距
         total_width = sum(node.width for node in nodes_at_level)
         total_spacing = (len(nodes_at_level) - 1) * HORIZONTAL_SPACING
         
         start_x = -(total_width + total_spacing) / 2
-        y = level * (150 + VERTICAL_SPACING)  # 150px level height
+        y = level * (150 + VERTICAL_SPACING)  # 层级高度 150px
         
         current_x = start_x
         for node in nodes_at_level:
@@ -195,18 +195,18 @@ def position_tree_layout(root, tree):
             current_x += node.width + HORIZONTAL_SPACING
 ```
 
-## Freeform Layout Algorithm
+## 自由布局算法
 
-### 1. Content-Based Grouping
+### 1. 基于内容的分组
 
-First, identify natural groupings in content:
+首先，识别内容中的自然分组：
 
 ```python
 def identify_groups(nodes, content_structure):
-    """Group nodes by semantic relationships"""
+    """按语义关系对节点分组"""
     groups = []
     
-    # Analyze content structure
+    # 分析内容结构
     for section in content_structure:
         group_nodes = [node for node in nodes if node.section == section]
         
@@ -219,23 +219,23 @@ def identify_groups(nodes, content_structure):
     return groups
 ```
 
-### 2. Grid-Based Zone Layout
+### 2. 基于网格的区域布局
 
-Divide canvas into zones for different groups:
+将画布划分为不同分组使用的区域：
 
 ```python
 def layout_zones(groups, canvas_width=2000, canvas_height=1500):
-    """Arrange groups in grid zones"""
+    """在网格区域中排列分组"""
     n_groups = len(groups)
     
-    # Calculate grid dimensions
+    # 计算网格尺寸
     cols = ceil(sqrt(n_groups))
     rows = ceil(n_groups / cols)
     
     zone_width = canvas_width / cols
     zone_height = canvas_height / rows
     
-    # Assign zones
+    # 分配区域
     zones = []
     for i, group in enumerate(groups):
         col = i % cols
@@ -244,7 +244,7 @@ def layout_zones(groups, canvas_width=2000, canvas_height=1500):
         zone = {
             "x": col * zone_width - canvas_width / 2,
             "y": row * zone_height - canvas_height / 2,
-            "width": zone_width * 0.9,  # Leave 10% margin
+            "width": zone_width * 0.9,  # 保留 10% 边距
             "height": zone_height * 0.9,
             "group": group
         }
@@ -253,26 +253,26 @@ def layout_zones(groups, canvas_width=2000, canvas_height=1500):
     return zones
 ```
 
-### 3. Within-Zone Node Positioning
+### 3. 区域内的节点定位
 
-Position nodes within each zone:
+在每个区域内定位节点：
 
-**Option A: Organic Flow**
+**方案 A：有机流动**
 
 ```python
 def position_organic(zone, nodes):
-    """Organic, flowing arrangement within zone"""
+    """区域内有机、流动的排列"""
     positions = []
     
-    # Start at zone top-left with margin
+    # 从区域左上角开始，留出边距
     current_x = zone.x + 50
     current_y = zone.y + 50
     row_height = 0
     
     for node in nodes:
-        # Check if node fits in current row
+        # 检查节点能否放入当前行
         if current_x + node.width > zone.x + zone.width - 50:
-            # Move to next row
+            # 移到下一行
             current_x = zone.x + 50
             current_y += row_height + VERTICAL_SPACING
             row_height = 0
@@ -288,16 +288,16 @@ def position_organic(zone, nodes):
     return positions
 ```
 
-**Option B: Structured Grid**
+**方案 B：结构化网格**
 
 ```python
 def position_grid(zone, nodes):
-    """Grid arrangement within zone"""
+    """区域内的网格排列"""
     n = len(nodes)
     cols = ceil(sqrt(n))
     rows = ceil(n / cols)
     
-    cell_width = (zone.width - 100) / cols  # 50px margin each side
+    cell_width = (zone.width - 100) / cols  # 两侧各留 50px 边距
     cell_height = (zone.height - 100) / rows
     
     positions = []
@@ -305,7 +305,7 @@ def position_grid(zone, nodes):
         col = i % cols
         row = i // cols
         
-        # Center node in cell
+        # 将节点居中于单元格
         x = zone.x + 50 + col * cell_width + (cell_width - node.width) / 2
         y = zone.y + 50 + row * cell_height + (cell_height - node.height) / 2
         
@@ -314,30 +314,30 @@ def position_grid(zone, nodes):
     return positions
 ```
 
-### 4. Cross-Zone Connections
+### 4. 跨区域连接
 
-Calculate optimal edge paths between zones:
+计算区域之间的最优边路径：
 
 ```python
 def calculate_edge_path(from_node, to_node):
-    """Determine edge connection points"""
-    # Calculate centers
+    """确定边的连接点"""
+    # 计算中心
     from_center = (from_node.x + from_node.width/2, 
                    from_node.y + from_node.height/2)
     to_center = (to_node.x + to_node.width/2,
                  to_node.y + to_node.height/2)
     
-    # Determine best sides to connect
+    # 确定最佳的连接边侧
     dx = to_center[0] - from_center[0]
     dy = to_center[1] - from_center[1]
     
-    # Choose sides based on direction
+    # 根据方向选择边侧
     if abs(dx) > abs(dy):
-        # Horizontal connection
+        # 水平连接
         from_side = "right" if dx > 0 else "left"
         to_side = "left" if dx > 0 else "right"
     else:
-        # Vertical connection
+        # 垂直连接
         from_side = "bottom" if dy > 0 else "top"
         to_side = "top" if dy > 0 else "bottom"
     
@@ -347,22 +347,22 @@ def calculate_edge_path(from_node, to_node):
     }
 ```
 
-## Advanced Techniques
+## 高级技术
 
-### Force-Directed Layout
+### 力导向布局
 
-For complex networks with many cross-connections:
+适用于存在大量交叉连接的复杂网络：
 
 ```python
 def force_directed_layout(nodes, edges, iterations=100):
-    """Spring-based layout algorithm"""
-    # Constants
+    """基于弹簧的布局算法"""
+    # 常量
     SPRING_LENGTH = 200
     SPRING_CONSTANT = 0.1
     REPULSION_CONSTANT = 5000
     
     for iteration in range(iterations):
-        # Calculate repulsive forces (all pairs)
+        # 计算斥力（所有节点对）
         for node1 in nodes:
             force_x, force_y = 0, 0
             
@@ -375,7 +375,7 @@ def force_directed_layout(nodes, edges, iterations=100):
                 distance = sqrt(dx*dx + dy*dy)
                 
                 if distance > 0:
-                    # Repulsive force
+                    # 斥力
                     force = REPULSION_CONSTANT / (distance * distance)
                     force_x += (dx / distance) * force
                     force_y += (dy / distance) * force
@@ -383,7 +383,7 @@ def force_directed_layout(nodes, edges, iterations=100):
             node1.force_x = force_x
             node1.force_y = force_y
         
-        # Calculate attractive forces (connected nodes)
+        # 计算引力（相连节点）
         for edge in edges:
             node1 = get_node(edge.fromNode)
             node2 = get_node(edge.toNode)
@@ -392,7 +392,7 @@ def force_directed_layout(nodes, edges, iterations=100):
             dy = node2.y - node1.y
             distance = sqrt(dx*dx + dy*dy)
             
-            # Spring force
+            # 弹簧力
             force = SPRING_CONSTANT * (distance - SPRING_LENGTH)
             
             node1.force_x += (dx / distance) * force
@@ -400,29 +400,29 @@ def force_directed_layout(nodes, edges, iterations=100):
             node2.force_x -= (dx / distance) * force
             node2.force_y -= (dy / distance) * force
         
-        # Apply forces
+        # 应用力
         for node in nodes:
             node.x += node.force_x
             node.y += node.force_y
 ```
 
-### Hierarchical Clustering
+### 层次聚类
 
-Group related nodes automatically:
+自动分组相关节点：
 
 ```python
 def hierarchical_cluster(nodes, similarity_threshold=0.7):
-    """Cluster nodes by content similarity"""
+    """按内容相似度对节点聚类"""
     clusters = []
     
-    # Calculate similarity matrix
+    # 计算相似度矩阵
     similarity = calculate_similarity_matrix(nodes)
     
-    # Agglomerative clustering
+    # 凝聚聚类
     current_clusters = [[node] for node in nodes]
     
     while len(current_clusters) > 1:
-        # Find most similar clusters
+        # 找到最相似的簇
         max_sim = 0
         merge_i, merge_j = 0, 1
         
@@ -438,29 +438,29 @@ def hierarchical_cluster(nodes, similarity_threshold=0.7):
         if max_sim < similarity_threshold:
             break
         
-        # Merge clusters
+        # 合并簇
         current_clusters[merge_i].extend(current_clusters[merge_j])
         current_clusters.pop(merge_j)
     
     return current_clusters
 ```
 
-## Layout Optimization
+## 布局优化
 
-### Minimize Edge Crossings
+### 最小化边交叉
 
 ```python
 def minimize_crossings(nodes, edges):
-    """Reduce edge crossing through node repositioning"""
+    """通过重新定位节点减少边交叉"""
     crossings = count_crossings(edges)
     
-    # Try swapping adjacent nodes
+    # 尝试交换相邻节点
     improved = True
     while improved:
         improved = False
         
         for i in range(len(nodes) - 1):
-            # Swap nodes i and i+1
+            # 交换节点 i 和 i+1
             swap_positions(nodes[i], nodes[i+1])
             new_crossings = count_crossings(edges)
             
@@ -468,21 +468,21 @@ def minimize_crossings(nodes, edges):
                 crossings = new_crossings
                 improved = True
             else:
-                # Swap back
+                # 换回来
                 swap_positions(nodes[i], nodes[i+1])
 ```
 
-### Visual Balance
+### 视觉平衡
 
 ```python
 def calculate_visual_weight(canvas):
-    """Calculate center of mass for visual balance"""
+    """计算质心以实现视觉平衡"""
     total_weight = 0
     weighted_x = 0
     weighted_y = 0
     
     for node in canvas.nodes:
-        # Weight is proportional to area
+        # 权重与面积成正比
         weight = node.width * node.height
         total_weight += weight
         
@@ -492,7 +492,7 @@ def calculate_visual_weight(canvas):
     center_x = weighted_x / total_weight
     center_y = weighted_y / total_weight
     
-    # Shift entire canvas to center at (0, 0)
+    # 平移整个画布，使中心位于 (0, 0)
     offset_x = -center_x
     offset_y = -center_y
     
@@ -501,22 +501,22 @@ def calculate_visual_weight(canvas):
         node.y += offset_y
 ```
 
-## Performance Optimization
+## 性能优化
 
-### Spatial Indexing
+### 空间索引
 
-For large canvases, use spatial indexing to speed up collision detection:
+对于大型画布，使用空间索引加速碰撞检测：
 
 ```python
 class SpatialGrid:
-    """Grid-based spatial index for fast collision detection"""
+    """用于快速碰撞检测的基于网格的空间索引"""
     
     def __init__(self, cell_size=500):
         self.cell_size = cell_size
         self.grid = {}
     
     def add_node(self, node):
-        """Add node to grid"""
+        """将节点添加到网格"""
         cells = self.get_cells(node)
         for cell in cells:
             if cell not in self.grid:
@@ -524,7 +524,7 @@ class SpatialGrid:
             self.grid[cell].append(node)
     
     def get_cells(self, node):
-        """Get grid cells node occupies"""
+        """获取节点占据的网格单元格"""
         min_x = int(node.x / self.cell_size)
         max_x = int((node.x + node.width) / self.cell_size)
         min_y = int(node.y / self.cell_size)
@@ -537,7 +537,7 @@ class SpatialGrid:
         return cells
     
     def get_nearby_nodes(self, node):
-        """Get nodes in nearby cells"""
+        """获取附近单元格中的节点"""
         cells = self.get_cells(node)
         nearby = set()
         
@@ -548,32 +548,32 @@ class SpatialGrid:
         return nearby
 ```
 
-## Common Layout Patterns
+## 常见布局模式
 
-### Timeline Layout
+### 时间线布局
 
-For chronological content:
+用于按时间顺序排列的内容：
 
 ```python
 def layout_timeline(events, direction="horizontal"):
-    """Create timeline layout"""
+    """创建时间线布局"""
     if direction == "horizontal":
         for i, event in enumerate(events):
             event.x = i * (event.width + HORIZONTAL_SPACING)
             event.y = 0
-    else:  # vertical
+    else:  # 垂直
         for i, event in enumerate(events):
             event.x = 0
             event.y = i * (event.height + VERTICAL_SPACING)
 ```
 
-### Circular Layout
+### 圆形布局
 
-For cyclical processes:
+适用于循环过程：
 
 ```python
 def layout_circular(nodes, radius=500):
-    """Arrange nodes in a circle"""
+    """将节点排成圆形"""
     n = len(nodes)
     angle_step = 2 * pi / n
     
@@ -583,13 +583,13 @@ def layout_circular(nodes, radius=500):
         node.y = radius * sin(angle) - node.height / 2
 ```
 
-### Matrix Layout
+### 矩阵布局
 
-For comparing multiple dimensions:
+用于比较多个维度：
 
 ```python
 def layout_matrix(nodes, rows, cols):
-    """Arrange nodes in a matrix"""
+    """将节点排成矩阵"""
     cell_width = 400
     cell_height = 250
     
@@ -601,14 +601,14 @@ def layout_matrix(nodes, rows, cols):
         node.y = row * cell_height
 ```
 
-## Quality Checks
+## 质量检查
 
-Before finalizing layout, verify:
+定稿布局之前，验证：
 
-1. **No Overlaps**: All nodes have minimum spacing
-2. **Balanced**: Visual center near (0, 0)
-3. **Accessible**: All nodes reachable via edges
-4. **Readable**: Text sizes appropriate for zoom level
-5. **Efficient**: Edge paths reasonably direct
+1. **无重叠**：所有节点都有最小间距
+2. **平衡**：视觉中心接近 (0, 0)
+3. **可达**：所有节点都能通过边到达
+4. **可读**：文本大小适合缩放级别
+5. **高效**：边路径尽可能直接
 
-Use these algorithms as foundations, adapting to specific content and user preferences.
+把这些算法作为基础，根据具体内容和用户偏好进行调整。

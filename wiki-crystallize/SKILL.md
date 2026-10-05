@@ -55,5 +55,5 @@ description: 将对话内容提炼为 AI-Wiki 持久笔记，按 PARA 结构归�
 ## 参考
 
 - 模板目录：`00_系统/模板/`
-- 枚举注册表：`.obsidian/types.json`
+- 合法值以 `00_系统/Agent操作指南.md` 的 Frontmatter 枚举值注册表为准；`.obsidian/types.json` 仅登记字段类型
 - 三层链接体系：README 导航 → 高可信度 wikilink（知识笔记 1-3 条）→ DataviewJS（需启用 Dataview 插件；未启用时降级为普通 wikilink）

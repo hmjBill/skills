@@ -1,8 +1,8 @@
-# HTML Slide Template
+# HTML 幻灯片模板
 
-Complete HTML structure with navigation, tokens, and Chart.js integration.
+完整的 HTML 结构，包含导航、令牌与 Chart.js 集成。
 
-## Base Structure
+## 基础结构
 
 ```html
 <!DOCTYPE html>
@@ -201,7 +201,7 @@ Complete HTML structure with navigation, tokens, and Chart.js integration.
 </html>
 ```
 
-## Chart.js Integration
+## Chart.js 集成
 
 ```html
 <div class="chart-container" style="width: min(80%, 600px); height: clamp(200px, 40vh, 350px);">
@@ -236,7 +236,7 @@ new Chart(document.getElementById('revenueChart'), {
 </script>
 ```
 
-## Animation Classes
+## 动画类
 
 ```css
 /* Fade Up */
@@ -272,7 +272,7 @@ new Chart(document.getElementById('revenueChart'), {
 .animate-stagger > *:nth-child(4) { animation-delay: 0.4s; }
 ```
 
-## Background Images
+## 背景图片
 
 ```html
 <div class="slide slide-with-bg" style="background-image: url('https://images.pexels.com/...')">
@@ -283,13 +283,13 @@ new Chart(document.getElementById('revenueChart'), {
 </div>
 ```
 
-## CSS Variables Reference
+## CSS 变量参考
 
-| Variable | Usage |
+| 变量 | 用途 |
 |----------|-------|
-| `--color-primary` | Brand primary (CTA, highlights) |
-| `--color-background` | Slide background |
-| `--color-secondary` | Secondary elements |
-| `--primitive-gradient-primary` | Title gradients |
-| `--typography-font-heading` | Headlines |
-| `--typography-font-body` | Body text |
+| `--color-primary` | 品牌主色（CTA、高亮） |
+| `--color-background` | 幻灯片背景 |
+| `--color-secondary` | 次级元素 |
+| `--primitive-gradient-primary` | 标题渐变 |
+| `--typography-font-heading` | 标题 |
+| `--typography-font-body` | 正文文字 |

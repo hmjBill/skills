@@ -1,85 +1,85 @@
-# Messaging Framework
+# 信息框架
 
-## Framework Structure
+## 框架结构
 
 ```
-Mission (Why we exist)
+使命（我们为何存在）
     ↓
-Vision (Where we're going)
+愿景（我们要去往何方）
     ↓
-Value Proposition (What we offer)
+价值主张（我们提供什么）
     ↓
-Positioning Statement (How we're different)
+定位声明（我们有何不同）
     ↓
-Key Messages (What we say)
+核心信息（我们说什么）
     ↓
-Proof Points (Why to believe)
+论据支撑（为何可信）
 ```
 
-## Core Statements
+## 核心陈述
 
-### Mission Statement
+### 使命声明
 ```
-We [action] for [audience] by [method] so they can [outcome].
-```
-
-### Vision Statement
-```
-A world where [aspiration/change we want to see].
+我们为 [audience] [action]，通过 [method]，让他们能够 [outcome]。
 ```
 
-### Value Proposition
+### 愿景声明
 ```
-For [target customer] who [need/problem],
-[Product/Brand] is a [category]
-that [key benefit].
-Unlike [competitors],
-we [unique differentiator].
+一个能够实现 [aspiration/change we want to see] 的世界。
 ```
 
-### Positioning Statement
+### 价值主张
 ```
-[Brand] is the [category] for [audience]
-who want [desired outcome]
-because [reason to believe].
+面向有 [need/problem] 的 [target customer]，
+[Product/Brand] 是一款 [category]，
+能够 [key benefit]。
+与 [competitors] 不同，
+我们 [unique differentiator]。
 ```
 
-## Message Architecture
+### 定位声明
+```
+[Brand] 是面向 [audience] 的 [category]，
+他们想要 [desired outcome]，
+因为 [reason to believe]。
+```
 
-### Primary Message
-One sentence that captures your core value.
+## 信息架构
 
-### Supporting Messages (3-5)
-Each addresses a different benefit or audience need.
+### 核心信息
+用一句话概括你的核心价值。
 
-| Message | Audience Need | Proof Point |
+### 支撑信息（3-5 条）
+每一条针对不同的利益点或受众需求。
+
+| 信息 | 受众需求 | 论据 |
 |---------|---------------|-------------|
 | [Message 1] | [Need] | [Evidence] |
 | [Message 2] | [Need] | [Evidence] |
 | [Message 3] | [Need] | [Evidence] |
 
-### Elevator Pitches
+### 电梯演讲
 
-**10-second:**
-[One sentence that sparks interest]
+**10 秒版：**
+[一句能引起兴趣的话]
 
-**30-second:**
-[Problem + solution + differentiation]
+**30 秒版：**
+[问题 + 方案 + 差异化]
 
-**60-second:**
-[Full pitch with proof points]
+**60 秒版：**
+[包含论据支撑的完整介绍]
 
-## Message by Audience
+## 按受众划分的信息
 
-| Audience | Pain Point | Key Message | CTA |
+| 受众 | 痛点 | 核心信息 | CTA |
 |----------|------------|-------------|-----|
 | [Segment 1] | [Pain] | [Message] | [Action] |
 | [Segment 2] | [Pain] | [Message] | [Action] |
 
-## Message Testing
+## 信息测试
 
-1. Is it clear? (No jargon)
-2. Is it differentiated? (Competitors can't say it)
-3. Is it credible? (Can we prove it)
-4. Is it compelling? (Does audience care)
-5. Is it consistent? (Aligns with brand)
+1. 是否清晰？（无术语）
+2. 是否有差异化？（竞争对手无法这么说）
+3. 是否可信？（我们能证明吗）
+4. 是否有吸引力？（受众在意吗）
+5. 是否一致？（与品牌一致）

@@ -6,13 +6,14 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（66 个，均含 SKILL.md）
+## 收录条目（67 个，均含 SKILL.md）
 
 ### 开发与架构
 
 | Skill | 说明 |
 |-------|------|
 | [caveman](caveman/SKILL.md) | 极致压缩的沟通模式，大幅减少 token 消耗 |
+| [codebase-design](codebase-design/SKILL.md) | 深模块设计的共享词汇：寻找深化机会、决定接缝位置（设计两次） |
 | [codemap](codemap/SKILL.md) | 生成代码地图，快速理解项目结构 |
 | [improve-codebase-architecture](improve-codebase-architecture/SKILL.md) | 改善代码库架构 |
 | [migrate-to-shoehorn](migrate-to-shoehorn/SKILL.md) | 迁移到 Shoehorn 框架 |
@@ -135,7 +136,17 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 
 ## 使用方式
 
-将需要的 Skill 目录复制到你的 AI 编程助手配置目录中。以 Claude Code 为例：
+将需要的 Skill 目录复制到你的 AI 编程助手配置目录中（Claude Code：`~/.claude/skills/`；OpenCode：`~/.config/opencode/skills/`）。以 Claude Code 为例：
+
+```powershell
+# 复制单个 Skill
+Copy-Item -Recurse simplify "$env:USERPROFILE\.claude\skills\"
+
+# 复制全部
+Get-ChildItem -Directory | Copy-Item -Destination "$env:USERPROFILE\.claude\skills\" -Recurse
+```
+
+macOS / Linux 等价写法：
 
 ```bash
 # 复制单个 Skill

@@ -1,17 +1,17 @@
-# shadcn/ui Theming & Customization
+# shadcn/ui 主题与定制
 
-Theme configuration, CSS variables, dark mode, and component customization.
+主题配置、CSS 变量、深色模式与组件定制。
 
-## Dark Mode Setup
+## 深色模式配置
 
 ### Next.js App Router
 
-**1. Install next-themes:**
+**1. 安装 next-themes：**
 ```bash
 npm install next-themes
 ```
 
-**2. Create theme provider:**
+**2. 创建主题提供者：**
 ```tsx
 // components/theme-provider.tsx
 "use client"
@@ -27,7 +27,7 @@ export function ThemeProvider({
 }
 ```
 
-**3. Wrap app:**
+**3. 包裹应用：**
 ```tsx
 // app/layout.tsx
 import { ThemeProvider } from "@/components/theme-provider"
@@ -50,7 +50,7 @@ export default function RootLayout({ children }) {
 }
 ```
 
-**4. Theme toggle component:**
+**4. 主题切换组件：**
 ```tsx
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
@@ -73,9 +73,9 @@ export function ThemeToggle() {
 }
 ```
 
-### Vite / Other Frameworks
+### Vite / 其他框架
 
-Use similar approach with next-themes or implement custom solution:
+使用类似方式配合 next-themes，或实现自定义方案：
 
 ```javascript
 // Store preference
@@ -92,9 +92,9 @@ if (localStorage.theme === 'dark' ||
 }
 ```
 
-## CSS Variable System
+## CSS 变量系统
 
-shadcn/ui uses CSS variables for theming. Variables defined in `globals.css`:
+shadcn/ui 使用 CSS 变量实现主题化。变量定义在 `globals.css` 中：
 
 ```css
 @layer base {
@@ -137,22 +137,22 @@ shadcn/ui uses CSS variables for theming. Variables defined in `globals.css`:
 }
 ```
 
-### Color Format
+### 颜色格式
 
-Values use HSL format without `hsl()` wrapper for better opacity control:
+值使用不带 `hsl()` 包裹的 HSL 格式，以便更好地控制不透明度：
 ```css
 --primary: 222.2 47.4% 11.2%;  /* H S L */
 ```
 
-Usage in Tailwind:
+在 Tailwind 中的用法：
 ```css
 background: hsl(var(--primary));
 background: hsl(var(--primary) / 0.5);  /* 50% opacity */
 ```
 
-## Tailwind Configuration
+## Tailwind 配置
 
-Map CSS variables to Tailwind utilities:
+将 CSS 变量映射到 Tailwind 工具类：
 
 ```ts
 // tailwind.config.ts
@@ -197,11 +197,11 @@ export default {
 }
 ```
 
-## Color Customization
+## 颜色定制
 
-### Method 1: Update CSS Variables
+### 方法 1：更新 CSS 变量
 
-Change colors by modifying CSS variables in `globals.css`:
+通过修改 `globals.css` 中的 CSS 变量来更换颜色：
 
 ```css
 :root {
@@ -215,15 +215,15 @@ Change colors by modifying CSS variables in `globals.css`:
 }
 ```
 
-### Method 2: Theme Generator
+### 方法 2：主题生成器
 
-Use shadcn/ui theme generator: https://ui.shadcn.com/themes
+使用 shadcn/ui 主题生成器：https://ui.shadcn.com/themes
 
-Select base color, generate theme, copy CSS variables.
+选择基础色，生成主题，复制 CSS 变量。
 
-### Method 3: Multiple Themes
+### 方法 3：多主题
 
-Create theme variants with data attributes:
+使用 data 属性创建主题变体：
 
 ```css
 [data-theme="violet"] {
@@ -237,18 +237,18 @@ Create theme variants with data attributes:
 }
 ```
 
-Apply theme:
+应用主题：
 ```tsx
 <div data-theme="violet">
   <Button>Violet theme</Button>
 </div>
 ```
 
-## Component Customization
+## 组件定制
 
-Components live in your codebase - modify directly.
+组件位于你的代码库中——可直接修改。
 
-### Customize Variants
+### 定制变体
 
 ```tsx
 // components/ui/button.tsx
@@ -279,14 +279,14 @@ const buttonVariants = cva(
 )
 ```
 
-Usage:
+用法：
 ```tsx
 <Button variant="gradient" size="xl">Custom Button</Button>
 ```
 
-### Customize Styles
+### 定制样式
 
-Modify base styles in component:
+修改组件中的基础样式：
 
 ```tsx
 // components/ui/card.tsx
@@ -305,9 +305,9 @@ const Card = React.forwardRef<
 ))
 ```
 
-### Override with className
+### 用 className 覆盖
 
-Pass additional classes to override:
+传入额外类名进行覆盖：
 
 ```tsx
 <Card className="border-2 border-purple-500 shadow-2xl hover:scale-105 transition-transform">
@@ -315,26 +315,26 @@ Pass additional classes to override:
 </Card>
 ```
 
-## Base Color Presets
+## 基础色预设
 
-shadcn/ui provides base color presets during `init`:
+shadcn/ui 在 `init` 期间提供基础色预设：
 
-- **Slate**: Cool gray tones
-- **Gray**: Neutral gray
-- **Zinc**: Warm gray
-- **Neutral**: Balanced gray
-- **Stone**: Earthy gray
+- **Slate**：冷灰色调
+- **Gray**：中性灰
+- **Zinc**：暖灰
+- **Neutral**：平衡灰
+- **Stone**：大地灰
 
-Select during setup or change later by updating CSS variables.
+在设置时选择，或之后通过更新 CSS 变量更改。
 
-## Style Variants
+## 风格变体
 
-Two component styles available:
+提供两种组件风格：
 
-- **Default**: Softer, more rounded
-- **New York**: Sharp, more contrast
+- **Default**：更柔和、更圆润
+- **New York**：更锐利、对比更强
 
-Select during `init` or in `components.json`:
+在 `init` 期间或 `components.json` 中选择：
 
 ```json
 {
@@ -345,9 +345,9 @@ Select during `init` or in `components.json`:
 }
 ```
 
-## Radius Customization
+## 圆角定制
 
-Control border radius globally:
+全局控制边框圆角：
 
 ```css
 :root {
@@ -357,17 +357,17 @@ Control border radius globally:
 }
 ```
 
-Components use radius variable:
+组件使用圆角变量：
 ```tsx
 className="rounded-lg"  /* Uses var(--radius) */
 ```
 
-## Best Practices
+## 最佳实践
 
-1. **Use CSS Variables**: Enables runtime theme switching
-2. **Consistent Foreground Colors**: Pair each color with appropriate foreground
-3. **Test Both Themes**: Verify components in light and dark modes
-4. **Semantic Naming**: Use `destructive` not `red`, `muted` not `gray`
-5. **Accessibility**: Maintain sufficient color contrast (WCAG AA minimum)
-6. **Component Overrides**: Use `className` prop for one-off customization
-7. **Extract Patterns**: Create custom variants for repeated customizations
+1. **使用 CSS 变量**：支持运行时切换主题
+2. **一致的前景色**：为每种颜色搭配合适的前景色
+3. **测试两种主题**：在浅色和深色模式下验证组件
+4. **语义化命名**：用 `destructive` 而非 `red`，用 `muted` 而非 `gray`
+5. **无障碍**：保持足够的颜色对比度（最低 WCAG AA）
+6. **组件覆盖**：一次性定制使用 `className` 属性
+7. **提取模式**：为重复出现的定制创建自定义变体

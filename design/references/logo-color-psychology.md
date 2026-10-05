@@ -1,101 +1,101 @@
-# Logo Color Psychology
+# Logo 色彩心理学
 
-## Primary Color Meanings
+## 主色含义
 
-### Blue
-- **Psychology:** Trust, stability, professionalism, calm
-- **Industries:** Finance, healthcare, tech, corporate
-- **Hex Examples:** Navy #003366, Royal #0055A4, Sky #0EA5E9
-- **Pairings:** White, gold, light gray
+### 蓝色
+- **心理：** 信任、稳定、专业、冷静
+- **行业：** 金融、医疗、科技、企业
+- **色值示例：** 藏青 #003366、皇家蓝 #0055A4、天蓝 #0EA5E9
+- **搭配：** 白、金、浅灰
 
-### Red
-- **Psychology:** Energy, passion, urgency, excitement
-- **Industries:** Food, sports, entertainment, sales
-- **Hex Examples:** Crimson #DC2626, Scarlet #EF4444, Burgundy #9F1239
-- **Pairings:** White, black, gold
-- **Caution:** Avoid for healthcare (blood connotation)
+### 红色
+- **心理：** 活力、热情、紧迫、兴奋
+- **行业：** 食品、体育、娱乐、促销
+- **色值示例：** 绯红 #DC2626、猩红 #EF4444、酒红 #9F1239
+- **搭配：** 白、黑、金
+- **注意：** 医疗行业避免使用（血的联想）
 
-### Green
-- **Psychology:** Growth, nature, health, sustainability
-- **Industries:** Eco, wellness, organic, finance (growth)
-- **Hex Examples:** Forest #228B22, Sage #2E8B57, Mint #10B981
-- **Pairings:** White, brown, blue
+### 绿色
+- **心理：** 成长、自然、健康、可持续
+- **行业：** 环保、健康、有机、金融（增长）
+- **色值示例：** 森林绿 #228B22、鼠尾草绿 #2E8B57、薄荷绿 #10B981
+- **搭配：** 白、棕、蓝
 
-### Yellow/Gold
-- **Psychology:** Optimism, warmth, luxury, attention
-- **Industries:** Food, children, luxury (gold), energy
-- **Hex Examples:** Gold #D4AF37, Amber #F59E0B, Lemon #FACC15
-- **Pairings:** Black, navy, dark brown
+### 黄色/金色
+- **心理：** 乐观、温暖、奢华、吸引注意
+- **行业：** 食品、儿童、奢侈品（金色）、能源
+- **色值示例：** 金 #D4AF37、琥珀 #F59E0B、柠檬黄 #FACC15
+- **搭配：** 黑、藏青、深棕
 
-### Purple
-- **Psychology:** Creativity, wisdom, luxury, mystery
-- **Industries:** Beauty, creative, spiritual, premium
-- **Hex Examples:** Royal #7C3AED, Lavender #A78BFA, Deep #581C87
-- **Pairings:** Gold, white, pink
+### 紫色
+- **心理：** 创意、智慧、奢华、神秘
+- **行业：** 美妆、创意、灵性、高端
+- **色值示例：** 皇家紫 #7C3AED、薰衣草紫 #A78BFA、深紫 #581C87
+- **搭配：** 金、白、粉
 
-### Orange
-- **Psychology:** Friendly, energetic, confident, youthful
-- **Industries:** Food, sports, entertainment, retail
-- **Hex Examples:** Tangerine #F97316, Coral #FB923C, Burnt #EA580C
-- **Pairings:** White, navy, dark gray
+### 橙色
+- **心理：** 友好、活力、自信、年轻
+- **行业：** 食品、体育、娱乐、零售
+- **色值示例：** 橘 #F97316、珊瑚 #FB923C、焦橙 #EA580C
+- **搭配：** 白、藏青、深灰
 
-### Black
-- **Psychology:** Sophistication, power, elegance, authority
-- **Industries:** Luxury, fashion, tech, premium
-- **Pairings:** White, gold, silver
-- **Note:** Use for high-end positioning
+### 黑色
+- **心理：** 精致、力量、优雅、权威
+- **行业：** 奢华、时尚、科技、高端
+- **搭配：** 白、金、银
+- **说明：** 用于高端定位
 
-### White
-- **Psychology:** Purity, simplicity, cleanliness, modern
-- **Use:** Backgrounds, negative space, contrast
-- **Pairings:** Any color (universal neutral)
+### 白色
+- **心理：** 纯净、简约、洁净、现代
+- **用途：** 背景、负空间、对比
+- **搭配：** 任意颜色（通用中性色）
 
-## Color Combinations by Industry
+## 按行业的配色组合
 
-| Industry | Primary | Secondary | Accent | Avoid |
+| 行业 | 主色 | 辅助色 | 点缀色 | 避免 |
 |----------|---------|-----------|--------|-------|
-| Tech | Blue, Purple | Gray, White | Teal, Green | Brown, Beige |
-| Healthcare | Blue, Green | Teal, White | Light Purple | Red, Black |
-| Finance | Navy, Blue | Gold, Gray | Green | Bright colors |
-| Food | Red, Orange | Yellow, Brown | Green | Blue (appetite suppressant) |
-| Fashion | Black, White | Gold, Blush | Navy | Neon (unless intentional) |
-| Eco | Green, Brown | Beige, Blue | Yellow | Neon, Black |
-| Children | Multi-color | Pastels | Bright accents | Dark, muted |
+| 科技 | 蓝、紫 | 灰、白 | 青绿、绿 | 棕、米色 |
+| 医疗 | 蓝、绿 | 青绿、白 | 浅紫 | 红、黑 |
+| 金融 | 藏青、蓝 | 金、灰 | 绿 | 亮色 |
+| 食品 | 红、橙 | 黄、棕 | 绿 | 蓝（抑制食欲） |
+| 时尚 | 黑、白 | 金、腮红粉 | 藏青 | 霓虹色（除非刻意为之） |
+| 环保 | 绿、棕 | 米色、蓝 | 黄 | 霓虹色、黑 |
+| 儿童 | 多色 | 粉彩 | 明亮点缀 | 暗色、低饱和 |
 
-## Color Harmony Types
+## 色彩和谐类型
 
-### Monochromatic
-Single color with tints/shades. Safe, cohesive.
+### 单色
+单一颜色加明暗变化。安全、协调。
 
-### Complementary
-Opposite colors (blue-orange). High contrast, vibrant.
+### 互补
+对比色（蓝-橙）。高对比、鲜明。
 
-### Analogous
-Adjacent colors (blue-teal-green). Harmonious, natural.
+### 类似
+相邻色（蓝-青-绿）。和谐、自然。
 
-### Triadic
-Three evenly spaced colors. Balanced, dynamic.
+### 三角
+三种等距分布的颜色。平衡、动感。
 
-## Accessibility Considerations
+## 无障碍注意事项
 
-- Minimum contrast ratio: 4.5:1 (WCAG AA)
-- Avoid red-green only indicators
-- Test in grayscale for clarity
-- Consider colorblind users (~8% of males)
+- 最低对比度：4.5:1（WCAG AA）
+- 避免仅用红绿色作为指示
+- 以灰度模式测试清晰度
+- 考虑色盲用户（约占男性 8%）
 
-## Quick Reference Palettes
+## 快速参考配色
 
-**Tech Professional:**
-Primary: #6366F1 | Secondary: #8B5CF6 | Accent: #06B6D4
+**科技专业：**
+主色： #6366F1 | 辅助色： #8B5CF6 | 点缀色： #06B6D4
 
-**Eco Sustainable:**
-Primary: #228B22 | Secondary: #2E8B57 | Accent: #DEB887
+**环保可持续：**
+主色： #228B22 | 辅助色： #2E8B57 | 点缀色： #DEB887
 
-**Luxury Premium:**
-Primary: #1C1917 | Secondary: #D4AF37 | Accent: #FFFFFF
+**奢华高端：**
+主色： #1C1917 | 辅助色： #D4AF37 | 点缀色： #FFFFFF
 
-**Healthcare Trust:**
-Primary: #0077B6 | Secondary: #00A896 | Accent: #FFFFFF
+**医疗信赖：**
+主色： #0077B6 | 辅助色： #00A896 | 点缀色： #FFFFFF
 
-**Food Warm:**
-Primary: #DC2626 | Secondary: #F97316 | Accent: #CA8A04
+**食品暖色：**
+主色： #DC2626 | 辅助色： #F97316 | 点缀色： #CA8A04

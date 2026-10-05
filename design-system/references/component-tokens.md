@@ -1,37 +1,37 @@
-# Component Tokens
+# 组件令牌
 
-Component-specific tokens referencing semantic layer.
+引用语义层的组件专用令牌。
 
-## Button Tokens
+## 按钮令牌
 
 ```css
 :root {
-  /* Default (Primary) */
+  /* 默认（主色） */
   --button-bg: var(--color-primary);
   --button-fg: var(--color-primary-foreground);
   --button-hover-bg: var(--color-primary-hover);
   --button-active-bg: var(--color-primary-active);
 
-  /* Secondary */
+  /* 次要 */
   --button-secondary-bg: var(--color-secondary);
   --button-secondary-fg: var(--color-secondary-foreground);
   --button-secondary-hover-bg: var(--color-secondary-hover);
 
-  /* Outline */
+  /* 描边 */
   --button-outline-border: var(--color-border);
   --button-outline-fg: var(--color-foreground);
   --button-outline-hover-bg: var(--color-accent);
 
-  /* Ghost */
+  /* 幽灵 */
   --button-ghost-fg: var(--color-foreground);
   --button-ghost-hover-bg: var(--color-accent);
 
-  /* Destructive */
+  /* 危险 */
   --button-destructive-bg: var(--color-destructive);
   --button-destructive-fg: var(--color-destructive-foreground);
   --button-destructive-hover-bg: var(--color-destructive-hover);
 
-  /* Sizing */
+  /* 尺寸 */
   --button-padding-x: var(--space-4);
   --button-padding-y: var(--space-2);
   --button-padding-x-sm: var(--space-3);
@@ -39,38 +39,38 @@ Component-specific tokens referencing semantic layer.
   --button-padding-x-lg: var(--space-6);
   --button-padding-y-lg: var(--space-3);
 
-  /* Shape */
+  /* 形状 */
   --button-radius: var(--radius-md);
   --button-font-size: var(--font-size-sm);
   --button-font-weight: var(--font-weight-medium);
 }
 ```
 
-## Input Tokens
+## 输入框令牌
 
 ```css
 :root {
-  /* Background & Border */
+  /* 背景与边框 */
   --input-bg: var(--color-background);
   --input-border: var(--color-input);
   --input-fg: var(--color-foreground);
 
-  /* Placeholder */
+  /* 占位符 */
   --input-placeholder: var(--color-muted-foreground);
 
-  /* Focus */
+  /* 聚焦 */
   --input-focus-border: var(--color-ring);
   --input-focus-ring: var(--color-ring);
 
-  /* Error */
+  /* 错误 */
   --input-error-border: var(--color-error);
   --input-error-fg: var(--color-error);
 
-  /* Disabled */
+  /* 禁用 */
   --input-disabled-bg: var(--color-muted);
   --input-disabled-fg: var(--color-muted-foreground);
 
-  /* Sizing */
+  /* 尺寸 */
   --input-padding-x: var(--space-3);
   --input-padding-y: var(--space-2);
   --input-radius: var(--radius-md);
@@ -78,50 +78,50 @@ Component-specific tokens referencing semantic layer.
 }
 ```
 
-## Card Tokens
+## 卡片令牌
 
 ```css
 :root {
-  /* Background & Border */
+  /* 背景与边框 */
   --card-bg: var(--color-card);
   --card-fg: var(--color-card-foreground);
   --card-border: var(--color-border);
 
-  /* Shadow */
+  /* 阴影 */
   --card-shadow: var(--shadow-default);
   --card-shadow-hover: var(--shadow-md);
 
-  /* Spacing */
+  /* 间距 */
   --card-padding: var(--space-6);
   --card-padding-sm: var(--space-4);
   --card-gap: var(--space-4);
 
-  /* Shape */
+  /* 形状 */
   --card-radius: var(--radius-lg);
 }
 ```
 
-## Badge Tokens
+## 徽章令牌
 
 ```css
 :root {
-  /* Default */
+  /* 默认 */
   --badge-bg: var(--color-primary);
   --badge-fg: var(--color-primary-foreground);
 
-  /* Secondary */
+  /* 次要 */
   --badge-secondary-bg: var(--color-secondary);
   --badge-secondary-fg: var(--color-secondary-foreground);
 
-  /* Outline */
+  /* 描边 */
   --badge-outline-border: var(--color-border);
   --badge-outline-fg: var(--color-foreground);
 
-  /* Destructive */
+  /* 危险 */
   --badge-destructive-bg: var(--color-destructive);
   --badge-destructive-fg: var(--color-destructive-foreground);
 
-  /* Sizing */
+  /* 尺寸 */
   --badge-padding-x: var(--space-2-5);
   --badge-padding-y: var(--space-0-5);
   --badge-radius: var(--radius-full);
@@ -129,68 +129,68 @@ Component-specific tokens referencing semantic layer.
 }
 ```
 
-## Alert Tokens
+## 提示令牌
 
 ```css
 :root {
-  /* Default */
+  /* 默认 */
   --alert-bg: var(--color-background);
   --alert-fg: var(--color-foreground);
   --alert-border: var(--color-border);
 
-  /* Destructive */
+  /* 危险 */
   --alert-destructive-bg: var(--color-destructive);
   --alert-destructive-fg: var(--color-destructive-foreground);
 
-  /* Spacing */
+  /* 间距 */
   --alert-padding: var(--space-4);
   --alert-radius: var(--radius-lg);
 }
 ```
 
-## Dialog/Modal Tokens
+## 对话框/模态框令牌
 
 ```css
 :root {
-  /* Overlay */
+  /* 遮罩 */
   --dialog-overlay-bg: rgb(0 0 0 / 0.5);
 
-  /* Content */
+  /* 内容 */
   --dialog-bg: var(--color-background);
   --dialog-fg: var(--color-foreground);
   --dialog-border: var(--color-border);
   --dialog-shadow: var(--shadow-lg);
 
-  /* Spacing */
+  /* 间距 */
   --dialog-padding: var(--space-6);
   --dialog-radius: var(--radius-lg);
   --dialog-max-width: 32rem;
 }
 ```
 
-## Table Tokens
+## 表格令牌
 
 ```css
 :root {
-  /* Header */
+  /* 表头 */
   --table-header-bg: var(--color-muted);
   --table-header-fg: var(--color-muted-foreground);
 
-  /* Body */
+  /* 表体 */
   --table-row-bg: var(--color-background);
   --table-row-hover-bg: var(--color-muted);
   --table-row-fg: var(--color-foreground);
 
-  /* Border */
+  /* 边框 */
   --table-border: var(--color-border);
 
-  /* Spacing */
+  /* 间距 */
   --table-cell-padding-x: var(--space-4);
   --table-cell-padding-y: var(--space-3);
 }
 ```
 
-## Usage Example
+## 用法示例
 
 ```css
 .button {

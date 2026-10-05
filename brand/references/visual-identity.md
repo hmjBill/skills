@@ -1,96 +1,96 @@
-# Visual Identity Basics
+# 视觉识别基础
 
-## Core Visual Elements
+## 核心视觉元素
 
 ### Logo
-- **Primary:** Full logo (horizontal/stacked)
-- **Secondary:** Abbreviated version
-- **Icon/Mark:** Symbol only
-- **Clear space:** Minimum padding around logo
-- **Minimum size:** Smallest readable size
+- **主版本：** 完整 Logo（横向/堆叠）
+- **次版本：** 缩写版本
+- **图标/标记：** 仅符号
+- **安全留白：** Logo 周围的最小内边距
+- **最小尺寸：** 可清晰辨认的最小尺寸
 
-### Color Palette
+### 调色板
 ```
-Primary Colors (1-2)
-├── Main brand color
-└── Supporting primary
+主色（1-2）
+├── 品牌主色
+└── 辅助主色
 
-Secondary Colors (2-3)
-├── Accent colors
-└── Supporting visuals
+次要色（2-3）
+├── 强调色
+└── 辅助视觉
 
-Neutrals (3-4)
-├── Text colors
-├── Background colors
-└── UI elements
+中性色（3-4）
+├── 文本颜色
+├── 背景颜色
+└── UI 元素
 ```
 
-### Typography
-| Usage | Font | Weight | Size |
+### 排版
+| 用途 | 字体 | 字重 | 字号 |
 |-------|------|--------|------|
-| H1 | [Font] | Bold | 32-48px |
-| H2 | [Font] | Semibold | 24-32px |
-| Body | [Font] | Regular | 16-18px |
-| Caption | [Font] | Regular | 12-14px |
+| H1 | [Font] | 粗体 | 32-48px |
+| H2 | [Font] | 半粗体 | 24-32px |
+| 正文 | [Font] | 常规 | 16-18px |
+| 说明文字 | [Font] | 常规 | 12-14px |
 
-## Visual Guidelines Template
+## 视觉指南模板
 
 ```markdown
-## Logo Usage
+## Logo 使用
 
-### Correct Usage
-- [Guidelines for proper logo use]
+### 正确用法
+- [正确使用 Logo 的规范]
 
-### Incorrect Usage
-- Don't stretch or distort
-- Don't change colors (unless approved)
-- Don't add effects
-- Don't place on busy backgrounds
+### 错误用法
+- 不要拉伸或变形
+- 不要更改颜色（除非获得批准）
+- 不要添加特效
+- 不要放在复杂背景上
 
-## Color Specifications
+## 颜色规范
 
-### Primary Palette
-| Color | Hex | RGB | Usage |
+### 主调色板
+| 颜色 | Hex | RGB | 用途 |
 |-------|-----|-----|-------|
-| [Name] | #XXXXXX | r,g,b | [Where to use] |
+| [Name] | #XXXXXX | r,g,b | [使用位置] |
 
-### Accessibility
-- Text contrast ratio: 4.5:1 minimum
-- Button contrast: WCAG AA compliant
+### 无障碍
+- 文本对比度：至少 4.5:1
+- 按钮对比度：符合 WCAG AA
 
-## Imagery Style
+## 图像风格
 
-### Photography
-- [Lighting preferences]
-- [Subject guidelines]
-- [Composition rules]
-- [Editing style]
+### 摄影
+- [光线偏好]
+- [主体规范]
+- [构图规则]
+- [后期风格]
 
-### Illustrations
-- [Style description]
-- [Color usage]
-- [Complexity level]
+### 插画
+- [风格描述]
+- [颜色用法]
+- [复杂程度]
 
-### Icons
-- [Style: outlined/filled/duotone]
-- [Stroke weight]
-- [Corner radius]
+### 图标
+- [风格：线框/填充/双色]
+- [描边粗细]
+- [圆角半径]
 ```
 
-## Quick Checks
+## 快速检查
 
 ### Logo
-- [ ] Correct version for context
-- [ ] Sufficient clear space
-- [ ] Legible at size used
-- [ ] Correct color for background
+- [ ] 版本与使用场景匹配
+- [ ] 留白充足
+- [ ] 实际尺寸下清晰可辨
+- [ ] 颜色与背景匹配
 
-### Colors
-- [ ] From approved palette
-- [ ] Accessible contrast
-- [ ] Consistent across materials
+### 颜色
+- [ ] 来自已批准的调色板
+- [ ] 对比度符合无障碍要求
+- [ ] 各类物料保持一致
 
-### Typography
-- [ ] Correct fonts
-- [ ] Appropriate hierarchy
-- [ ] Readable size
+### 排版
+- [ ] 字体正确
+- [ ] 层级合理
+- [ ] 字号可读

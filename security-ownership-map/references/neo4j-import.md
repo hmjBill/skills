@@ -1,11 +1,11 @@
-# Neo4j Import Notes
+# Neo4j 导入说明
 
-Use these steps when persisting the ownership graph to Neo4j.
+将所有权图持久化到 Neo4j 时使用以下步骤。
 
-## Quick import (LOAD CSV)
+## 快速导入（LOAD CSV）
 
-1. Copy `people.csv`, `files.csv`, and `edges.csv` into the Neo4j import directory.
-2. Run the following Cypher from Neo4j Browser or `cypher-shell`:
+1. 将 `people.csv`、`files.csv` 和 `edges.csv` 复制到 Neo4j 的 import 目录。
+2. 从 Neo4j Browser 或 `cypher-shell` 运行以下 Cypher：
 
 ```cypher
 CREATE CONSTRAINT person_id IF NOT EXISTS FOR (p:Person) REQUIRE p.id IS UNIQUE;
@@ -53,8 +53,8 @@ SET r.cochange_count = toInteger(row.cochange_count),
     r.jaccard = toFloat(row.jaccard);
 ```
 
-## Visualization tips
+## 可视化提示
 
-- Use Neo4j Bloom or Browser with `MATCH (p:Person)-[r:TOUCHES]->(f:File) RETURN p,r,f`.
-- Filter by `f.sensitivity_score > 0` to highlight security-relevant clusters.
-- For Gephi, import `edges.csv` as edges and `files.csv` / `people.csv` as nodes.
+- 使用 Neo4j Bloom 或 Browser 执行 `MATCH (p:Person)-[r:TOUCHES]->(f:File) RETURN p,r,f`。
+- 用 `f.sensitivity_score > 0` 过滤，以突出与安全相关的聚类。
+- 对 Gephi，将 `edges.csv` 导入为边，`people.csv` / `files.csv` 作为节点导入。

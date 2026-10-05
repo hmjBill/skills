@@ -89,12 +89,12 @@ description: 周/月/季度复盘辅助：汇总日记与待办、检测过期�
 
 ## 枚举值参考
 
-所有 frontmatter 字段的合法值定义在 `.obsidian/types.json` 的枚举注册表中。
+所有 frontmatter 字段的合法值以 `00_系统/Agent操作指南.md` 的 Frontmatter 枚举值注册表为准；`.obsidian/types.json` 仅登记字段类型。
 
 ## 参考
 
 - 模板目录：`00_系统/模板/`
-- 枚举注册表：`.obsidian/types.json`
+- 合法值以 `00_系统/Agent操作指南.md` 的 Frontmatter 枚举值注册表为准；`.obsidian/types.json` 仅登记字段类型
 - 日记目录：`02_日常/日记与复盘/每日/`
 - 事件目录：`02_日常/事件/`
 - OKR 目录：`02_日常/OKR/`

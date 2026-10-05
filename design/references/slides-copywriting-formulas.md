@@ -1,84 +1,84 @@
-# Copywriting Formulas
+# 文案公式
 
-25 formulas for persuasive slide copy.
+25 个用于说服性幻灯片文案的公式。
 
-## Core Formulas
+## 核心公式
 
-### PAS (Problem-Agitate-Solution)
-**Use:** Problem slides, pain points
-**Components:** Problem → Agitate → Solution
-**Template:** "[Pain point]? Every [time frame], [consequence]. [Solution] fixes this."
+### PAS（问题-激化-方案）
+**用途：** 问题页、痛点
+**构成：** 问题 → 激化 → 方案
+**模板：** “[痛点]？每[时间段]，[后果]。[方案] 可以解决。”
 
-### AIDA (Attention-Interest-Desire-Action)
-**Use:** CTAs, closing slides
-**Components:** Attention → Interest → Desire → Action
-**Template:** "[Bold statement]. [Benefit detail]. [Social proof]. [CTA]."
+### AIDA（注意-兴趣-欲望-行动）
+**用途：** CTA、收尾页
+**构成：** 注意 → 兴趣 → 欲望 → 行动
+**模板：** “[大胆陈述]。[利益细节]。[社会证明]。[CTA]。”
 
-### FAB (Features-Advantages-Benefits)
-**Use:** Feature slides, product showcases
-**Components:** Feature → Advantage → Benefit
-**Template:** "[Feature] lets you [advantage], so you can [benefit]."
+### FAB（特性-优势-利益）
+**用途：** 功能页、产品展示
+**构成：** 特性 → 优势 → 利益
+**模板：** “[特性]让你[优势]，从而[利益]。”
 
-### Cost of Inaction
-**Use:** Agitation slides, urgency
-**Components:** Status Quo → Loss → Time Decay
-**Template:** "Without [solution], you're losing [amount] every [timeframe]."
+### 不作为的代价
+**用途：** 激化页、紧迫感
+**构成：** 现状 → 损失 → 时间衰减
+**模板：** “没有[方案]，你每[时间段]都在损失[金额]。”
 
-### Before-After-Bridge
-**Use:** Transformation slides, case studies
-**Components:** Before → After → Bridge
-**Template:** "[Pain point before]. [Desired state after]. [Your solution] is the bridge."
+### 之前-之后-桥梁
+**用途：** 转变页、案例研究
+**构成：** 之前 → 之后 → 桥梁
+**模板：** “[之前的痛点]。[期望达成的状态]。[你的方案]就是桥梁。”
 
-## Formula-to-Slide Mapping
+## 公式与幻灯片映射
 
-| Slide Type | Primary Formula | Emotion |
+| 幻灯片类型 | 主要公式 | 情绪 |
 |------------|-----------------|---------|
-| Title/Hook | AIDA, Hook | curiosity |
-| Problem | PAS, Agitate | frustration |
-| Cost/Risk | Cost of Inaction | fear |
-| Solution | FAB, BAB | hope |
-| Features | FAB | confidence |
-| Traction | Proof Stack | trust |
-| Social Proof | Testimonial | trust |
-| Pricing | Value Stack | confidence |
-| CTA | AIDA, Urgency | urgency |
+| 标题/钩子 | AIDA、钩子 | 好奇 |
+| 问题 | PAS、激化 | 挫败 |
+| 成本/风险 | 不作为的代价 | 恐惧 |
+| 方案 | FAB、BAB | 希望 |
+| 功能 | FAB | 信心 |
+| 进展 | 证据堆叠 | 信任 |
+| 社会证明 | 证言 | 信任 |
+| 定价 | 价值堆叠 | 信心 |
+| CTA | AIDA、紧迫感 | 紧迫 |
 
-## Headline Patterns
+## 标题模式
 
-### Power Words
-- "Stop [bad thing]"
-- "Get [desired result] in [timeframe]"
-- "The [adjective] way to [action]"
-- "Why [audience] choose [product]"
-- "[Number] ways to [achieve goal]"
+### 力量词
+- “停止[坏事]”
+- “在[时间范围]内获得[期望结果]”
+- “[形容词]的[行动]方式”
+- “为什么[受众]选择[产品]”
+- “[数字] 种[达成目标]的方法”
 
-### Contrast Patterns
-- "[Old way] is dead. Meet [new way]."
-- "Don't [bad action]. Instead, [good action]."
-- "From [pain point] to [benefit]."
+### 对比模式
+- “[旧方式]已死。迎接[新方式]。”
+- “不要[坏行为]。而要[好行为]。”
+- “从[痛点]到[收益]。”
 
-### Social Proof Patterns
-- "[Number]+ [users/companies] trust [product]"
-- "Join [notable company] and [notable company]"
-- "As seen in [publication]"
+### 社会证明模式
+- “[数字]+ [用户/公司]信任[产品]”
+- “加入[知名公司]和[知名公司]”
+- “曾在[出版物]亮相”
 
-## Search Commands
+## 搜索命令（在 design-system 技能目录下运行）
 
 ```bash
-# Find formula for slide type
-python .claude/skills/design-system/scripts/search-slides.py "problem agitation" -d copy
+# 按幻灯片类型查找公式
+python scripts/search-slides.py "problem agitation" -d copy
 
-# Get emotion-appropriate formula
-python .claude/skills/design-system/scripts/search-slides.py "urgency cta" -d copy
+# 获取情绪适配的公式
+python scripts/search-slides.py "urgency cta" -d copy
 ```
 
-## Quick Reference
+## 快速参考
 
-| Need | Use Formula |
+| 需求 | 使用公式 |
 |------|------------|
-| Create urgency | Cost of Inaction, Scarcity |
-| Build trust | Social Proof, Testimonial |
-| Show value | FAB, Value Stack |
-| Drive action | AIDA, CTA |
-| Tell story | BAB, Story Arc |
-| Present data | Proof Stack |
+| 制造紧迫感 | 不作为的代价、稀缺性 |
+| 建立信任 | 社会证明、证言 |
+| 展示价值 | FAB、价值堆叠 |
+| 促成行动 | AIDA、CTA |
+| 讲述故事 | BAB、故事弧 |
+| 呈现数据 | 证据堆叠 |

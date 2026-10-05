@@ -104,10 +104,10 @@ description: 将外部内容或学习材料导入 AI-Wiki 笔记库，支持归�
 
 ## 枚举值参考
 
-所有 frontmatter 字段的合法值定义在 `.obsidian/types.json` 的枚举注册表中。创建笔记前必须确认所用值在注册表中存在。
+所有 frontmatter 字段的合法值以 `00_系统/Agent操作指南.md` 的 Frontmatter 枚举值注册表为准；`.obsidian/types.json` 仅登记字段类型。创建笔记前必须确认所用值在注册表中存在。
 
 ## 参考
 
 - AI-Wiki 模板目录：`00_系统/模板/`
-- 枚举注册表：`.obsidian/types.json`
+- 合法值以 `00_系统/Agent操作指南.md` 的 Frontmatter 枚举值注册表为准；`.obsidian/types.json` 仅登记字段类型
 - 内容路由规则参考 `00_系统/架构说明.md`

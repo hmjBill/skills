@@ -1,29 +1,29 @@
-# Layout Patterns
+# 布局模式
 
-25 slide layouts with CSS structures and animation classes.
+25 种幻灯片布局，含 CSS 结构与动画类。
 
-## Layout Selection by Use Case
+## 按用例选择布局
 
-| Layout | Use Case | Animation |
+| 布局 | 用例 | 动画 |
 |--------|----------|-----------|
-| Title Slide | Opening/first impression | `animate-fade-up` |
-| Problem Statement | Establish pain point | `animate-stagger` |
-| Solution Overview | Introduce solution | `animate-scale` |
-| Feature Grid | Show capabilities (3-6 cards) | `animate-stagger` |
-| Metrics Dashboard | Display KPIs (3-4 metrics) | `animate-stagger-scale` |
-| Comparison Table | Compare options | `animate-fade-up` |
-| Timeline Flow | Show progression | `animate-stagger` |
-| Team Grid | Introduce people | `animate-stagger` |
-| Quote Testimonial | Customer endorsement | `animate-fade-up` |
-| Two Column Split | Compare/contrast | `animate-fade-up` |
-| Big Number Hero | Single powerful metric | `animate-count` |
-| Product Screenshot | Show product UI | `animate-scale` |
-| Pricing Cards | Present tiers | `animate-stagger` |
-| CTA Closing | Drive action | `animate-pulse` |
+| 标题页 | 开场/第一印象 | `animate-fade-up` |
+| 问题陈述 | 建立痛点 | `animate-stagger` |
+| 方案概览 | 介绍方案 | `animate-scale` |
+| 功能网格 | 展示能力（3-6 张卡片） | `animate-stagger` |
+| 指标仪表盘 | 展示 KPI（3-4 项指标） | `animate-stagger-scale` |
+| 对比表 | 对比选项 | `animate-fade-up` |
+| 时间线流程 | 展示进程 | `animate-stagger` |
+| 团队网格 | 介绍成员 | `animate-stagger` |
+| 引语证言 | 客户背书 | `animate-fade-up` |
+| 双栏分栏 | 比较/对照 | `animate-fade-up` |
+| 大数字主视觉 | 单一有力指标 | `animate-count` |
+| 产品截图 | 展示产品界面 | `animate-scale` |
+| 定价卡片 | 展示档位 | `animate-stagger` |
+| CTA 收尾 | 促成行动 | `animate-pulse` |
 
-## CSS Structures
+## CSS 结构
 
-### Title Slide
+### 标题页
 ```css
 .slide-title {
     display: flex;
@@ -34,7 +34,7 @@
 }
 ```
 
-### Two Column Split
+### 双栏分栏
 ```css
 .slide-split {
     display: grid;
@@ -47,7 +47,7 @@
 }
 ```
 
-### Feature Grid (3 columns)
+### 功能网格（3 列）
 ```css
 .slide-features {
     display: grid;
@@ -62,7 +62,7 @@
 }
 ```
 
-### Metrics Dashboard (4 columns)
+### 指标仪表盘（4 列）
 ```css
 .slide-metrics {
     display: grid;
@@ -77,50 +77,50 @@
 }
 ```
 
-## Component Variants
+## 组件变体
 
-### Card Styles
-| Style | CSS Class | Use For |
+### 卡片样式
+| 样式 | CSS 类 | 用途 |
 |-------|-----------|---------|
-| Icon Left | `.card-icon-left` | Features with icons |
-| Accent Bar | `.card-accent-bar` | Highlighted features |
-| Metric Card | `.card-metric` | Numbers/stats |
-| Avatar Card | `.card-avatar` | Team members |
-| Pricing Card | `.card-pricing` | Price tiers |
+| 左侧图标 | `.card-icon-left` | 带图标的功能 |
+| 强调条 | `.card-accent-bar` | 高亮功能 |
+| 指标卡片 | `.card-metric` | 数字/统计 |
+| 头像卡片 | `.card-avatar` | 团队成员 |
+| 定价卡片 | `.card-pricing` | 价格档位 |
 
-### Metric Styles
-| Style | Effect |
+### 指标样式
+| 样式 | 效果 |
 |-------|--------|
-| `gradient-number` | Gradient text on numbers |
-| `oversized` | Extra large (120px+) |
-| `sparkline` | Small inline chart |
-| `funnel-numbers` | Conversion stages |
+| `gradient-number` | 数字渐变文字 |
+| `oversized` | 超大（120px+） |
+| `sparkline` | 小型内联图表 |
+| `funnel-numbers` | 转化阶段 |
 
-## Visual Treatments
+## 视觉处理
 
-| Treatment | When to Use |
+| 处理 | 使用时机 |
 |-----------|-------------|
-| `gradient-glow` | Title slides, CTAs |
-| `subtle-border` | Problem statements |
-| `icon-top` | Feature grids |
-| `screenshot-shadow` | Product screenshots |
-| `popular-highlight` | Pricing (scale 1.05) |
-| `bg-overlay` | Background images |
-| `contrast-pair` | Before/after |
-| `logo-grayscale` | Client logos |
+| `gradient-glow` | 标题页、CTA |
+| `subtle-border` | 问题陈述 |
+| `icon-top` | 功能网格 |
+| `screenshot-shadow` | 产品截图 |
+| `popular-highlight` | 定价（放大 1.05） |
+| `bg-overlay` | 背景图片 |
+| `contrast-pair` | 前后对比 |
+| `logo-grayscale` | 客户 Logo |
 
-## Search Commands
+## 搜索命令（在 design-system 技能目录下运行）
 
 ```bash
-# Find layout for specific use
-python .claude/skills/design-system/scripts/search-slides.py "metrics dashboard" -d layout
+# 为特定用途查找布局
+python scripts/search-slides.py "metrics dashboard" -d layout
 
-# Contextual recommendation
-python .claude/skills/design-system/scripts/search-slides.py "traction slide" \
+# 上下文推荐
+python scripts/search-slides.py "traction slide" \
   --context --position 4 --total 10
 ```
 
-## Layout Decision Flow
+## 布局决策流程
 
 ```
 1. What's the slide goal?

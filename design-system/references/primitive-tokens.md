@@ -1,10 +1,10 @@
-# Primitive Tokens
+# 原始令牌
 
-Raw design values - foundation of the design system.
+原始设计值 - 设计系统的基础。
 
-## Color Scales
+## 颜色色阶
 
-### Gray Scale
+### 灰色阶
 
 ```css
 :root {
@@ -22,7 +22,7 @@ Raw design values - foundation of the design system.
 }
 ```
 
-### Primary Colors (Blue)
+### 主色（蓝色）
 
 ```css
 :root {
@@ -39,30 +39,30 @@ Raw design values - foundation of the design system.
 }
 ```
 
-### Status Colors
+### 状态色
 
 ```css
 :root {
-  /* Success - Green */
+  /* 成功 - 绿色 */
   --color-green-500: #22C55E;
   --color-green-600: #16A34A;
 
-  /* Warning - Yellow */
+  /* 警告 - 黄色 */
   --color-yellow-500: #EAB308;
   --color-yellow-600: #CA8A04;
 
-  /* Error - Red */
+  /* 错误 - 红色 */
   --color-red-500: #EF4444;
   --color-red-600: #DC2626;
 
-  /* Info - Blue */
+  /* 信息 - 蓝色 */
   --color-info: var(--color-blue-500);
 }
 ```
 
-## Spacing Scale
+## 间距比例
 
-4px base unit system.
+4px 基准单位体系。
 
 ```css
 :root {
@@ -90,11 +90,11 @@ Raw design values - foundation of the design system.
 }
 ```
 
-## Typography Scale
+## 排版比例
 
 ```css
 :root {
-  /* Font Sizes */
+  /* 字号 */
   --font-size-xs:   0.75rem;   /* 12px */
   --font-size-sm:   0.875rem;  /* 14px */
   --font-size-base: 1rem;      /* 16px */
@@ -105,7 +105,7 @@ Raw design values - foundation of the design system.
   --font-size-4xl:  2.25rem;   /* 36px */
   --font-size-5xl:  3rem;      /* 48px */
 
-  /* Line Heights */
+  /* 行高 */
   --leading-none:   1;
   --leading-tight:  1.25;
   --leading-snug:   1.375;
@@ -113,13 +113,13 @@ Raw design values - foundation of the design system.
   --leading-relaxed: 1.625;
   --leading-loose:  2;
 
-  /* Font Weights */
+  /* 字重 */
   --font-weight-normal:   400;
   --font-weight-medium:   500;
   --font-weight-semibold: 600;
   --font-weight-bold:     700;
 
-  /* Letter Spacing */
+  /* 字距 */
   --tracking-tighter: -0.05em;
   --tracking-tight:   -0.025em;
   --tracking-normal:  0;
@@ -128,7 +128,7 @@ Raw design values - foundation of the design system.
 }
 ```
 
-## Border Radius
+## 圆角
 
 ```css
 :root {
@@ -144,7 +144,7 @@ Raw design values - foundation of the design system.
 }
 ```
 
-## Shadows
+## 阴影
 
 ```css
 :root {
@@ -163,7 +163,7 @@ Raw design values - foundation of the design system.
 }
 ```
 
-## Motion / Duration
+## 动效 / 时长
 
 ```css
 :root {
@@ -176,14 +176,14 @@ Raw design values - foundation of the design system.
   --duration-700: 700ms;
   --duration-1000: 1000ms;
 
-  /* Semantic durations */
+  /* 语义化时长 */
   --duration-fast:   var(--duration-150);
   --duration-normal: var(--duration-200);
   --duration-slow:   var(--duration-300);
 }
 ```
 
-## Z-Index Scale
+## Z-Index 比例
 
 ```css
 :root {

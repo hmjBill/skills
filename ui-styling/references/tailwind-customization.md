@@ -1,10 +1,10 @@
-# Tailwind CSS Customization
+# Tailwind CSS 定制
 
-Config file structure, custom utilities, plugins, and theme extensions.
+配置文件结构、自定义工具类、插件与主题扩展。
 
-## @theme Directive
+## @theme 指令
 
-Modern approach to customize Tailwind using CSS:
+使用 CSS 定制 Tailwind 的现代方式：
 
 ```css
 @import "tailwindcss";
@@ -35,7 +35,7 @@ Modern approach to customize Tailwind using CSS:
 }
 ```
 
-**Usage:**
+**用法：**
 ```html
 <div class="bg-brand-500 font-display shadow-glow rounded-large">
   Custom themed element
@@ -46,9 +46,9 @@ Modern approach to customize Tailwind using CSS:
 </div>
 ```
 
-## Color Customization
+## 颜色定制
 
-### Custom Color Palette
+### 自定义调色板
 
 ```css
 @theme {
@@ -67,7 +67,7 @@ Modern approach to customize Tailwind using CSS:
 }
 ```
 
-### Semantic Colors
+### 语义化颜色
 
 ```css
 @theme {
@@ -83,9 +83,9 @@ Modern approach to customize Tailwind using CSS:
 <div class="border-error">Error state</div>
 ```
 
-## Typography Customization
+## 排版定制
 
-### Custom Fonts
+### 自定义字体
 
 ```css
 @theme {
@@ -102,7 +102,7 @@ Modern approach to customize Tailwind using CSS:
 <code class="font-mono">Code block</code>
 ```
 
-### Custom Font Sizes
+### 自定义字号
 
 ```css
 @theme {
@@ -119,7 +119,7 @@ Modern approach to customize Tailwind using CSS:
 }
 ```
 
-## Spacing Customization
+## 间距定制
 
 ```css
 @theme {
@@ -140,9 +140,9 @@ Modern approach to customize Tailwind using CSS:
 <section class="py-section">Section spacing</section>
 ```
 
-## Custom Utilities
+## 自定义工具类
 
-Create reusable utility classes:
+创建可复用的工具类：
 
 ```css
 @utility content-auto {
@@ -160,16 +160,16 @@ Create reusable utility classes:
 }
 ```
 
-**Usage:**
+**用法：**
 ```html
 <div class="content-auto">Optimized rendering</div>
 <pre class="tab-4">Code with 4-space tabs</pre>
 <div class="glass">Glassmorphism effect</div>
 ```
 
-## Custom Variants
+## 自定义变体
 
-Create custom state variants:
+创建自定义状态变体：
 
 ```css
 @custom-variant theme-midnight (&:where([data-theme="midnight"] *));
@@ -177,7 +177,7 @@ Create custom state variants:
 @custom-variant required (&:required);
 ```
 
-**Usage:**
+**用法：**
 ```html
 <div data-theme="midnight">
   <div class="theme-midnight:bg-navy-900">
@@ -188,9 +188,9 @@ Create custom state variants:
 <input class="required:border-red-500" required />
 ```
 
-## Layer Organization
+## 层组织
 
-Organize CSS into layers:
+将 CSS 组织到层中：
 
 ```css
 @layer base {
@@ -248,9 +248,9 @@ Organize CSS into layers:
 }
 ```
 
-## @apply Directive
+## @apply 指令
 
-Extract repeated utility patterns:
+提取重复的工具类模式：
 
 ```css
 .btn-primary {
@@ -266,16 +266,16 @@ Extract repeated utility patterns:
 }
 ```
 
-**Usage:**
+**用法：**
 ```html
 <button class="btn-primary">Click me</button>
 <input class="input-field" />
 <div class="section-container">Content</div>
 ```
 
-## Plugins
+## 插件
 
-### Official Plugins
+### 官方插件
 
 ```bash
 npm install -D @tailwindcss/typography @tailwindcss/forms @tailwindcss/container-queries
@@ -292,7 +292,7 @@ export default {
 }
 ```
 
-**Typography plugin:**
+**Typography 插件：**
 ```html
 <article class="prose lg:prose-xl">
   <h1>Styled article</h1>
@@ -300,7 +300,7 @@ export default {
 </article>
 ```
 
-**Forms plugin:**
+**Forms 插件：**
 ```html
 <!-- Automatically styled form elements -->
 <input type="text" />
@@ -308,7 +308,7 @@ export default {
 <textarea></textarea>
 ```
 
-### Custom Plugin
+### 自定义插件
 
 ```javascript
 // tailwind.config.js
@@ -341,9 +341,9 @@ export default {
 }
 ```
 
-## Configuration Examples
+## 配置示例
 
-### Complete Tailwind Config
+### 完整 Tailwind 配置
 
 ```javascript
 // tailwind.config.ts
@@ -412,7 +412,7 @@ const config: Config = {
 export default config
 ```
 
-## Dark Mode Configuration
+## 深色模式配置
 
 ```javascript
 // tailwind.config.js
@@ -422,7 +422,7 @@ export default {
 }
 ```
 
-**Usage:**
+**用法：**
 ```html
 <!-- Class-based -->
 <html class="dark">
@@ -437,9 +437,9 @@ export default {
 </div>
 ```
 
-## Content Configuration
+## 内容配置
 
-Specify files to scan for classes:
+指定要扫描类名的文件：
 
 ```javascript
 // tailwind.config.js
@@ -454,9 +454,9 @@ export default {
 }
 ```
 
-### Safelist
+### Safelist（白名单）
 
-Preserve dynamic classes:
+保留动态类名：
 
 ```javascript
 export default {
@@ -471,13 +471,13 @@ export default {
 }
 ```
 
-## Best Practices
+## 最佳实践
 
-1. **Use @theme for simple customizations**: Prefer CSS-based customization
-2. **Extract components sparingly**: Use @apply only for truly repeated patterns
-3. **Leverage design tokens**: Define custom tokens in @theme
-4. **Layer organization**: Keep base, components, and utilities separate
-5. **Plugin for complex logic**: Use plugins for advanced customizations
-6. **Test dark mode**: Ensure custom colors work in both themes
-7. **Document custom utilities**: Add comments explaining custom classes
-8. **Semantic naming**: Use descriptive names (primary not blue)
+1. **简单定制用 @theme**：优先使用基于 CSS 的定制
+2. **谨慎提取组件**：只对真正重复的模式使用 @apply
+3. **利用设计令牌**：在 @theme 中定义自定义令牌
+4. **层组织**：将 base、components 和 utilities 分开维护
+5. **复杂逻辑用插件**：高级定制使用插件实现
+6. **测试深色模式**：确保自定义颜色在两种主题下都正常
+7. **记录自定义工具类**：为自定义类添加注释说明
+8. **语义化命名**：使用描述性名称（用 primary 而非 blue）

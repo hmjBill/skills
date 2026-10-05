@@ -1,14 +1,14 @@
-# JSON Canvas Specification for Obsidian
+# Obsidian 的 JSON Canvas 规范
 
 Version 1.0 — 2024-03-11
 
-## Overview
+## 概述
 
-JSON Canvas is a format for representing infinite canvas documents. This specification defines the structure for creating canvas files compatible with Obsidian.
+JSON Canvas 是一种表示无限画布文档的格式。本规范定义与 Obsidian 兼容的画布文件的结构。
 
-## Top Level Structure
+## 顶层结构
 
-The root JSON object contains two optional arrays:
+根 JSON 对象包含两个可选数组：
 
 ```json
 {
@@ -17,31 +17,31 @@ The root JSON object contains two optional arrays:
 }
 ```
 
-- `nodes` (optional, array): All canvas objects (text, files, links, groups)
-- `edges` (optional, array): All connections between nodes
+- `nodes`（可选，数组）：所有画布对象（文本、文件、链接、分组）
+- `edges`（可选，数组）：节点之间的所有连接
 
-## Node Types
+## 节点类型
 
-### Common Attributes
+### 公共属性
 
-All nodes share these required attributes:
+所有节点共享以下必需属性：
 
-- `id` (required, string): Unique identifier for the node
-- `type` (required, string): Node type (`text`, `file`, `link`, `group`)
-- `x` (required, integer): X position in pixels
-- `y` (required, integer): Y position in pixels
-- `width` (required, integer): Width in pixels
-- `height` (required, integer): Height in pixels
-- `color` (optional, string/number): Color (hex `"#FF0000"` or preset `"1"`)
+- `id`（必需，字符串）：节点的唯一标识符
+- `type`（必需，字符串）：节点类型（`text`、`file`、`link`、`group`）
+- `x`（必需，整数）：X 坐标（像素）
+- `y`（必需，整数）：Y 坐标（像素）
+- `width`（必需，整数）：宽度（像素）
+- `height`（必需，整数）：高度（像素）
+- `color`（可选，字符串/数字）：颜色（十六进制 `"#FF0000"` 或预设 `"1"`）
 
-### Text Nodes
+### 文本节点
 
-Store plain text with Markdown formatting.
+以 Markdown 格式存储纯文本。
 
-**Required Attributes:**
-- `text` (string): Content in Markdown syntax
+**必需属性：**
+- `text`（字符串）：Markdown 语法的内容
 
-**Example:**
+**示例：**
 ```json
 {
   "id": "abc123",
@@ -55,17 +55,17 @@ Store plain text with Markdown formatting.
 }
 ```
 
-### File Nodes
+### 文件节点
 
-Reference other files or attachments (images, PDFs, etc.).
+引用其他文件或附件（图片、PDF 等）。
 
-**Required Attributes:**
-- `file` (string): Path to file in the vault
+**必需属性：**
+- `file`（字符串）：笔记库中的文件路径
 
-**Optional Attributes:**
-- `subpath` (string): Link to specific heading/block (starts with `#`)
+**可选属性：**
+- `subpath`（字符串）：指向特定标题/块的链接（以 `#` 开头）
 
-**Example:**
+**示例：**
 ```json
 {
   "id": "def456",
@@ -78,7 +78,7 @@ Reference other files or attachments (images, PDFs, etc.).
 }
 ```
 
-**With Subpath:**
+**带 subpath：**
 ```json
 {
   "id": "ghi789",
@@ -92,14 +92,14 @@ Reference other files or attachments (images, PDFs, etc.).
 }
 ```
 
-### Link Nodes
+### 链接节点
 
-Reference external URLs.
+引用外部 URL。
 
-**Required Attributes:**
-- `url` (string): Full URL including protocol
+**必需属性：**
+- `url`（字符串）：包含协议的完整 URL
 
-**Example:**
+**示例：**
 ```json
 {
   "id": "jkl012",
@@ -113,19 +113,19 @@ Reference external URLs.
 }
 ```
 
-### Group Nodes
+### 分组节点
 
-Visual containers for organizing related nodes.
+用于组织相关节点的视觉容器。
 
-**Optional Attributes:**
-- `label` (string): Text label for the group (recommended)
-- `background` (string): Path to background image
-- `backgroundStyle` (string): Image rendering style
-  - `cover`: Fill entire node
-  - `ratio`: Maintain aspect ratio
-  - `repeat`: Tile as pattern
+**可选属性：**
+- `label`（字符串）：分组文本标签（推荐）
+- `background`（字符串）：背景图片路径
+- `backgroundStyle`（字符串）：图片渲染样式
+  - `cover`：填满整个节点
+  - `ratio`：保持宽高比
+  - `repeat`：平铺为图案
 
-**Example:**
+**示例：**
 ```json
 {
   "id": "group1",
@@ -139,7 +139,7 @@ Visual containers for organizing related nodes.
 }
 ```
 
-**With Background:**
+**带背景：**
 ```json
 {
   "id": "group2",
@@ -154,41 +154,41 @@ Visual containers for organizing related nodes.
 }
 ```
 
-## Z-Index and Layering
+## Z 轴顺序与分层
 
-Nodes are displayed in array order:
-- **First node**: Bottom layer (rendered below others)
-- **Last node**: Top layer (rendered above others)
+节点按数组顺序显示：
+- **第一个节点**：底层（渲染在其他节点之下）
+- **最后一个节点**：顶层（渲染在其他节点之上）
 
-**Best Practice Order:**
-1. Group nodes (backgrounds)
-2. Sub-groups
-3. Regular nodes (text, file, link)
+**最佳实践顺序：**
+1. 分组节点（背景）
+2. 子分组
+3. 普通节点（文本、文件、链接）
 
-This ensures groups appear behind content.
+这确保分组显示在内容之后。
 
-## Edges (Connections)
+## 边（连接）
 
-Edges connect nodes with lines.
+边用线条连接节点。
 
-**Required Attributes:**
-- `id` (required, string): Unique identifier
-- `fromNode` (required, string): Starting node ID
-- `toNode` (required, string): Ending node ID
+**必需属性：**
+- `id`（必需，字符串）：唯一标识符
+- `fromNode`（必需，字符串）：起始节点 ID
+- `toNode`（必需，字符串）：结束节点 ID
 
-**Optional Attributes:**
-- `fromSide` (string): Starting edge side
-  - Values: `top`, `right`, `bottom`, `left`
-- `fromEnd` (string): Start endpoint shape
-  - Values: `none` (default), `arrow`
-- `toSide` (string): Ending edge side
-  - Values: `top`, `right`, `bottom`, `left`
-- `toEnd` (string): End endpoint shape
-  - Values: `arrow` (default), `none`
-- `color` (string/number): Edge color
-- `label` (string): Text label on edge
+**可选属性：**
+- `fromSide`（字符串）：起始边侧
+  - 取值：`top`、`right`、`bottom`、`left`
+- `fromEnd`（字符串）：起点端点形状
+  - 取值：`none`（默认）、`arrow`
+- `toSide`（字符串）：结束边侧
+  - 取值：`top`、`right`、`bottom`、`left`
+- `toEnd`（字符串）：终点端点形状
+  - 取值：`arrow`（默认）、`none`
+- `color`（字符串/数字）：边颜色
+- `label`（字符串）：边上的文本标签
 
-**Example - Simple Connection:**
+**示例——简单连接：**
 ```json
 {
   "id": "edge1",
@@ -197,7 +197,7 @@ Edges connect nodes with lines.
 }
 ```
 
-**Example - Fully Specified:**
+**示例——完整指定：**
 ```json
 {
   "id": "edge2",
@@ -212,33 +212,33 @@ Edges connect nodes with lines.
 }
 ```
 
-## Color System
+## 颜色系统
 
-### Preset Colors
+### 预设颜色
 
-Use string numbers `"1"` through `"6"`:
+使用字符串数字 `"1"` 到 `"6"`：
 
-- `"1"` - Red
-- `"2"` - Orange
-- `"3"` - Yellow
-- `"4"` - Green
-- `"5"` - Cyan
-- `"6"` - Purple
+- `"1"` - 红色
+- `"2"` - 橙色
+- `"3"` - 黄色
+- `"4"` - 绿色
+- `"5"` - 青色
+- `"6"` - 紫色
 
-**Note:** Exact colors adapt to Obsidian's theme. These provide semantic meaning across light/dark modes.
+**注意：** 具体颜色会随 Obsidian 主题自适应。这些颜色在浅色/深色模式下提供语义含义。
 
-### Custom Hex Colors
+### 自定义十六进制颜色
 
-Use hex format: `"#RRGGBB"`
+使用十六进制格式：`"#RRGGBB"`
 
-**Examples:**
-- `"#4A90E2"` (blue)
-- `"#50E3C2"` (teal)
-- `"#F5A623"` (orange)
+**示例：**
+- `"#4A90E2"`（蓝色）
+- `"#50E3C2"`（青绿）
+- `"#F5A623"`（橙色）
 
-**Best Practice:** Use consistent format within a canvas (all hex OR all presets).
+**最佳实践：** 在同一画布中使用一致的格式（全部十六进制或全部预设）。
 
-## Complete Example
+## 完整示例
 
 ```json
 {
@@ -324,80 +324,80 @@ Use hex format: `"#RRGGBB"`
 }
 ```
 
-## Validation Requirements
+## 验证要求
 
-When creating canvas files, ensure:
+创建画布文件时，确保：
 
-1. **Unique IDs**: All `id` values must be unique across nodes and edges
-2. **Valid References**: All edge `fromNode` and `toNode` must reference existing node IDs
-3. **Required Fields**: All required attributes are present for each type
-4. **Valid Coordinates**: All position/dimension values are integers
-5. **Color Format**: Colors use either hex (`"#RRGGBB"`) or preset strings (`"1"` to `"6"`)
-6. **Quote Escaping**: Special characters properly escaped in JSON strings
+1. **唯一 ID**：所有 `id` 值在节点和边之间必须唯一
+2. **有效引用**：所有边的 `fromNode` 和 `toNode` 必须引用存在的节点 ID
+3. **必需字段**：每种类型的必需属性均已提供
+4. **有效坐标**：所有位置/尺寸值均为整数
+5. **颜色格式**：颜色使用十六进制（`"#RRGGBB"`）或预设字符串（`"1"` 到 `"6"`）
+6. **引号转义**：JSON 字符串中的特殊字符已正确转义
 
-## Common Issues and Solutions
+## 常见问题与解决方案
 
-### Issue: Canvas won't open in Obsidian
-**Solutions:**
-- Validate JSON syntax (use JSON validator)
-- Check all IDs are unique
-- Verify all edge references exist
-- Ensure required fields present
+### 问题：画布无法在 Obsidian 中打开
+**解决方案：**
+- 验证 JSON 语法（使用 JSON 校验器）
+- 检查所有 ID 唯一
+- 验证所有边引用存在
+- 确保必需字段存在
 
-### Issue: Nodes appear overlapped
-**Solutions:**
-- Increase spacing between coordinates
-- Account for node dimensions in positioning
-- Use minimum spacing: 320px horizontal, 200px vertical
+### 问题：节点出现重叠
+**解决方案：**
+- 增大坐标之间的间距
+- 定位时考虑节点尺寸
+- 使用最小间距：水平 320px，垂直 200px
 
-### Issue: Groups don't show properly
-**Solutions:**
-- Ensure groups appear before content nodes in array
-- Add explicit `label` to all groups
-- Check group dimensions encompass child nodes
+### 问题：分组显示不正确
+**解决方案：**
+- 确保分组的数组位置在内容节点之前
+- 为所有分组添加显式 `label`
+- 检查分组尺寸包含子节点
 
-### Issue: Colors don't match expectations
-**Solutions:**
-- Use consistent color format (all hex OR all presets)
-- Remember presets adapt to theme
-- Test in both light and dark mode if using custom colors
+### 问题：颜色与预期不符
+**解决方案：**
+- 使用一致的颜色格式（全部十六进制或全部预设）
+- 记住预设会随主题自适应
+- 使用自定义颜色时在浅色和深色模式下都测试
 
-### Issue: Text appears truncated
-**Solutions:**
-- Increase node dimensions
-- Break long text into multiple nodes
-- Use file nodes for lengthy content
+### 问题：文本显示被截断
+**解决方案：**
+- 增大节点尺寸
+- 将长文本拆分为多个节点
+- 长内容使用文件节点
 
-## Character Encoding for Chinese Content
+## 中文内容的字符编码
 
-When canvas contains Chinese text, apply these transformations:
+当画布包含中文文本时，应用以下转换：
 
-- Chinese double quotes `"` → `『』`
-- Chinese single quotes `'` → `「」`
-- English double quotes must be escaped: `\"`
+- 中文双引号 `"` → `『』`
+- 中文单引号 `'` → `「」`
+- 英文双引号必须转义：`\"`
 
-**Example:**
+**示例：**
 ```json
 {
   "text": "『核心概念』包含:「子概念A」和「子概念B」"
 }
 ```
 
-This prevents JSON parsing errors with mixed-language content.
+这可以避免混合语言内容导致的 JSON 解析错误。
 
-## Performance Considerations
+## 性能考虑
 
-- **Large Canvases**: Keep node count reasonable (<500 for smooth performance)
-- **Image Files**: Use compressed images for backgrounds
-- **Text Length**: Keep node text concise; use file nodes for long content
-- **Edge Complexity**: Minimize crossing edges for clarity
+- **大型画布**：保持节点数量合理（<500 以获得流畅性能）
+- **图片文件**：背景使用压缩图片
+- **文本长度**：节点文本保持简洁；长内容使用文件节点
+- **边复杂度**：尽量减少交叉边以保持清晰
 
-## Future Extensions
+## 未来扩展
 
-This specification may be extended with:
-- Additional node types
-- More edge styling options
-- Animation properties
-- Interactive behaviors
+本规范可能扩展以下内容：
+- 更多节点类型
+- 更多边样式选项
+- 动画属性
+- 交互行为
 
-Always check Obsidian documentation for latest Canvas features.
+始终查阅 Obsidian 文档以了解最新的 Canvas 特性。

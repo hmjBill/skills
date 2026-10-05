@@ -1,49 +1,49 @@
-# Mermaid Syntax Rules Reference
+# Mermaid 语法规则参考
 
-This reference provides comprehensive syntax rules and error prevention strategies for Mermaid diagrams. Load this when encountering syntax errors or needing detailed syntax information.
+本参考提供 Mermaid 图表的全面语法规则和错误预防策略。遇到语法错误或需要详细语法信息时加载本文件。
 
-## Table of Contents
+## 目录
 
-1. [Critical Error Prevention](#critical-error-prevention)
-2. [Node Syntax](#node-syntax)
-3. [Subgraph Syntax](#subgraph-syntax)
-4. [Arrow and Connection Types](#arrow-and-connection-types)
-5. [Styling and Colors](#styling-and-colors)
-6. [Layout and Direction](#layout-and-direction)
-7. [Advanced Patterns](#advanced-patterns)
-8. [Troubleshooting](#troubleshooting)
+1. [关键错误预防](#关键错误预防)
+2. [节点语法](#节点语法)
+3. [Subgraph 语法](#subgraph-语法)
+4. [箭头与连接类型](#箭头与连接类型)
+5. [样式与颜色](#样式与颜色)
+6. [布局与方向](#布局与方向)
+7. [高级模式](#高级模式)
+8. [故障排除](#故障排除)
 
-## Critical Error Prevention
+## 关键错误预防
 
-### List Syntax Conflict (Most Common Error)
+### 列表语法冲突（最常见的错误）
 
-**Problem:** Mermaid parser interprets `number. space` as Markdown ordered list syntax.
+**问题：** Mermaid 解析器会把 `number. space` 解释为 Markdown 有序列表语法。
 
-**Error Message:** `Parse error: Unsupported markdown: list`
+**错误信息：** `Parse error: Unsupported markdown: list`
 
-**Solutions:**
+**解决方案：**
 
 ```mermaid
 ❌ [1. Perception]
 ❌ [2. Planning]
 ❌ [3. Reasoning]
 
-✅ [1.Perception]           # Remove space
-✅ [① Perception]           # Use circled numbers
-✅ [(1) Perception]         # Use parentheses  
-✅ [Step 1: Perception]     # Use prefix
-✅ [Step 1 - Perception]    # Use dash
-✅ [Perception]             # Remove numbering
+✅ [1.Perception]           # 去掉空格
+✅ [① Perception]           # 使用带圈数字
+✅ [(1) Perception]         # 使用括号
+✅ [Step 1: Perception]     # 使用前缀
+✅ [Step 1 - Perception]    # 使用短横线
+✅ [Perception]             # 去掉编号
 ```
 
-**Circled number reference:**
+**带圈数字参考：**
 ```
 ① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ ⑪ ⑫ ⑬ ⑭ ⑮ ⑯ ⑰ ⑱ ⑲ ⑳
 ```
 
-### Subgraph Naming Rules
+### Subgraph 命名规则
 
-**Rule:** Subgraphs with spaces must use ID + display name format.
+**规则：** 名称含空格的 subgraph 必须使用 ID + 显示名的格式。
 
 ```mermaid
 ❌ subgraph Core Process
@@ -59,105 +59,105 @@ This reference provides comprehensive syntax rules and error prevention strategi
    end
 ```
 
-**Referencing subgraphs:**
+**引用 subgraph：**
 ```mermaid
-❌ Title --> Core Process      # Cannot reference display name
-✅ Title --> core              # Must reference ID
+❌ Title --> Core Process      # 不能引用显示名
+✅ Title --> core              # 必须引用 ID
 ```
 
-### Node Reference Rules
+### 节点引用规则
 
-**Rule:** Always reference nodes by ID, never by display text.
+**规则：** 始终按 ID 引用节点，绝不使用显示文本。
 
 ```mermaid
-# Define nodes
+# 定义节点
 A[Display Text A]
 B["Display Text B"]
 
-# Reference nodes
-A --> B                        ✅ Use node IDs
-Display Text A --> Display Text B  ❌ Cannot use display text
+# 引用节点
+A --> B                        ✅ 使用节点 ID
+Display Text A --> Display Text B  ❌ 不能使用显示文本
 ```
 
-## Node Syntax
+## 节点语法
 
-### Basic Node Types
+### 基本节点类型
 
 ```mermaid
-# Rectangle (default)
+# 矩形（默认）
 A[Rectangle Text]
 
-# Rectangle with rounded corners
+# 圆角矩形
 B(Rounded Text)
 
-# Stadium shape
+# 体育场形
 C([Stadium Text])
 
-# Circle
+# 圆形
 D((Circle<br/>Text))
 
-# Asymmetric shape
+# 非对称形状
 E>Right Arrow]
 
-# Rhombus (decision)
+# 菱形（判断）
 F{Decision?}
 
-# Hexagon
+# 六边形
 G{{Hexagon}}
 
-# Parallelogram
+# 平行四边形
 H[/Parallelogram/]
 
-# Database
+# 数据库
 I[(Database)]
 
-# Trapezoid
+# 梯形
 J[/Trapezoid\]
 ```
 
-### Node Text Rules
+### 节点文本规则
 
-**Line breaks:**
-- `<br/>` only works in circle nodes: `((Text<br/>Break))`
-- For other nodes, use separate annotation nodes or keep text concise
+**换行：**
+- `<br/>` 仅在圆形节点中有效：`((Text<br/>Break))`
+- 其他节点请使用单独的注释节点，或保持文本简洁
 
-**Special characters:**
-- Spaces: Use quotes if needed: `["Text with spaces"]`
-- Quotes: Replace with 『』or avoid
-- Parentheses: Replace with 「」or avoid
-- Colons: Generally safe but avoid if causing issues
-- Hyphens/dashes: Safe to use
+**特殊字符：**
+- 空格：需要时使用引号：`["Text with spaces"]`
+- 引号：替换为 『』 或避免使用
+- 圆括号：替换为 「」 或避免使用
+- 冒号：通常安全，但若引发问题则避免
+- 连字符/短横线：可安全使用
 
-**Length guidelines:**
-- Keep node text under 50 characters
-- Use multiple lines (circle nodes) or separate annotation nodes for longer content
-- Consider splitting into multiple nodes if text is too long
+**长度指引：**
+- 节点文本保持在 50 个字符以内
+- 更长内容使用多行（圆形节点）或单独的注释节点
+- 文本过长时考虑拆分为多个节点
 
-## Subgraph Syntax
+## Subgraph 语法
 
-### Basic Structure
+### 基本结构
 
 ```mermaid
 flowchart TB
-    # Correct format with ID and display name
+    # 正确格式：ID + 显示名
     subgraph id["Display Name"]
         direction TB
         A --> B
     end
     
-    # Simple ID only (no spaces)
+    # 仅简单 ID（无空格）
     subgraph simple
         C --> D
     end
     
-    # Can set direction inside subgraph
+    # 可在 subgraph 内设置方向
     subgraph horiz["Horizontal"]
         direction LR
         E --> F
     end
 ```
 
-### Nested Subgraphs
+### 嵌套 Subgraph
 
 ```mermaid
 flowchart TB
@@ -176,9 +176,9 @@ flowchart TB
     end
 ```
 
-**Limitation:** Keep nesting to 2 levels maximum for readability.
+**限制：** 为可读性，嵌套最多保持 2 层。
 
-### Connecting Subgraphs
+### 连接 Subgraph
 
 ```mermaid
 flowchart TB
@@ -190,25 +190,25 @@ flowchart TB
         B[Node B]
     end
     
-    # Connect individual nodes (recommended)
+    # 连接单个节点（推荐）
     A --> B
     
-    # Connect subgraphs (creates invisible link for layout)
+    # 连接 subgraph（创建用于布局的隐形链接）
     g1 -.-> g2
 ```
 
-## Arrow and Connection Types
+## 箭头与连接类型
 
-### Basic Arrows
+### 基本箭头
 
 ```mermaid
-A --> B          # Solid arrow
-A -.-> B         # Dashed arrow
-A ==> B          # Thick arrow
-A ~~~> B         # Invisible link (layout only, not rendered)
+A --> B          # 实线箭头
+A -.-> B         # 虚线箭头
+A ==> B          # 粗箭头
+A ~~~> B         # 隐形链接（仅用于布局，不渲染）
 ```
 
-### Arrow Labels
+### 箭头标签
 
 ```mermaid
 A -->|Label Text| B
@@ -216,80 +216,80 @@ A -.->|Optional| B
 A ==>|Important| B
 ```
 
-### Multi-target Connections
+### 多目标连接
 
 ```mermaid
-# One to many
+# 一对多
 A --> B & C & D
 
-# Many to one
+# 多对一
 A & B & C --> D
 
-# Chaining
+# 链式连接
 A --> B --> C --> D
 ```
 
-### Bidirectional
+### 双向
 
 ```mermaid
-A <--> B         # Bidirectional solid
-A <-.-> B        # Bidirectional dashed
+A <--> B         # 双向实线
+A <-.-> B        # 双向虚线
 ```
 
-## Styling and Colors
+## 样式与颜色
 
-### Inline Styling
+### 内联样式
 
 ```mermaid
 style NodeID fill:#color,stroke:#color,stroke-width:2px
 ```
 
-### Color Format
+### 颜色格式
 
-- Hex colors: `#ff0000` or `#f00`
-- RGB: `rgb(255,0,0)`
-- Color names: `red`, `blue`, etc. (limited support)
+- 十六进制颜色：`#ff0000` 或 `#f00`
+- RGB：`rgb(255,0,0)`
+- 颜色名：`red`、`blue` 等（支持有限）
 
-### Common Style Patterns
+### 常用样式模式
 
 ```mermaid
-# Professional look
+# 专业外观
 style A fill:#d3f9d8,stroke:#2f9e44,stroke-width:2px
 
-# Emphasis
+# 强调
 style B fill:#ffe3e3,stroke:#c92a2a,stroke-width:3px
 
-# Muted/secondary
+# 柔和/次要
 style C fill:#f8f9fa,stroke:#dee2e6,stroke-width:1px
 
-# Title/header
+# 标题/页眉
 style D fill:#1971c2,stroke:#1971c2,stroke-width:3px,color:#ffffff
 ```
 
-### Styling Multiple Nodes
+### 为多个节点设置样式
 
 ```mermaid
-# Apply same style to multiple nodes
+# 对多个节点应用相同样式
 style A,B,C fill:#d3f9d8,stroke:#2f9e44,stroke-width:2px
 ```
 
-## Layout and Direction
+## 布局与方向
 
-### Direction Codes
+### 方向代码
 
 ```mermaid
-flowchart TB    # Top to Bottom (vertical)
-flowchart BT    # Bottom to Top
-flowchart LR    # Left to Right (horizontal)
-flowchart RL    # Right to Left
-flowchart TD    # Top Down (same as TB)
+flowchart TB    # 从上到下（垂直）
+flowchart BT    # 从下到上
+flowchart LR    # 从左到右（水平）
+flowchart RL    # 从右到左
+flowchart TD    # 自上而下（与 TB 相同）
 ```
 
-### Layout Control Tips
+### 布局控制技巧
 
-1. **Vertical layouts (TB/BT):** Best for sequential processes, hierarchies
-2. **Horizontal layouts (LR/RL):** Best for timelines, wide displays
-3. **Mixed directions:** Set different directions in subgraphs
+1. **垂直布局（TB/BT）：** 最适合顺序流程、层级结构
+2. **水平布局（LR/RL）：** 最适合时间线、宽幅显示
+3. **混合方向：** 在不同 subgraph 中设置不同方向
 
 ```mermaid
 flowchart TB
@@ -304,9 +304,9 @@ flowchart TB
     end
 ```
 
-## Advanced Patterns
+## 高级模式
 
-### Feedback Loop Pattern
+### 反馈循环模式
 
 ```mermaid
 flowchart TB
@@ -319,7 +319,7 @@ flowchart TB
     style C fill:#c5f6fa,stroke:#0c8599,stroke-width:2px
 ```
 
-### Swimlane Pattern
+### 泳道模式
 
 ```mermaid
 flowchart TB
@@ -334,7 +334,7 @@ flowchart TB
     B --> C
 ```
 
-### Hub and Spoke
+### 中心辐射模式
 
 ```mermaid
 flowchart TB
@@ -346,7 +346,7 @@ flowchart TB
     Hub --> D[Output]
 ```
 
-### Decision Tree
+### 决策树
 
 ```mermaid
 flowchart TB
@@ -360,7 +360,7 @@ flowchart TB
     PathC --> End
 ```
 
-### Comparison Layout
+### 对比布局
 
 ```mermaid
 flowchart TB
@@ -389,96 +389,96 @@ flowchart TB
     right --> compare
 ```
 
-## Troubleshooting
+## 故障排除
 
-### Common Errors and Solutions
+### 常见错误与解决方案
 
-#### Error: "Parse error on line X: Expecting 'SEMI', 'NEWLINE', 'EOF'"
+#### 错误："Parse error on line X: Expecting 'SEMI', 'NEWLINE', 'EOF'"
 
-**Causes:**
-1. Subgraph name with spaces not using ID format
-2. Node reference using display text instead of ID
-3. Invalid special characters in node text
+**原因：**
+1. 含空格的 subgraph 名称未使用 ID 格式
+2. 节点引用使用显示文本而非 ID
+3. 节点文本中包含无效特殊字符
 
-**Solutions:**
-- Use `subgraph id["Display Name"]` format
-- Reference nodes by ID only
-- Quote node text with special characters
+**解决方案：**
+- 使用 `subgraph id["Display Name"]` 格式
+- 仅按 ID 引用节点
+- 对含特殊字符的节点文本加引号
 
-#### Error: "Unsupported markdown: list"
+#### 错误："Unsupported markdown: list"
 
-**Cause:** Using `number. space` pattern in node text
+**原因：** 在节点文本中使用 `number. space` 模式
 
-**Solution:** Remove space or use alternatives (①, (1), Step 1:)
+**解决方案：** 去掉空格或使用替代写法（①、(1)、Step 1:）
 
-#### Error: "Parse error: unexpected character"
+#### 错误："Parse error: unexpected character"
 
-**Causes:**
-1. Unescaped special characters
-2. Improper quotes
-3. Invalid Mermaid syntax
+**原因：**
+1. 未转义的特殊字符
+2. 引号使用不当
+3. 无效的 Mermaid 语法
 
-**Solutions:**
-- Replace problematic characters (quotes → 『』, parens → 「」)
-- Use proper node definition syntax
-- Check arrow syntax
+**解决方案：**
+- 替换有问题的字符（引号 → 『』，圆括号 → 「」）
+- 使用正确的节点定义语法
+- 检查箭头语法
 
-#### Diagram doesn't render correctly
+#### 图表渲染不正确
 
-**Causes:**
-1. Missing style declarations
-2. Incorrect direction specification
-3. Invalid connections
+**原因：**
+1. 缺少样式声明
+2. 方向指定错误
+3. 无效连接
 
-**Solutions:**
-- Verify all style declarations use valid syntax
-- Check direction is set in the flowchart declaration or subgraph
-- Ensure all node IDs are defined before referencing
+**解决方案：**
+- 确认所有样式声明使用有效语法
+- 检查方向是否在 flowchart 声明或 subgraph 中设置
+- 确保引用前所有节点 ID 已定义
 
-### Validation Checklist
+### 验证清单
 
-Before finalizing any diagram:
+定稿任何图表之前：
 
-- [ ] No `number. space` patterns in node text
-- [ ] All subgraphs use proper ID syntax if they contain spaces
-- [ ] All node references use IDs not display text
-- [ ] All arrows use valid syntax (-->, -.->)
-- [ ] All style declarations are syntactically correct
-- [ ] Direction is explicitly set
-- [ ] No unescaped special characters in node text
-- [ ] All connections reference defined nodes
+- [ ] 节点文本中无 `number. space` 模式
+- [ ] 含空格的 subgraph 均使用正确的 ID 语法
+- [ ] 所有节点引用使用 ID 而非显示文本
+- [ ] 所有箭头使用有效语法（-->、-.->）
+- [ ] 所有样式声明语法正确
+- [ ] 显式设置了方向
+- [ ] 节点文本中无未转义的特殊字符
+- [ ] 所有连接引用的节点均已定义
 
-### Platform-Specific Notes
+### 平台特定说明
 
-**Obsidian:**
-- Older Mermaid version, more strict parsing
-- Limited support for `<br/>` (only in circle nodes)
-- Test diagrams before finalizing
+**Obsidian：**
+- Mermaid 版本较旧，解析更严格
+- 对 `<br/>` 支持有限（仅圆形节点）
+- 定稿前先测试图表
 
-**GitHub:**
-- Good Mermaid support
-- Renders most modern syntax
-- May differ slightly from Obsidian rendering
+**GitHub：**
+- Mermaid 支持良好
+- 可渲染大多数现代语法
+- 渲染结果可能与 Obsidian 略有不同
 
-**Mermaid Live Editor:**
-- Most up-to-date parser
-- Best for testing new syntax
-- May support features not available in Obsidian/GitHub
+**Mermaid Live Editor：**
+- 最新的解析器
+- 最适合测试新语法
+- 可能支持 Obsidian/GitHub 尚不可用的特性
 
-## Quick Reference
+## 快速参考
 
-### Safe Numbering Methods
+### 安全的编号方式
 ✅ `1.Text` `①Text` `(1)Text` `Step 1:Text`
 ❌ `1. Text`
 
-### Safe Subgraph Syntax
+### 安全的 Subgraph 语法
 ✅ `subgraph id["Name"]` `subgraph simple_name`
 ❌ `subgraph Name With Spaces`
 
-### Safe Node References
+### 安全的节点引用
 ✅ `NodeID --> AnotherID`
 ❌ `"Display Text" --> "Other Text"`
 
-### Safe Special Characters
-✅ `『』` for quotes, `「」` for parentheses
-❌ `"` unescaped quotes, `()` in problematic contexts
+### 安全的特殊字符
+✅ 引号用 `『』`，圆括号用 `「」`
+❌ 未转义的 `"`、问题上下文中的 `()`
