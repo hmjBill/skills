@@ -166,8 +166,6 @@ cp -r */ ~/.claude/skills/
 - Markdown 正文内容全部翻译为中文
 - 代码块保持不变
 
-本地化内容在 [`feature/full-localization`](https://github.com/hmjBill/skills/tree/feature/full-localization) 分支。
-
 ## 致谢与归属
 
 所有 Skills 来源于开源社区，版权归原作者所有。详细的来源与许可证信息请参阅 [ATTRIBUTIONS.md](ATTRIBUTIONS.md)。
