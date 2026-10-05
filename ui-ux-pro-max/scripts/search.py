@@ -6,8 +6,8 @@ Usage: python search.py "<query>" [--domain <domain>] [--stack <stack>] [--max-r
        python search.py "<query>" --design-system [-p "Project Name"]
        python search.py "<query>" --design-system --persist [-p "Project Name"] [--page "dashboard"]
 
-Domains: style, prompt, color, chart, landing, product, ux, typography, google-fonts
-Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtjs, nuxt-ui, html-tailwind, shadcn, jetpack-compose, threejs
+Domains: style, color, chart, landing, product, ux, typography, icons, react, web, google-fonts
+Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtjs, nuxt-ui, html-tailwind, shadcn, jetpack-compose, threejs, angular, laravel
 
 Persistence (Master + Overrides pattern):
   --persist    Save design system to design-system/MASTER.md

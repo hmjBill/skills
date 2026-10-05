@@ -1,207 +1,173 @@
-# Design Routing Guide
+# 设计路由指南
 
-When to use each design sub-skill.
+何时使用哪个设计技能。
 
-## Skill Overview
+## 技能概览
 
-| Skill | Purpose | Key Files |
-|-------|---------|-----------|
-| brand | Brand identity, voice, assets | SKILL.md + 10 references + 3 scripts |
-| design-system | Token architecture, specs | SKILL.md + 7 references + 2 scripts |
-| ui-styling | Component implementation | SKILL.md + 7 references + 2 scripts |
-| logo-design | AI logo generation (55 styles, 30 palettes) | SKILL.md + 4 references + 2 scripts |
-| cip-design | Corporate Identity Program (50 deliverables) | SKILL.md + 3 references + 3 scripts |
-| slides | HTML presentations with Chart.js | SKILL.md + 4 references |
-| banner-design | Banners for social, ads, web, print (22 styles) | SKILL.md + 1 reference |
-| icon-design | SVG icon generation (15 styles, Gemini 3.1 Pro) | SKILL.md + 1 reference + 1 script |
+| 技能 | 用途 |
+|------|------|
+| brand | 品牌识别、语调、信息框架、资产与风格指南 |
+| design-system | 设计令牌架构、组件规范、令牌校验 |
+| ui-styling | 使用 shadcn/ui + Tailwind 实现组件与页面 |
+| slides | 使用 Chart.js、设计令牌和文案公式创建 HTML 演示文稿 |
+| banner-design | 社交、广告、网页、印刷横幅设计 |
 
-## Routing by Task Type
+> Logo、CIP、图标为 `design` 技能的内置模块（见本技能 SKILL.md 与 `references/logo-*.md`、`references/cip-*.md`、`references/icon-design.md`），不单独成技能。
 
-### Brand Identity Tasks
+## 按任务类型路由
+
+### 品牌识别任务
 **→ brand**
 
-- Define brand colors and typography
-- Create logo usage guidelines
-- Establish brand voice and tone
-- Organize and validate assets
-- Create messaging frameworks
-- Audit brand consistency
+- 定义品牌颜色与排版
+- 创建 Logo 使用规范
+- 建立品牌语调与语气
+- 组织与验证品牌资产
+- 创建信息框架
+- 审计品牌一致性
 
-### Token System Tasks
+### 令牌系统任务
 **→ design-system**
 
-- Create design tokens JSON
-- Generate CSS variables
-- Define component specifications
-- Map tokens to Tailwind config
-- Validate token usage in code
-- Document state and variants
+- 创建设计令牌 JSON
+- 生成 CSS 变量
+- 定义组件规范
+- 将令牌映射到 Tailwind 配置
+- 校验代码中的令牌使用
+- 记录状态与变体
 
-### Implementation Tasks
+### 实现任务
 **→ ui-styling**
 
-- Add shadcn/ui components
-- Style with Tailwind classes
-- Implement dark mode
-- Create responsive layouts
-- Build accessible components
+- 添加 shadcn/ui 组件
+- 使用 Tailwind 类进行样式设计
+- 实现深色模式
+- 创建响应式布局
+- 构建无障碍组件
 
-### Logo Design Tasks
-**→ logo-design**
-
-- Create logos with AI (Gemini Nano Banana)
-- Search logo styles, color palettes, industry guidelines
-- Generate design briefs
-- Explore 55+ styles (minimalist, vintage, luxury, geometric, etc.)
-
-### Corporate Identity Program Tasks
-**→ cip-design**
-
-- Generate CIP deliverables (business cards, letterheads, signage, vehicles, apparel)
-- Create CIP briefs with industry/style analysis
-- Generate mockups with/without logo (Gemini Flash/Pro)
-- Render HTML presentations from CIP mockups
-
-### Presentation Tasks
+### 演示文稿任务
 **→ slides**
 
-- Create strategic HTML presentations
-- Data visualization with Chart.js
-- Apply copywriting formulas to slide content
-- Use layout patterns and design tokens
+- 创建策略性 HTML 演示文稿
+- 使用 Chart.js 做数据可视化
+- 对幻灯片内容套用文案公式
+- 使用布局模式与设计令牌
 
-### Banner Design Tasks
+### 横幅设计任务
 **→ banner-design**
 
-- Design banners for social media (Facebook, Twitter, LinkedIn, YouTube, Instagram)
-- Create ad banners (Google Ads, Meta Ads)
-- Website hero banners and headers
-- Print banners and covers
-- 22 art direction styles (minimalist, bold typography, gradient, glassmorphism, etc.)
+- 社交平台横幅（Facebook、Twitter、LinkedIn、YouTube、Instagram）
+- 广告横幅（Google Ads、Meta Ads）
+- 网站英雄区与页眉
+- 印刷横幅与封面
+- 22 种艺术方向风格（极简、粗体排版、渐变、玻璃拟态等）
 
-### Icon Design Tasks
-**→ icon-design**
+## 按问题类型路由
 
-- Generate SVG icons with AI (Gemini 3.1 Pro Preview)
-- Batch icon variations in multiple styles
-- Multi-size export (16px, 24px, 32px, 48px)
-- 15 styles: outlined, filled, duotone, rounded, sharp, gradient, etc.
-- 12 categories: navigation, action, communication, media, commerce, data
+| 问题 | 技能 |
+|------|------|
+| "这个颜色应该用什么？" | brand |
+| "如何为 X 创建令牌？" | design-system |
+| "如何构建按钮组件？" | ui-styling |
+| "这符合品牌规范吗？" | brand |
+| "这里应该用 CSS 变量吗？" | design-system |
+| "如何添加深色模式？" | ui-styling |
+| "创建一份 pitch deck" | slides |
+| "设计 Facebook 封面" | banner-design |
+| "为 Google 创建广告横幅" | banner-design |
+| "制作网站英雄区横幅" | banner-design |
+| "为我的品牌创建 Logo" | design（内置 Logo 模块） |
+| "生成名片样机" | design（内置 CIP 模块） |
+| "生成设置图标" | design（内置图标模块） |
 
-## Routing by Question Type
+## 组合工作流
 
-| Question | Skill |
-|----------|-------|
-| "What color should this be?" | brand |
-| "How do I create a token for X?" | design-system |
-| "How do I build a button component?" | ui-styling |
-| "Is this on-brand?" | brand |
-| "Should I use a CSS variable here?" | design-system |
-| "How do I add dark mode?" | ui-styling |
-| "Create a logo for my brand" | logo-design |
-| "Generate business card mockups" | cip-design |
-| "Create a pitch deck" | slides |
-| "Design brand identity package" | cip-design |
-| "What logo style fits my industry?" | logo-design |
-| "Design a Facebook cover" | banner-design |
-| "Create ad banners for Google" | banner-design |
-| "Make a website hero banner" | banner-design |
-| "Generate a settings icon" | icon-design |
-| "Create SVG icons for my app" | icon-design |
-| "Design an icon set" | icon-design |
-
-## Multi-Skill Workflows
-
-### New Project Setup
+### 新项目设计系统
 
 ```
-1. brand → Define identity
-   - Colors, typography, voice
+1. brand → 定义识别
+   - 颜色、排版、语调
 
-2. design-system → Create tokens
-   - Primitive, semantic, component
+2. design-system → 创建令牌
+   - 基础层、语义层、组件层
 
-3. ui-styling → Implement
-   - Configure Tailwind, add components
+3. ui-styling → 实现
+   - 配置 Tailwind、添加组件
 ```
 
-### Design System Migration
+### 设计系统迁移
 
 ```
-1. brand → Audit existing
-   - Extract brand colors, fonts
+1. brand → 审计现有资产
+   - 提取品牌颜色、字体
 
-2. design-system → Formalize tokens
-   - Create three-layer architecture
+2. design-system → 规范化令牌
+   - 建立三层令牌架构
 
-3. ui-styling → Update code
-   - Replace hardcoded values
+3. ui-styling → 更新代码
+   - 替换硬编码值
 ```
 
-### Component Creation
+### 组件创建
 
 ```
-1. design-system → Reference specs
-   - Button states, sizes, variants
+1. design-system → 参考规范
+   - 按钮状态、尺寸、变体
 
-2. ui-styling → Implement
-   - Build with shadcn/ui + Tailwind
+2. ui-styling → 实现
+   - 使用 shadcn/ui + Tailwind 构建
 ```
 
-## Skill Dependencies
+## 技能依赖
 
 ```
 brand
-    ↓ (colors, typography)
+    ↓ (颜色、排版)
 design-system
-    ↓ (tokens, specs)
+    ↓ (令牌、规范)
 ui-styling
-    ↓ (components)
-Application Code
+    ↓ (组件)
+应用代码
 ```
 
-## Quick Commands
+## 常用命令
 
-**Brand:**
+**brand**（在 brand 技能目录下运行）：
 ```bash
-node .claude/skills/brand/scripts/inject-brand-context.cjs
-node .claude/skills/brand/scripts/validate-asset.cjs <path>
+node scripts/inject-brand-context.cjs
+node scripts/validate-asset.cjs <asset-path>
 ```
 
-**Tokens:**
+**design-system**（在 design-system 技能目录下运行）：
 ```bash
-node .claude/skills/design-system/scripts/generate-tokens.cjs -c tokens.json
-node .claude/skills/design-system/scripts/validate-tokens.cjs -d src/
+node scripts/generate-tokens.cjs -c tokens.json
+node scripts/validate-tokens.cjs -d src/
 ```
 
-**Components:**
+**ui-styling**：
 ```bash
 npx shadcn@latest add button card input
 ```
 
-## When to Use Multiple Skills
+## 多技能组合场景
 
-Use **all eight** when:
-- Complete brand package from scratch (logo → CIP → presentation)
+使用 **brand + design-system + ui-styling** 当：
 
-Use **brand + design-system + ui-styling** when:
-- Design system setup and implementation
+- 从零搭建设计系统并落地到代码
 
-Use **logo-design + cip-design** when:
-- Complete brand identity package with deliverable mockups
+使用 **banner-design + brand** 当：
 
-Use **logo-design + cip-design + slides** when:
-- Brand pitch: generate logo, create CIP mockups, build pitch deck
+- 社交平台品牌横幅：跨平台统一品牌视觉
 
-Use **banner-design + brand** when:
-- Social media presence: branded banners across all platforms
+使用 **slides + design-system** 当：
 
-Use **icon-design + design-system** when:
-- Custom icon set matching design tokens and component specs
+- 基于既有设计令牌构建品牌演示文稿
 
-Use **brand + design-system** when:
-- Defining design language without implementation
+使用 **brand + design-system** 当：
 
-Use **design-system + ui-styling** when:
-- Implementing existing brand in code
-- Building component library
+- 只定义设计语言，不做代码实现
+
+使用 **design-system + ui-styling** 当：
+
+- 在代码中实现既有品牌
+- 构建组件库

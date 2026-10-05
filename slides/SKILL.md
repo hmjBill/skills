@@ -2,16 +2,13 @@
 name: slides
 description: 使用 Chart.js、设计令牌、响应式布局、文案公式和上下文幻灯片策略创建策略性 HTML 演示文稿。
 argument-hint: "[topic] [slide-count]"
-metadata:
-  author: claudekit
-  version: "1.0.0"
 ---
 
 # 幻灯片
 
 使用数据可视化的战略性 HTML 演示设计。
 
-<args>$ARGUMENTS</args>
+**任务：** 用户提供的任务内容（主题、幻灯片数量、受众等）。
 
 ## 何时使用
 
@@ -37,6 +34,6 @@ metadata:
 
 ## 路由
 
-1. 从 `$ARGUMENTS`（第一个词）解析子命令
+1. 从用户提供的任务内容（第一个词）解析子命令
 2. 加载相应的 `references/{subcommand}.md`
 3. 使用剩余参数执行

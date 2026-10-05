@@ -20,10 +20,10 @@ description: 在当前仓库中设置 Husky 预提交钩子，配合 lint-staged
 
 ### 2. 安装依赖
 
-作为 devDependencies 安装：
+作为 devDependencies 安装（将 `npm` 替换为第 1 步检测到的包管理器）：
 
-```
-husky lint-staged prettier
+```bash
+npm install -D husky lint-staged prettier
 ```
 
 ### 3. 初始化 Husky
@@ -64,7 +64,7 @@ npm run test
   "tabWidth": 2,
   "printWidth": 80,
   "singleQuote": false,
-  "trailingComma": "es5",
+  "trailingComma": "all",
   "semi": true,
   "arrowParens": "always"
 }
@@ -72,7 +72,7 @@ npm run test
 
 ### 7. 验证
 
-- [ ] `.husky/pre-commit` 存在且可执行
+- [ ] `.husky/pre-commit` 存在且可执行（Windows 下无需检查可执行位：Git for Windows 通过 sh 运行钩子，可执行位没有实际意义）
 - [ ] `.lintstagedrc` 存在
 - [ ] package.json 中的 `prepare` 脚本是 `"husky"`
 - [ ] Prettier 配置存在
@@ -80,9 +80,9 @@ npm run test
 
 ### 8. 提交
 
-暂存所有已更改/创建的文件并使用消息提交：`Add pre-commit hooks (husky + lint-staged + prettier)`
+遵循目标仓库的提交规范准备提交信息；默认先向用户确认暂存范围与提交信息，不自动提交。
 
-这将通过新的 pre-commit hooks 运行 — 这是验证一切正常的好方法。
+提交将通过新的 pre-commit hooks 运行 — 这是验证一切正常的好方法。
 
 ## 注意事项
 

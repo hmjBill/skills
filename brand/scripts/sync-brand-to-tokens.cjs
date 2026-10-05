@@ -17,7 +17,7 @@ const { execSync } = require('child_process');
 const BRAND_GUIDELINES = 'docs/brand-guidelines.md';
 const DESIGN_TOKENS_JSON = 'assets/design-tokens.json';
 const DESIGN_TOKENS_CSS = 'assets/design-tokens.css';
-const GENERATE_TOKENS_SCRIPT = '.claude/skills/design-system/scripts/generate-tokens.cjs';
+const GENERATE_TOKENS_SCRIPT = path.resolve(__dirname, '..', '..', 'design-system', 'scripts', 'generate-tokens.cjs');
 
 /**
  * Extract color info from brand guidelines markdown
@@ -246,11 +246,15 @@ function main() {
   fs.writeFileSync(tokensPath, JSON.stringify(tokens, null, 2));
   console.log(`✅ Updated: ${DESIGN_TOKENS_JSON}`);
 
-  // Regenerate CSS
-  const generateScript = path.resolve(process.cwd(), GENERATE_TOKENS_SCRIPT);
-  if (fs.existsSync(generateScript)) {
+  // Regenerate CSS via the design-system skill script (resolved relative to this file)
+  const generateScript = GENERATE_TOKENS_SCRIPT;
+  if (!fs.existsSync(generateScript)) {
+    console.error(`❌ design-system script not found: ${generateScript}`);
+    console.error('   Install the design-system skill (or fix the path) and re-run to regenerate CSS.');
+    process.exitCode = 1;
+  } else {
     try {
-      execSync(`node ${generateScript} --config ${DESIGN_TOKENS_JSON} -o ${DESIGN_TOKENS_CSS}`, {
+      execSync(`node "${generateScript}" --config ${DESIGN_TOKENS_JSON} -o ${DESIGN_TOKENS_CSS}`, {
         cwd: process.cwd(),
         stdio: 'inherit'
       });

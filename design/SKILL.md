@@ -3,14 +3,13 @@ name: design
 description: 综合设计技能：品牌识别、设计令牌、UI 样式、Logo 生成、企业识别系统、HTML 演示文稿、横幅设计、图标设计、社交照片。
 argument-hint: "[design-type] [context]"
 license: MIT
-metadata:
-  author: claudekit
-  version: "2.1.0"
 ---
 
 # 综合-设计
 
 统一设计技能：品牌、令牌、UI、Logo、CIP、幻灯片、横幅、社交照片、图标。
+
+> 本文脚本命令均在本技能目录（`design/`）下运行；Windows PowerShell 7 使用 `python`，无需 `python3`。
 
 ## 使用场景
 
@@ -44,15 +43,15 @@ metadata:
 ### Logo：生成设计简报
 
 ```bash
-python3 ~/.claude/skills/design/scripts/logo/search.py "tech startup modern" --design-brief -p "BrandName"
+python scripts/logo/search.py "tech startup modern" --design-brief -p "BrandName"
 ```
 
 ### Logo：搜索风格/颜色/行业
 
 ```bash
-python3 ~/.claude/skills/design/scripts/logo/search.py "minimalist clean" --domain style
-python3 ~/.claude/skills/design/scripts/logo/search.py "tech professional" --domain color
-python3 ~/.claude/skills/design/scripts/logo/search.py "healthcare medical" --domain industry
+python scripts/logo/search.py "minimalist clean" --domain style
+python scripts/logo/search.py "tech professional" --domain color
+python scripts/logo/search.py "healthcare medical" --domain industry
 ```
 
 ### Logo：使用 AI 生成
@@ -60,13 +59,13 @@ python3 ~/.claude/skills/design/scripts/logo/search.py "healthcare medical" --do
 **始终**生成白色背景的输出 logo 图片。
 
 ```bash
-python3 ~/.claude/skills/design/scripts/logo/generate.py --brand "TechFlow" --style minimalist --industry tech
-python3 ~/.claude/skills/design/scripts/logo/generate.py --prompt "coffee shop vintage badge" --style vintage
+python scripts/logo/generate.py --brand "TechFlow" --style minimalist --industry tech
+python scripts/logo/generate.py --prompt "coffee shop vintage badge" --style vintage
 ```
 
 **重要：** 脚本失败时，尝试直接修复。
 
-生成后，**始终**通过 `AskUserQuestion` 询问用户是否需要 HTML 预览。如果是，调用 `/ui-ux-pro-max` 获取图库。
+生成后，**始终**询问用户是否需要 HTML 预览；如需要，可使用 `ui-ux-pro-max` 技能获取图库。
 
 ## CIP 设计（内置）
 
@@ -75,32 +74,32 @@ python3 ~/.claude/skills/design/scripts/logo/generate.py --prompt "coffee shop v
 ### CIP：生成简报
 
 ```bash
-python3 ~/.claude/skills/design/scripts/cip/search.py "tech startup" --cip-brief -b "BrandName"
+python scripts/cip/search.py "tech startup" --cip-brief -b "BrandName"
 ```
 
 ### CIP：搜索领域
 
 ```bash
-python3 ~/.claude/skills/design/scripts/cip/search.py "business card letterhead" --domain deliverable
-python3 ~/.claude/skills/design/scripts/cip/search.py "luxury premium elegant" --domain style
-python3 ~/.claude/skills/design/scripts/cip/search.py "hospitality hotel" --domain industry
-python3 ~/.claude/skills/design/scripts/cip/search.py "office reception" --domain mockup
+python scripts/cip/search.py "business card letterhead" --domain deliverable
+python scripts/cip/search.py "luxury premium elegant" --domain style
+python scripts/cip/search.py "hospitality hotel" --domain industry
+python scripts/cip/search.py "office reception" --domain mockup
 ```
 
 ### CIP：生成样机
 
 ```bash
-# 综合-设计
-python3 ~/.claude/skills/design/scripts/cip/generate.py --brand "TopGroup" --logo /path/to/logo.png --deliverable "business card" --industry "consulting"
+# 单个交付物
+python scripts/cip/generate.py --brand "TopGroup" --logo /path/to/logo.png --deliverable "business card" --industry "consulting"
 
-# 综合-设计
-python3 ~/.claude/skills/design/scripts/cip/generate.py --brand "TopGroup" --logo /path/to/logo.png --industry "consulting" --set
+# 全套交付物（--set）
+python scripts/cip/generate.py --brand "TopGroup" --logo /path/to/logo.png --industry "consulting" --set
 
-# 综合-设计
-python3 ~/.claude/skills/design/scripts/cip/generate.py --brand "TopGroup" --logo logo.png --deliverable "business card" --model pro
+# 使用 Pro 模型
+python scripts/cip/generate.py --brand "TopGroup" --logo logo.png --deliverable "business card" --model pro
 
-# 综合-设计
-python3 ~/.claude/skills/design/scripts/cip/generate.py --brand "TechFlow" --deliverable "business card" --no-logo-prompt
+# 跳过 Logo 提示词（使用已有 logo）
+python scripts/cip/generate.py --brand "TechFlow" --deliverable "business card" --no-logo-prompt
 ```
 
 模型：`flash`（默认，`gemini-2.5-flash-image`）、`pro`（`gemini-3-pro-image-preview`）
@@ -108,7 +107,7 @@ python3 ~/.claude/skills/design/scripts/cip/generate.py --brand "TechFlow" --del
 ### CIP：渲染 HTML 演示
 
 ```bash
-python3 ~/.claude/skills/design/scripts/cip/render-html.py --brand "TopGroup" --industry "consulting" --images /path/to/cip-output
+python scripts/cip/render-html.py --brand "TopGroup" --industry "consulting" --images /path/to/cip-output
 ```
 
 **提示：** 如果没有 logo，先使用上面的 Logo 设计部分。
@@ -137,7 +136,7 @@ python3 ~/.claude/skills/design/scripts/cip/render-html.py --brand "TopGroup" --
 
 ### Banner：工作流程
 
-1. **收集需求** 通过 `AskUserQuestion` — 目的、平台、内容、品牌、风格、数量
+1. **收集需求** — 目的、平台、内容、品牌、风格、数量（向用户确认）
 2. **研究** — 激活 `ui-ux-pro-max`，浏览 Pinterest 获取参考
 3. **设计** — 使用 `frontend-design` 创建 HTML/CSS 横幅，使用 `ai-artist`/`ai-multimodal` 生成视觉元素
 4. **导出** — 通过 `chrome-devtools` 以精确尺寸截图为 PNG
@@ -183,21 +182,21 @@ python3 ~/.claude/skills/design/scripts/cip/render-html.py --brand "TopGroup" --
 ### Icon：生成单个图标
 
 ```bash
-python3 ~/.claude/skills/design/scripts/icon/generate.py --prompt "settings gear" --style outlined
-python3 ~/.claude/skills/design/scripts/icon/generate.py --prompt "shopping cart" --style filled --color "#6366F1"
-python3 ~/.claude/skills/design/scripts/icon/generate.py --name "dashboard" --category navigation --style duotone
+python scripts/icon/generate.py --prompt "settings gear" --style outlined
+python scripts/icon/generate.py --prompt "shopping cart" --style filled --color "#6366F1"
+python scripts/icon/generate.py --name "dashboard" --category navigation --style duotone
 ```
 
 ### Icon：批量生成变体
 
 ```bash
-python3 ~/.claude/skills/design/scripts/icon/generate.py --prompt "cloud upload" --batch 4 --output-dir ./icons
+python scripts/icon/generate.py --prompt "cloud upload" --batch 4 --output-dir ./icons
 ```
 
 ### Icon：多尺寸导出
 
 ```bash
-python3 ~/.claude/skills/design/scripts/icon/generate.py --prompt "user profile" --sizes "16,24,32,48" --output-dir ./icons
+python scripts/icon/generate.py --prompt "user profile" --sizes "16,24,32,48" --output-dir ./icons
 ```
 
 ### Icon：顶级风格
@@ -222,14 +221,14 @@ python3 ~/.claude/skills/design/scripts/icon/generate.py --prompt "user profile"
 
 ### Social Photos：工作流程
 
-1. **编排** — `project-management` 技能用于 TODO 任务；并行子代理处理独立工作
+1. **编排** — 用 TODO 清单跟踪任务；独立工作并行处理
 2. **分析** — 解析提示：主题、平台、风格、品牌上下文、内容元素
-3. **构思** — 3-5 个概念，通过 `AskUserQuestion` 展示
-4. **设计** — `/ckm:brand` → `/ckm:design-system` → 随机调用 `/ck:ui-ux-pro-max` 或 `/ck:frontend-design`；每个想法 × 尺寸的 HTML
+3. **构思** — 形成 3-5 个概念并向用户展示
+4. **设计** — `brand` → `design-system` → 随机选用 `ui-ux-pro-max` 或 `frontend-design`；每个想法 × 尺寸的 HTML
 5. **导出** — `chrome-devtools` 或 Playwright 以精确 px 截图（2x deviceScaleFactor）
 6. **验证** — 使用 Chrome MCP 或 `chrome-devtools` 技能目视检查导出的设计；修复布局/样式问题并重新导出
 7. **报告** — 设计决策摘要到 `plans/reports/`
-8. **组织** — 调用 `assets-organizing` 技能对输出文件和报告进行排序
+8. **组织** — 整理输出文件和报告（按项目约定归档）
 
 ### Social Photos：关键尺寸
 
@@ -292,7 +291,14 @@ python3 ~/.claude/skills/design/scripts/icon/generate.py --prompt "user profile"
 ## 设置
 
 ```bash
+# macOS / Linux
 export GEMINI_API_KEY="your-key"  # https://aistudio.google.com/apikey
+pip install google-genai pillow
+```
+
+```powershell
+# Windows PowerShell 7
+$env:GEMINI_API_KEY = "your-key"  # https://aistudio.google.com/apikey
 pip install google-genai pillow
 ```
 

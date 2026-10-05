@@ -3,9 +3,6 @@ name: ui-styling
 description: 使用 shadcn/ui 组件（基于 Radix UI + Tailwind）、Tailwind CSS 实用优先样式和基于画布的视觉设计，创建美观、可访问的用户界面。
 argument-hint: "[component or layout]"
 license: MIT
-metadata:
-  author: claudekit
-  version: "1.0.0"
 ---
 
 # UI 样式
@@ -198,6 +195,8 @@ export default { plugins: [tailwindcss()] }
 **基于 Canvas 的设计哲学、视觉传达原则和复杂的构图。**
 
 参见：`references/canvas-design-system.md`
+
+字体资源：`canvas-fonts/` 目录提供多套 OFL 开源字体（`.ttf` 及许可证文件），供 Canvas 视觉设计选用；用法见参考文档。
 
 涵盖内容：
 - 设计哲学方法

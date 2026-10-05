@@ -2,14 +2,13 @@
 name: brand
 description: 品牌语调、视觉识别、信息框架、资产管理、品牌一致性。用于品牌内容、语调风格、营销素材、品牌合规、风格指南。
 argument-hint: "[update|review|create] [args]"
-metadata:
-  author: claudekit
-  version: "1.0.0"
 ---
 
 # 品牌设计
 
 品牌识别、声音、信息、资产管理及一致性框架。
+
+> 本文脚本命令均在本技能目录（`brand/`）下运行。
 
 ## 使用场景
 
@@ -41,18 +40,18 @@ node scripts/extract-colors.cjs <image-path>
 
 ## 品牌同步工作流程
 
-```bash
-# 品牌设计
-# 品牌设计
+```powershell
+# 同步品牌指南 → 设计令牌
 node scripts/sync-brand-to-tokens.cjs
-# 品牌设计
-node scripts/inject-brand-context.cjs --json | head -20
+
+# 查看品牌上下文（JSON 前 20 行）
+node scripts/inject-brand-context.cjs --json | Select-Object -First 20
 ```
 
 **同步的文件：**
-- `docs/brand-guidelines.md` → 事实来源
-- `assets/design-tokens.json` → 令牌定义
-- `assets/design-tokens.css` → CSS 变量
+- `docs/brand-guidelines.md` → 事实来源（前置条件：先存在该文件，否则同步脚本会明确报错退出）
+- `assets/design-tokens.json` → 运行时同步产物（由 sync-brand-to-tokens.cjs 写入）
+- `assets/design-tokens.css` → 运行时同步产物（需已安装 `design-system` 技能，由 generate-tokens.cjs 再生成；找不到该脚本时同步脚本会给出明确报错）
 
 ## 子命令
 
@@ -92,6 +91,6 @@ node scripts/inject-brand-context.cjs --json | head -20
 
 ## 路由
 
-1. 从 `$ARGUMENTS` 解析子命令（第一个词）
+1. 从用户提供的任务内容（第一个词）解析子命令
 2. 加载对应的 `references/{subcommand}.md`
 3. 使用剩余参数执行

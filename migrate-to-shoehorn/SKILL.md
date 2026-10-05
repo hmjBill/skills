@@ -1,6 +1,6 @@
 ---
 name: migrate-to-shoehorn
-description: 将测试文件从 `as` 类型断言迁移到 @total-typescript/shoehorn。当用户提到 shoehorn、想要替换测试中的 `as`、或需要部分测试数据时使用。
+description: 将测试文件从 `as` 类型断言迁移到 @total-typescript/shoehorn。当用户提到 shoehorn、想要替换测试中的 `as`、或需要部分测试数据时使用；非 TypeScript 项目或已有等价工具时不适用。
 ---
 
 # Shoehorn 迁移
@@ -13,7 +13,7 @@ description: 将测试文件从 `as` 类型断言迁移到 @total-typescript/sho
 
 `as` 在测试中的问题：
 
-- 训练有素不使用它
+- 绕过类型检查，类型不匹配会被静默接受
 - 必须手动指定目标类型
 - 双 as（`as unknown as Type`）用于故意错误的数据
 
@@ -111,7 +111,10 @@ getUser(fromAny({ body: { id: 123 } }));
 
 2. **安装并迁移**：
    - [ ] 安装：`npm i @total-typescript/shoehorn`
-   - [ ] 找到有 `as` 断言的测试文件：`grep -r " as [A-Z]" --include="*.test.ts" --include="*.spec.ts"`
+   - [ ] 找到有 `as` 断言的测试文件（任选一条命令）：
+     - ripgrep：`rg " as [A-Z]" -g "*.test.ts" -g "*.spec.ts"`
+     - GNU grep：`grep -r " as [A-Z]" --include="*.test.ts" --include="*.spec.ts"`
+     - Windows PowerShell 7：`Get-ChildItem -Recurse -File -Include *.test.ts,*.spec.ts | Select-String -Pattern " as [A-Z]"`
    - [ ] 将 `as Type` 替换为 `fromPartial()`
    - [ ] 将 `as unknown as Type` 替换为 `fromAny()`
    - [ ] 从 `@total-typescript/shoehorn` 添加导入

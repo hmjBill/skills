@@ -11,12 +11,13 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-# Paths
+# Paths (relative to this skill's directory)
 SCRIPT_DIR = Path(__file__).parent
+ASSETS_DIR = SCRIPT_DIR.parent / "assets"
 DATA_DIR = SCRIPT_DIR.parent / "data"
-TOKENS_CSS = Path(__file__).resolve().parents[4] / "assets" / "design-tokens.css"
-TOKENS_JSON = Path(__file__).resolve().parents[4] / "assets" / "design-tokens.json"
-OUTPUT_DIR = Path(__file__).resolve().parents[4] / "assets" / "designs" / "slides"
+TOKENS_CSS = ASSETS_DIR / "design-tokens.css"
+TOKENS_JSON = ASSETS_DIR / "design-tokens.json"
+OUTPUT_DIR = ASSETS_DIR / "designs" / "slides"
 
 # ============ BRAND-COMPLIANT SLIDE TEMPLATE ============
 # ALL values reference CSS variables from design-tokens.css

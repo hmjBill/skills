@@ -1,6 +1,6 @@
 Update brand colors, typography, and style - automatically syncs to all design system files.
 
-<args>$ARGUMENTS</args>
+Task input: user-provided arguments (theme name, preset, etc.).
 
 ## Overview
 
@@ -13,7 +13,7 @@ This command systematically updates:
 
 ### Step 1: Gather Brand Input
 
-Use `AskUserQuestion` to collect:
+Collect from the user:
 
 **Theme Selection:**
 - Theme name (e.g., "Ocean Professional", "Electric Creative", "Forest Calm")
@@ -44,9 +44,9 @@ Edit `docs/brand-guidelines.md`:
 
 ### Step 3: Sync to Design Tokens
 
-Run the sync script:
+Run the sync script (from the brand skill directory):
 ```bash
-node .claude/skills/brand/scripts/sync-brand-to-tokens.cjs
+node scripts/sync-brand-to-tokens.cjs
 ```
 
 This will:
@@ -55,13 +55,13 @@ This will:
 
 ### Step 4: Verify Sync
 
-Confirm all files are updated:
-```bash
-# Check brand context extraction
-node .claude/skills/brand/scripts/inject-brand-context.cjs --json | head -30
+Confirm all files are updated (run from the brand skill directory):
+```powershell
+# Check brand context extraction (first 30 lines of JSON)
+node scripts/inject-brand-context.cjs --json | Select-Object -First 30
 
 # Check CSS variables
-grep "primary" assets/design-tokens.css | head -5
+Select-String "primary" assets/design-tokens.css | Select-Object -First 5
 ```
 
 ### Step 5: Report
@@ -88,16 +88,11 @@ Output summary:
 
 ## Examples
 
-```bash
-# Interactive mode
-/brand:update
+Describe the update to the brand skill directly, for example:
 
-# With theme hint
-/brand:update "Ocean Professional"
-
-# Quick preset
-/brand:update "midnight purple"
-```
+- Update the brand (provide theme and colors interactively)
+- Update the brand to "Ocean Professional"
+- Update the brand with preset "midnight purple"
 
 ## Color Presets
 

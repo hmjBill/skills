@@ -18,15 +18,15 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 
-# Project root relative to this script
-PROJECT_ROOT = Path(__file__).parent.parent.parent.parent.parent
-TOKENS_JSON_PATH = PROJECT_ROOT / 'assets' / 'design-tokens.json'
-TOKENS_CSS_PATH = PROJECT_ROOT / 'assets' / 'design-tokens.css'
+# Skill root relative to this script
+SKILL_ROOT = Path(__file__).parent.parent
+TOKENS_JSON_PATH = SKILL_ROOT / 'assets' / 'design-tokens.json'
+TOKENS_CSS_PATH = SKILL_ROOT / 'assets' / 'design-tokens.css'
 
 # Asset directories to validate
 ASSET_DIRS = {
-    'slides': PROJECT_ROOT / 'assets' / 'designs' / 'slides',
-    'infographics': PROJECT_ROOT / 'assets' / 'infographics',
+    'slides': SKILL_ROOT / 'assets' / 'designs' / 'slides',
+    'infographics': SKILL_ROOT / 'assets' / 'infographics',
 }
 
 # Patterns that indicate hardcoded values (should use tokens)

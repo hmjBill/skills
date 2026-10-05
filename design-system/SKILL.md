@@ -3,9 +3,6 @@ name: design-system
 description: 令牌架构、组件规格和幻灯片生成。三层令牌（基础→语义→组件）、CSS 变量、间距/排版比例、组件规格、策略性幻灯片创建。
 argument-hint: "[component or token]"
 license: MIT
-metadata:
-  author: claudekit
-  version: "1.0.0"
 ---
 
 # 设计系统
@@ -50,6 +47,8 @@ Component（组件特定）
 
 ## 快速开始
 
+以下命令在技能目录下运行。
+
 **生成令牌：**
 ```bash
 node scripts/generate-tokens.cjs --config tokens.json -o tokens.css
@@ -87,9 +86,13 @@ node scripts/validate-tokens.cjs --dir src/
 |--------|---------|
 | `generate-tokens.cjs` | 从 JSON 令牌配置生成 CSS |
 | `validate-tokens.cjs` | 检查代码中的硬编码值 |
-| `search-slides.py` | BM25 搜索 + 上下文推荐 |
-| `slide-token-validator.py` | 验证幻灯片 HTML 的令牌合规性 |
-| `fetch-background.py` | 从 Pexels/Unsplash 获取图片 |
+| `generate-slide.py` | 从 JSON 数据或 `--demo` 生成品牌合规的幻灯片 HTML |
+| `search-slides.py` | 幻灯片 BM25 搜索 + 上下文推荐 |
+| `slide_search_core.py` | 幻灯片 BM25 检索核心逻辑（供 `search-slides.py` 调用） |
+| `slide-token-validator.py` | 验证幻灯片 HTML 的令牌合规性（委托给 `html-token-validator.py`） |
+| `html-token-validator.py` | 验证 HTML 资产（幻灯片/信息图）的令牌合规性 |
+| `embed-tokens.cjs` | 将 design-tokens.css 输出为可内联的 CSS 或 `<style>` 片段 |
+| `fetch-background.py` | 返回预选 Pexels 图片 URL 与遮罩 CSS（不发起网络请求） |
 
 ## 模板
 
@@ -113,12 +116,14 @@ node scripts/validate-tokens.cjs --dir src/
 
 | 文件 | 用途 |
 |------|------|
-| `docs/brand-guidelines.md` | 品牌识别、声音、颜色 |
-| `assets/design-tokens.json` | 令牌定义（原始→语义→组件） |
-| `assets/design-tokens.css` | CSS 变量（导入幻灯片） |
-| `assets/css/slide-animations.css` | CSS 动画库 |
+| `docs/brand-guidelines.md` | 品牌识别、声音、颜色（由 brand 技能维护） |
+| `assets/design-tokens.json` | 令牌定义（原始→语义→组件）；运行时生成产物 |
+| `assets/design-tokens.css` | CSS 变量（导入幻灯片）；运行时生成产物 |
+| `assets/css/slide-animations.css` | CSS 动画库（未随仓库提供，可按需自建） |
 
 ### 幻灯片搜索（BM25）
+
+在技能目录下运行：
 
 ```bash
 # 设计系统
@@ -223,16 +228,11 @@ font-family: 'Space Grotesk';
 
 ### 参考实现
 
-包含所有功能的工作示例：
-```
-assets/designs/slides/claudekit-pitch-251223.html
-```
+`assets/designs/slides/claudekit-pitch-251223.html` 未随本仓库提供；可运行 `python scripts/generate-slide.py --demo` 生成示例 deck 作为起点。
 
 ### 命令
 
-```bash
-/slides:create "10-slide investor pitch for ClaudeKit Marketing"
-```
+按上述流程描述需求即可，例如：`创建一份 10 页的投资者路演幻灯片`。
 
 ## 最佳实践
 

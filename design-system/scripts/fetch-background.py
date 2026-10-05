@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Background Image Fetcher
-Fetches real images from Pexels for slide backgrounds.
-Uses web scraping (no API key required) or WebFetch tool integration.
+Returns curated Pexels image URLs and overlay CSS for slide backgrounds.
+No API key, scraping, or network request required.
 """
 
 import json
@@ -11,9 +11,9 @@ import re
 import sys
 from pathlib import Path
 
-# Project root relative to this script
-PROJECT_ROOT = Path(__file__).parent.parent.parent.parent.parent
-TOKENS_PATH = PROJECT_ROOT / 'assets' / 'design-tokens.json'
+# Skill root relative to this script
+SKILL_ROOT = Path(__file__).parent.parent
+TOKENS_PATH = SKILL_ROOT / 'assets' / 'design-tokens.json'
 BACKGROUNDS_CSV = Path(__file__).parent.parent / 'data' / 'slide-backgrounds.csv'
 
 

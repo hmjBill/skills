@@ -1,6 +1,6 @@
 ---
 name: doc
-description: "处理 .docx 文档的读取、创建、编辑，强调布局可视化验证"
+description: 处理 .docx 文档的读取、创建、编辑，强调布局可视化验证
 ---
 
 
@@ -14,7 +14,7 @@ description: "处理 .docx 文档的读取、创建、编辑，强调布局可�
 ## 工作流程
 1. 优先进行视觉审查（布局、表格、图表）。
    - 如果 `soffice` 和 `pdftoppm` 可用，将 DOCX -> PDF -> PNG。
-   - 或使用 `scripts/render_docx.py`（需要 `pdf2image` 和 Poppler）。
+   - 或使用 `scripts/render_docx.py`（在技能目录下运行；需要 `pdf2image` 和 Poppler）。
    - 如果这些工具缺失，安装它们或要求用户在本地审查渲染页面。
 2. 使用 `python-docx` 进行编辑和结构化创建（标题、样式、表格、列表）。
 3. 每次有意义的更改后，重新渲染并检查页面。
@@ -23,22 +23,32 @@ description: "处理 .docx 文档的读取、创建、编辑，强调布局可�
 
 ## 临时文件和输出约定
 - 使用 `tmp/docs/` 存放中间文件；完成后删除。
-- 在此仓库中工作时，将最终产物写入 `output/doc/`。
+- 最终产物写入用户指定的输出目录；未指定时先与用户确认。
 - 保持文件名稳定且有描述性。
 
 ## 依赖（缺失时安装）
 优先使用 `uv` 进行依赖管理。
 
-Python 包：
+Python 包（在工作/项目目录下创建虚拟环境后安装）：
 ```
+uv venv
 uv pip install python-docx pdf2image
 ```
-如果 `uv` 不可用：
+如果 `uv` 不可用（在已激活的虚拟环境中）：
 ```
-python3 -m pip install python-docx pdf2image
+python -m pip install python-docx pdf2image
+```
+也可以不创建环境，用 `uv run` 直接注入依赖（在技能目录下运行）：
+```
+uv run --with python-docx --with pdf2image python scripts/render_docx.py path/to/file.docx
 ```
 系统工具（用于渲染）：
 ```
+# Windows
+winget install TheDocumentFoundation.LibreOffice
+scoop install poppler
+# 或：choco install poppler
+
 # macOS (Homebrew)
 brew install libreoffice poppler
 
@@ -52,19 +62,28 @@ sudo apt-get install -y libreoffice poppler-utils
 无必需的环境变量。
 
 ## 渲染命令
-DOCX -> PDF：
+DOCX -> PDF（PowerShell 7，Windows；`$env:OUTDIR`、`$env:INPUT_DOCX` 为输出目录和输入文件）：
 ```
-soffice -env:UserInstallation=file:///tmp/lo_profile_$$ --headless --convert-to pdf --outdir $OUTDIR $INPUT_DOCX
+$env:LO_PROFILE = "file:///" + ($env:TEMP -replace '\\','/') + "/lo_profile"
+soffice "-env:UserInstallation=$env:LO_PROFILE" --headless --convert-to pdf --outdir "$env:OUTDIR" "$env:INPUT_DOCX"
+```
+macOS/Linux：
+```
+soffice -env:UserInstallation=file:///tmp/lo_profile_$$ --headless --convert-to pdf --outdir "$OUTDIR" "$INPUT_DOCX"
 ```
 
-PDF -> PNG：
+PDF -> PNG（PowerShell 7，Windows）：
 ```
-pdftoppm -png $OUTDIR/$BASENAME.pdf $OUTDIR/$BASENAME
+pdftoppm -png "$env:OUTDIR\$env:BASENAME.pdf" "$env:OUTDIR\$env:BASENAME"
+```
+macOS/Linux：
+```
+pdftoppm -png "$OUTDIR/$BASENAME.pdf" "$OUTDIR/$BASENAME"
 ```
 
-打包的辅助脚本：
+打包的辅助脚本（在技能目录下运行）：
 ```
-python3 scripts/render_docx.py /path/to/file.docx --output_dir /tmp/docx_pages
+python scripts/render_docx.py path/to/file.docx --output_dir tmp/docx_pages
 ```
 
 ## 质量期望

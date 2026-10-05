@@ -19,27 +19,36 @@ description: 处理 PDF 文件的读取、创建、审查，强调视觉渲染�
 4. 每次有意义的更新后，重新渲染页面并验证对齐、间距和可读性。
 
 ## 临时文件和输出约定
-- 使用 `tmp/pdfs/` 存放中间文件；完成后删除。
-- 在此仓库中工作时，将最终产物放在 `output/pdf/` 下。
+- 使用临时目录（如工作目录下的 `tmp/pdfs/`）存放中间文件；完成后删除。
+- 最终产物写入用户指定的输出目录；未指定时先与用户确认。
 - 保持文件名稳定且具有描述性。
 
 ## 依赖项（缺失时安装）
 优先使用 `uv` 进行依赖管理。
 
-Python 包：
+Python 包（在工作/项目目录下创建虚拟环境后安装）：
 ```
+uv venv
 uv pip install reportlab pdfplumber pypdf
 ```
-如果 `uv` 不可用：
+如果 `uv` 不可用（在已激活的虚拟环境中）：
 ```
-python3 -m pip install reportlab pdfplumber pypdf
+python -m pip install reportlab pdfplumber pypdf
+```
+也可以不创建环境，用 `uv run` 直接注入依赖：
+```
+uv run --with reportlab --with pdfplumber --with pypdf python your_script.py
 ```
 系统工具（用于渲染）：
 ```
-# PDF 处理
+# Windows（scoop 或 choco）
+scoop install poppler
+# 或：choco install poppler
+
+# macOS (Homebrew)
 brew install poppler
 
-# PDF 处理
+# Ubuntu/Debian
 sudo apt-get install -y poppler-utils
 ```
 
@@ -49,8 +58,13 @@ sudo apt-get install -y poppler-utils
 无必需的环境变量。
 
 ## 渲染命令
+PowerShell 7（Windows；`$env:INPUT_PDF` 为输入 PDF，`$env:OUTPUT_PREFIX` 为输出前缀）：
 ```
-pdftoppm -png $INPUT_PDF $OUTPUT_PREFIX
+pdftoppm -png "$env:INPUT_PDF" "$env:OUTPUT_PREFIX"
+```
+macOS/Linux：
+```
+pdftoppm -png "$INPUT_PDF" "$OUTPUT_PREFIX"
 ```
 
 ## 质量期望
