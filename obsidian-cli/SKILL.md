@@ -29,6 +29,8 @@ obsidian create name="My Note" silent overwrite
 
 多行内容使用 `\n` 表示换行，`\t` 表示制表符。
 
+`property:set` 使用 `name=`/`value=` 参数；若你的 CLI 版本语法不同（例如使用 `values=`），以 `obsidian help` 输出为准。
+
 ## 文件定位
 
 许多命令接受 `file` 或 `path` 来指定目标文件。两者都未提供时，使用当前活动文件。
@@ -61,7 +63,9 @@ obsidian backlinks file="My Note"
 
 任意命令附加 `--copy` 可将输出复制到剪贴板。使用 `silent` 防止文件被打开。列表命令附加 `total` 可获取计数。
 
-## 插件开发
+## 插件开发（可选）
+
+> 以下为 Obsidian 插件与主题开发调试，可选，与知识库操作无关。
 
 ### 开发/测试循环
 
@@ -120,6 +124,7 @@ obsidian dev:mobile on
 - 创建后必须更新目标目录 README 的 ## 导航入口
 
 ### Frontmatter 修改
+- 适用场景：独立使用 CLI 时用 `property:set` 修改单个字段；在 Wiki Agent 环境（脚本/DataviewJS）中则用 `patchField`/`patchFields`。两侧规则并存，不要混用。
 - 使用 property:set 修改单个字段：
   ```bash
   obsidian property:set name="状态" value="进行中" file="项目名"
@@ -131,6 +136,8 @@ obsidian dev:mobile on
   - 收件类型: 灵感/摘录/待处理
   - 媒体类型: 电影/剧集/动画/视频/游戏
   - 优先级(OKR): High/Middle/Low
+
+以上为常用值清单。合法枚举值以 `00_系统/Agent操作指南.md` 的「Frontmatter 枚举值注册表」为准，`.obsidian/types.json` 负责字段类型注册；两者不一致时先核实并同步后再操作。
 
 ### 常用 AI-Wiki 操作
 ```bash

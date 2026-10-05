@@ -7,6 +7,8 @@ description: 在 AI-Wiki 笔记库中搜索、创建和管理笔记
 
 在 AI-Wiki 笔记库中搜索、创建和管理笔记。
 
+与 wiki-* 系列的分工：内容导入与路由用 wiki-ingest，全库问答用 wiki-query，写作辅助用 wiki-write，周期复盘用 wiki-review；本技能提供通用的搜索、创建与维护操作。
+
 ## AI-Wiki 架构
 
 AI-Wiki 是基于 PARA 变体的 Obsidian 笔记库，目录结构：
@@ -22,9 +24,9 @@ AI-Wiki 是基于 PARA 变体的 Obsidian 笔记库，目录结构：
 - `08_归档` — 已归档内容
 - `09_受控信息` — 敏感信息
 
-模板位于 `00_系统/模板/`，共 19 个中文模板。
+模板位于 `00_系统/模板/`（数量以该目录实际内容为准）。
 
-Frontmatter 规则：系统字段用英文（type/tags/date），业务字段用中文（状态/收件类型/来源/等级）。枚举值注册在 `00_系统/Agent操作指南.md`。
+Frontmatter 规则：系统字段用英文（type/tags/date），业务字段用中文（状态/收件类型/来源/等级）。合法枚举值注册在 `00_系统/Agent操作指南.md` 的「Frontmatter 枚举值注册表」；字段类型同步登记在 `.obsidian/types.json`。
 
 三层链接体系：README 导航 → 高置信 wikilink → DataviewJS。
 
@@ -61,11 +63,11 @@ obsidian create name="新笔记" template="资源模板" silent
 
 ### 4. 更新笔记
 
-修改笔记内容或 frontmatter。frontmatter 修改使用 `patchField`/`patchFields`，不使用 `processFrontMatter`。
+修改笔记内容或 frontmatter。frontmatter 修改使用 `patchField`/`patchFields`（Wiki Agent 脚本接口；独立 CLI 环境用 `obsidian property:set`，用法见 obsidian-cli 技能），不使用 `processFrontMatter`。
 
 ```bash
 obsidian append file="笔记名" content="新内容"
-obsidian property:set name="状态" values="进行中" file="笔记名"
+obsidian property:set name="状态" value="进行中" file="笔记名"
 ```
 
 ### 5. 查找反向链接
@@ -89,7 +91,7 @@ obsidian daily:append content="- [ ] 任务"
 
 ## 操作步骤
 
-1. 定位笔记库根目录（从当前目录向上搜索 `.obsidian/` 或 `00_系统/`）
+1. 定位笔记库根目录（如 `B:\AI-Wiki` 或你的库路径；也可从当前目录向上搜索 `.obsidian/` 或 `00_系统/`）
 2. 如需规则参考，读取 `00_系统/Agent操作指南.md`
 3. 执行请求的操作
 4. 验证结果（文件存在、frontmatter 合法、导航已更新）
@@ -101,6 +103,6 @@ obsidian daily:append content="- [ ] 任务"
 - 不自动删除或移动文件
 - 新笔记必须使用模板
 - 添加或删除文件后更新 README 导航
-- frontmatter 修改使用 `patchField`/`patchFields`
+- frontmatter 修改使用 `patchField`/`patchFields`（CLI 环境用 `obsidian property:set`，见 obsidian-cli 技能）
 - 遵守三层链接体系
 - 禁止：自动删除/移动/批量重分类、创建顶层目录、凭记忆写 frontmatter
