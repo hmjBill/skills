@@ -112,7 +112,7 @@
 
 | Skill | 来源仓库 | 许可证 |
 |-------|---------|--------|
-| agent-browser | https://github.com/CalebDane7/agent-browser | 未明确 |
+| agent-browser | https://github.com/CalebDane7/agent-browser（基于 [Vercel Agent Browser](https://github.com/vercel-labs/agent-browser) 的改进版） | Apache 2.0 |
 | caveman | https://github.com/JuliusBrussee/caveman | MIT |
 | codemap | https://github.com/camilo-acevedo/claude-skills | MIT |
 | env-bootstrap | https://github.com/NathanMaine/memoriant-env-bootstrap-skill | 未明确 |

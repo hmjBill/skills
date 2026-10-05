@@ -58,7 +58,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 
 | Skill | 说明 |
 |-------|------|
-| [agent-browser](agent-browser/SKILL.md) | 浏览器自动化 CLI |
+| [agent-browser](agent-browser/SKILL.md) | 用真实登录的 Chrome 完成网站任务（导航、表单、截图、测试） |
 | [playwright](playwright/SKILL.md) | Playwright 测试自动化 |
 | [playwright-interactive](playwright-interactive/SKILL.md) | Playwright 交互模式 |
 | [screenshot](screenshot/SKILL.md) | 截图工具 |

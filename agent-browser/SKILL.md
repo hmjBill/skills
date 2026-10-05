@@ -1,53 +1,114 @@
 ---
 name: agent-browser
-description: 面向 AI 代理的浏览器自动化 CLI。用于网站导航、表单填写、按钮点击、截图、数据提取、Web 应用测试等浏览器任务。
+description: 操作用户真实登录的 Windows Chrome：打开、检查、点击、填写、截图、上传下载、排查网站与 Web 应用；依赖已保存登录态、Cookie 或渲染后页面结果时使用，纯公开信息检索或 API/源码检查不用。
 allowed-tools: Bash(agent-browser:*), Bash(npx agent-browser:*)
 ---
 
-# 浏览器自动化
+# Agent 浏览器
 
-面向 AI 代理的快速浏览器自动化 CLI。通过 CDP 连接 Chrome/Chromium，提供无障碍树快照和紧凑的 `@eN` 元素引用。
+## 优先并行：多个代理、多个自有标签页
 
-安装：`npm i -g agent-browser && agent-browser install`
+在第一次浏览器操作之前，只要把独立页面、搜索、检查或账户通道拆分到多个代理、多个自有标签页上能显著缩短拿到最终结果的时间，就应积极拆分。立即派发这些通道；串行浏览器操作是例外，而非默认。为每条通道分配全局唯一且语义化的 `--session`，每个自有标签页树只保留一个写入者，并让同一配置文件下的各条通道并发运行。只有依赖同一标签页/状态、或可能争抢同一账户敏感变更的操作才需要串行。每条通道的结果一经整合，立即关闭。
 
-如果尚未安装 CLI，按上述命令安装（`npx agent-browser ...` 亦可调用）；若确实无法安装（例如没有 Node 环境），改用 `playwright` 技能完成浏览器自动化。
+当用户仍在使用某个协作标签页、或确实有待处理的用户输入时，保持其打开。否则应在原工作线程中及时关闭，并等待命令退出。已安装的 wrapper 会把别名绑定到其真实所有者命名空间；不同代理使用相同名称会得到相互独立的标签页。父级无法通过重复名称来关闭或接管子级的标签页。条件允许时，回到原工作线程执行清理；否则向运行时维护者报告确切的失败信息。绝不要伪造所有者元数据。进程死亡触发的原生清理不等同于子线程完成。
 
-在 Windows 上，`agent-browser install` 依赖本机安装的 Chromium 内核浏览器（Chrome 或 Edge）。
+## 必要时使用真实浏览器
 
-## 从这里开始
+选择能证明结果的最小操作面：
 
-本文件是发现存根，而非使用指南。在运行任何 `agent-browser` 命令之前，请从 CLI 加载实际的工作流内容：
+- 仅需公开信息、不依赖浏览器会话的研究，使用网页搜索。
+- 纯 API、状态、响应头、DNS 或源码检查，且渲染后的浏览器状态不会改变答案时，使用终端工具。
+- 只要 JavaScript 渲染、可见 UI、Cookie、登录、已有账户、已保存的浏览器状态、点击、输入、表单、下载、截图或真实的用户操作流程可能影响结果，就使用 `agent-browser`。
+
+当第三种情况成立时，不要用干净的、本地的、一次性的、无头、Lightpanda 或纯文本浏览器来替代。应操作真实的持久化 Windows Google Chrome 配置文件，并自行判断渲染后的结果。
+
+## 账户与传输的权威归属
+
+遇到未安装或新请求的配置文件时，先读一次[快速安装与复用](references/setup.md)。已经配置好？直接开始任务；每次任务都不需要重装、预热或重新注册。
+
+已安装的 `agent-browser` 启动器、私有 wrapper/broker 与配置文件本地扩展共同掌管：挂接到用户真实的 Windows 稳定版 Chrome、配置文件选择、确切的标签页能力以及传输。始终从 `open` 开始。
+
+- 绝不要直接启动 Chrome，也不要使用 `Start-Process chrome`、`start-chrome-debug`、固定端口 `9222`、`connect`、`--cdp`、`--headed`、替代的 `--user-data-dir`，或自定义的浏览器/配置/配置文件/状态。
+- 绝不要把历史复制的配置文件当作实时配置文件启用。副本可能显示扩展图标，却悄悄丢失 Cookie、设置和 MetaMask 钱包状态。
+
+没有更明确的账户指示时，省略 `--account` 以使用运行时配置的默认值。若指定了账户，使用 `--account HANDLE`，其中的别名必须与本地已安装操作者映射中登记的确切别名一致。显示名称、邮箱和配置文件目录不会自动成为有效的 CLI 别名。
+
+如果请求的账户没有已知的本地映射，不要杜撰别名，也不要静默使用默认值。按[安装指南](references/setup.md)创建新映射或注册；该机器专属映射须保密。
+
+- 具名会话只拥有任务标签页和 ref；它不负责选择 Google 账户。在执行任何账户敏感操作前，先核实可见的身份。
+- 在宣称登录受阻之前，先尝试请求的/默认的已保存配置文件、其可见的账户选择器以及已有的已登录状态。绝不要把要求用户登录当作第一步，也绝不要在错误的账户下静默操作。
+
+### 默认后台运行；仅在受邀时使用当前标签页
+
+常规的 `open` 会在所选配置文件中创建一个非活动任务标签页。如果该配置文件没有窗口，wrapper 会以无启动窗口的方式启动完全一致的稳定版配置文件，并由扩展按需创建一个最小化的任务窗口。关闭最后一个任务后，该扩展拥有的窗口即退役。不要为每个配置文件预先打开窗口，也不要仅仅为了查看就激活 Chrome。
+
+网站触发的弹窗可能把 Chrome 带到前台；普通任务标签页仍必须保持非活动。这一已接受的限制既不授权代理主动激活，也不免除对确属任务所有的弹窗后代的清理。任务结束后，若 `close` 之后仍残留该任务拥有的弹窗，即属清理失败；请向运行时维护者报告确切错误，不要关闭猜测的或用户拥有的标签页。
+
+仅当用户明确要求在其当前正在使用的标签页中提供帮助时，才可在冷启动会话引导阶段认领该确切的前台标签页：
 
 ```bash
-agent-browser skills get core             # 从这里开始 — 工作流、常见模式、故障排除
-agent-browser skills get core --full      # 包含完整的命令参考和模板
+IFS= read -r task_uuid </proc/sys/kernel/random/uuid
+browser_session="current-help-${task_uuid//-/}"
+agent-browser --session "$browser_session" --current-tab get url
 ```
 
-CLI 提供的技能内容始终与已安装版本匹配，因此说明永不过期。本存根中的内容在不同版本之间保持不变，这就是为什么它只是指向 `skills get core`。
+这种一次性认领会重新检查聚焦的配置文件/窗口/标签页，一旦发生变化或属于其他代理的任务就按失败关闭处理（fail closed）。在该已认领会话的后续每条命令上，都要重复相同的 `--account`、`--session` 和 `--current-tab` 选择器。`close` 只是从用户认领的标签页上脱离；它不会关闭该标签页。绝不要仅因某个标签页顺手就使用 `--current-tab`，也绝不要按标题、索引、视觉邻近、键盘或鼠标猜测来选取。
 
-## 专业化技能
+操作前先核实返回的 URL。刚选中的地址并不能证明其文档已经渲染；初始认领要求目标页面已加载且仍处于焦点。挂接之后，Chrome 可以被最小化而不干扰已保留的会话。多个被明确邀请的代理可以共享同一个用户标签页；运行时会串行执行该标签页上的完整命令。每个代理保留自己的会话并各自脱离。独立工作优先使用各自拥有的独立标签页：共享一个标签页并不会让其中的操作并行执行。
 
-当任务超出浏览器网页范围时，加载专业化技能：
+对于无法避免、只能由用户提供的输入，保留确切的具名会话。在用户许可下，使用 [commands](references/commands.md) 中描述的窄范围 `foreground --input-boundary TYPE` 命令；否则指出标签页供用户选择。输入完成后，`background` 必须在适用时重复确切的账户、会话和 `--current-tab` 前缀。仅当已保存的交接仍然有效时，它才会有条件地返回。取消、拒绝、结果未确认或没有交接，都不承诺获得焦点；不要重试，也不要强制聚焦。输入后恢复同一会话，并在共享工作完成后关闭它。绝不要在聊天或 shell 命令中索要机密信息。
+
+## 快速且省 token 的循环
+
+选择最小但有用的命令：用紧凑/限定范围的 `snapshot` 查看控件，用 `get` 或 `is` 获取特定值/状态，用 `find` 定位语义化控件，用 `screenshot` 获取像素，用 `console` / `errors` 查看页面诊断信息。语法与可用性见 [commands](references/commands.md)。新的整页/选择器/JPEG 截图、相对路径上传、错误缓冲区清理和有界 JSON 改进，在已验证的已安装修订版中可用。使用常规命令即可；不要为了使用它们而切换二进制文件。
 
 ```bash
-agent-browser skills get electron          # Electron 桌面应用（VS Code、Slack、Discord、Figma 等）
-agent-browser skills get slack             # Slack 工作区自动化
-agent-browser skills get dogfood           # 探索性测试 / QA / Bug 排查
-agent-browser skills get vercel-sandbox    # Vercel Sandbox 微虚拟机中的 agent-browser
-agent-browser skills get agentcore         # AWS Bedrock AgentCore 云浏览器
+IFS= read -r task_uuid </proc/sys/kernel/random/uuid
+browser_session="browser-task-${task_uuid//-/}"
+agent-browser --session "$browser_session" open URL
+agent-browser --session "$browser_session" snapshot -i --compact
+# 使用全新的 ref 执行操作，并核实相关的可见结果
+agent-browser --session "$browser_session" close
 ```
 
-运行 `agent-browser skills list` 查看已安装版本的所有可用内容。
+对于明确选定的已注册账户：
 
-## 为什么选择 agent-browser
+```bash
+IFS= read -r task_uuid </proc/sys/kernel/random/uuid
+: "${browser_account:?Set the requested alias from the local operator mapping}"
+browser_session="account-task-${task_uuid//-/}"
+agent-browser --account "$browser_account" --session "$browser_session" open URL
+agent-browser --account "$browser_account" --session "$browser_session" snapshot -i --compact
+agent-browser --account "$browser_account" --session "$browser_session" close
+```
 
-- 快速的原生 Rust CLI，而非 Node.js 封装
-- 兼容任意 AI 代理（Cursor、Claude Code、Codex、Continue、Windsurf 等）
-- 通过 CDP 连接 Chrome/Chromium，无须 Playwright 或 Puppeteer 依赖
-- 带元素引用的无障碍树快照，实现可靠交互
-- 会话管理、认证保险库、状态持久化、视频录制
-- 专业化技能支持 Electron 应用、Slack、探索性测试、云服务商
+在非默认配置文件会话中，每条命令都要重复相同的显式 `--account`。省略它会让该次调用选中运行时默认值，可能导致路由错误或工作流失败；不要指望后续的冲突来发现这个错误。在多次工具调用之间保留确切的账户/会话值；shell 变量未必能在新的调用中存活。把引擎输出标志放在命令之后，例如在常规的账户/会话前缀之后使用 `snapshot -i --compact --json`。JSON 只是一种格式，并不保证输出小；先限定观察范围。
 
-## 可观测性仪表板
+- 一个工作流复用一个具名会话。写入边界是其拥有的标签页树，而不是整个账户/配置文件。
+- 会话名称在并发代理之间必须唯一。当浏览器通道相互独立、且并行工作能显著缩短实际耗时，就让它们在不同的自有会话/标签页中并发运行——即便在同一配置文件中也是如此。依赖性的操作在同一标签页上保持串行。当前 broker 最多支持 16 个同时存活的会话；只打开确实需要的少数几个，并及时关闭每一个。
+- 交互前先快照。仅在导航、重新加载、保存、对话框或 DOM 发生实质变化之后重新快照，因为此时旧 ref 已失效。
+- 优先使用全新的 ref 或语义化控件。把 `get`/`snapshot` 的输出限定到相关选择器；默认绝不要整份转储 `get text body`。
+- 等待可观察的选择器、URL、加载状态或可见结果。不要使用任意的长时间休眠。
+- 仅当视觉证据有价值时才截图。
+- 简单的一页式流程不要加载参考文件。
 
-仪表板独立于浏览器会话运行在 4848 端口，也可通过代理或转发 URL 访问，如 `https://dashboard.agent-browser.localhost`。代理应保持在仪表板源站：会话标签页、状态和流量通过内部代理，因此无需暴露会话端口。
+完成后及时运行对应的 `close`，失败或取消后也是如此，除非该标签页仍在与用户积极协作，或仍在等待确实只能由用户提供的输入。它只关闭任务拥有的目标，同时保留用户真实的 Chrome、无关标签页、认证状态、扩展和设置。在协作或等待输入期间保留原始的账户/会话；不要把已完成或空白的任务目标留待稍后清理。
+
+## 证明与恢复
+
+执行真实用户会执行的相同操作，并核实最终可见状态。CLI 成功退出只能证明传输成功。对于已保存的设置或已提交的表单，当持久化属于验收条件时，应重新加载或重新打开。
+
+wrapper 会把离线的已注册配置文件启动一次，并等待其扩展自动重新连接。如果命令仍然失败，不要重复执行相同的 `open`；保留其精简错误信息，用于对照已安装的 wrapper、broker 和扩展进行诊断。绝不回退到其他浏览器或配置文件，也不要把已退役控制器的 `browser-runtime doctor` 当作现行路径的例行步骤。
+
+配对是配置文件本地行为，需要用户针对该确切配置文件做出一次明确手势。此前已注册的配置文件在常规的 broker/配置文件轮换期间应能自动重连，无需再次批准。在本应复用时却出现新的配对/批准请求，是一个危险信号——不要自动点击它，也不要声称已启用的扩展已经注册。
+
+只有在正确的已保存配置文件和可见的登录路径都已穷尽，且实时页面证明存在确实只能由用户完成的边界之后，才请求用户输入。保留确切的标签页/会话，随后完成流程，并关闭任务会话。绝不打印、导出、复制或持久化凭据、Cookie、令牌、一次性验证码、钱包保险库/恢复数据、私有正文或支付数据。
+
+## 按需参考文件
+
+- `references/commands.md`：较少使用的 CLI 命令。
+- `references/snapshot-refs.md`：ref 生命周期与选择器故障排除。
+- `references/authentication.md`：登录、OAuth 以及确实需要人工输入的边界。
+- `references/session-management.md`：复用、账户通道与清理。
+- `references/browser-state-recovery.md`：当 Chrome、配置文件、扩展、钱包或传输状态疑似损坏时的停止并转交边界。它不授予常规的恢复或变更权限。
+- 本目录中的其他遗留来源参考文件对这条私有认证路径没有权威性。在它们的解析器和权限对照已安装的 wrapper 与页面能力完成验证之前，不要使用其中的命令。
