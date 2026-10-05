@@ -1,13 +1,13 @@
 ---
 name: to-issues
-description: 将计划、规格或 PRD 拆分为可独立领取的 Issue，使用示踪弹垂直切片发布到项目 Issue 追踪器。当用户想要将计划转换为 Issue、创建实施工单时使用。
+description: 将计划、规格或 PRD 拆分为可独立领取的 Issue，以垂直切片（tracer bullet）发布到项目 Issue 追踪器。当用户想要将计划转换为 Issue、创建实施工单时使用。
 ---
 
 # 拆分 Issue
 
-使用垂直切片（tracer bullets）将计划分解为可独立认领的 issues。
+使用垂直切片（tracer bullet）将计划分解为可独立认领的 issues。
 
-问题跟踪器和分类标签词汇应该已提供给你 — 如果没有，运行 `/setup-matt-pocock-skills`。
+问题跟踪器和分类标签词汇应该已提供给你 — 如果没有，使用 setup-matt-pocock-skills skill。
 
 ## 流程
 
@@ -21,7 +21,7 @@ description: 将计划、规格或 PRD 拆分为可独立领取的 Issue，使�
 
 ### 3. 起草垂直切片
 
-将计划分解为 **tracer bullet** issues。每个 issue 是一个薄的垂直切片，切穿所有集成层端到端，而不是一层的水平切片。
+将计划分解为**垂直切片（tracer bullet）**形式的 issues。每个 issue 是一个薄的垂直切片，切穿所有集成层端到端，而不是一层的水平切片。
 
 切片可以是 'HITL' 或 'AFK'。HITL 切片需要人工交互，例如架构决策或设计审查。AFK 切片可以在无人为交互的情况下实现和合并。尽可能优先选择 AFK 而不是 HITL。
 
@@ -51,9 +51,15 @@ description: 将计划、规格或 PRD 拆分为可独立领取的 Issue，使�
 
 ### 5. 将 issues 发布到问题跟踪器
 
+优先读取项目的 `docs/agents/issue-tracker.md`（由 setup-matt-pocock-skills 生成），按其中约定的跟踪器与分类标签执行：
+
+- GitHub：使用 `gh issue create` 创建 Issue。
+- 本地 markdown 跟踪器：写入 `docs/agents/issue-tracker.md` 约定的文件。
+- 其他跟踪器：按该文件中的说明执行；文件缺失时先使用 setup-matt-pocock-skills skill 生成。
+
 对于每个批准的切片，将新 issue 发布到问题跟踪器。使用下面的 issue body 模板。这些 issues 被认为是准备好供 AFK agent 使用的，因此除非另有指示，否则使用正确的分类标签发布。
 
-按依赖顺序发布 issues（先 blockers），这样你可以在"Blocked by"字段中引用真实的 issue 标识符。
+按依赖顺序发布 issues（先 blockers）。如果跟踪器支持原生依赖关系（如 GitHub issue dependencies），优先用原生方式建立依赖；否则在"Blocked by"字段/正文中引用真实的 issue 标识符。
 
 <issue-template>
 ## Parent

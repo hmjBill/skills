@@ -1,6 +1,6 @@
 ---
 name: workflow-checker
-description: "通用工程检查清单，汇总配置、列出已启用技能/MCP/LSP状态"
+description: 通用工程检查清单，汇总配置并列出已启用的技能、MCP 与 LSP 状态。当用户想核对当前会话可用的工具/技能/工作流配置时使用。
 ---
 
 # 工程检查
@@ -8,7 +8,11 @@ description: "通用工程检查清单，汇总配置、列出已启用技能/MC
 当用户要求"检查配置/检查环境/做发布前核对"时，执行以下流程：
 
 1. 读取并汇总当前配置来源（用户级、项目级）。
-2. 列出已启用 MCP、可用 skills、LSP 可执行状态。
+2. 列出已启用 MCP、可用 skills、LSP 状态：
+   - skills：扫描技能目录，读取各 `SKILL.md` 的 name/description 汇总可用技能；
+   - MCP：从宿主配置文件读取（如 `opencode.json`、`.claude/settings.json`，按当前宿主选择对应文件）；
+   - LSP：按宿主配置与可执行文件检查（如 `Get-Command` / `which`）；
+   - 无法自动获取的信息，请用户提供对应配置内容。
 3. 输出缺失项与可复现的验证命令。
 4. 所有结论必须给出事实依据（文件路径或命令输出）。
 
