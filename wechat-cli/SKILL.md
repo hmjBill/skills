@@ -29,7 +29,7 @@ description: 查询本地微信数据（聊天记录、联系人、会话、收�
 uv tool install git+https://github.com/huohuoer/wechat-cli
 ```
 
-装完自带 `wechat-cli` 可执行文件（uv shim 目录，通常在 PATH）。
+装完自带 `wechat-cli` 可执行文件（uv shim 目录，通常在 PATH）；未进 PATH 时用 `uv tool run wechat-cli ...` 调用。
 
 **备选（pip from git）**：
 
@@ -83,28 +83,36 @@ wechat-cli init --force
 wechat-cli sessions --limit 10
 ```
 
+若 `wechat-cli` 不在 PATH（或 PATH 里是 npm 版），统一改用 `uv tool run`，在 uv tool 的隔离环境里执行已安装版本：
+
+```bash
+uv tool run wechat-cli sessions --limit 10
+```
+
+> Windows：`scripts/wx.sh` 需在 Git Bash 下运行；PowerShell 下直接用 `uv tool run wechat-cli ...`。
+
 ### PATH 冲突排错（重要）
 
 如果 `wechat-cli --version` 报类似 `Cannot find module '@canghe_ai/wechat-cli-win32-x64/package.json'` 的错误，说明 PATH 里的 npm 版（`@canghe_ai/wechat-cli`）优先于 git 安装版，而 npm 版在你的平台没有二进制。任选一种方式解决：
 
-**方式 A — 用本 skill 自带的包装脚本**（在 skill 目录下运行）：
+**方式 A — 用本 skill 自带的包装脚本**（Git Bash，在 skill 目录下运行）：
 
 ```bash
 bash scripts/wx.sh sessions --limit 10
 ```
 
-脚本本质是 `python -c "from wechat_cli.main import cli; cli()" -- "$@"`，绕过 PATH 冲突。
+脚本内部执行 `uv tool run wechat-cli "$@"`（uv 不存在时回退裸 `wechat-cli`），走 uv tool 隔离环境，不受 PATH 顺序影响。
 
-**方式 B — 直接走 Python 入口**：
+**方式 B — 直接走 uv tool run**：
 
 ```bash
-python -c "from wechat_cli.main import cli; cli()" -- sessions --limit 10
+uv tool run wechat-cli sessions --limit 10
 ```
 
 或在单条命令内定义临时别名：
 
 ```bash
-wx() { python -c "from wechat_cli.main import cli; cli()" -- "$@"; }
+wx() { uv tool run wechat-cli "$@"; }
 wx sessions --limit 10
 ```
 
@@ -116,7 +124,7 @@ npm uninstall -g @canghe_ai/wechat-cli
 
 ## 命令参考
 
-> 以下示例统一用 `wechat-cli`；若遇到上文的 PATH 冲突，按"方式 A/B"替换为 `bash scripts/wx.sh` 或 `python -c "from wechat_cli.main import cli; cli()" --`。
+> 以下示例统一用 `wechat-cli`；若遇到上文的 PATH 冲突，按"方式 A/B"替换为 `bash scripts/wx.sh` 或 `uv tool run wechat-cli`。
 
 ### sessions — 最近会话
 

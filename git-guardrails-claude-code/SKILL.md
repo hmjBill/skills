@@ -17,6 +17,11 @@ description: 设置 Claude Code 钩子，在危险 Git 命令（push、reset --h
 
 被阻止时，Claude 会看到一条消息，告知它没有权限执行这些命令。
 
+## 前置依赖
+
+- **jq**：钩子用 jq 解析 stdin 传入的 JSON。jq 缺失时钩子会以退出码 2 阻止该次 git 命令（fail-closed），而不是静默放行。安装方式：`winget install jqlang.jq`（Windows）、`scoop install jq`（Windows）、`brew install jq`（macOS）。
+- **Windows**：钩子是 `.sh` 脚本，需要 Git Bash 执行（安装 Git for Windows 即自带）。
+
 ## 步骤
 
 ### 1. 询问范围
