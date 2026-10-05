@@ -10,34 +10,41 @@ description: 当任务需要从终端自动化真实浏览器（导航、表单�
 
 ## 前置检查（必需）
 
-在提议命令之前，检查 `npx` 是否可用（包装脚本依赖它）：
+在提议命令之前，检查 `npx` 是否可用（包装脚本依赖它）。以下命令在 Bash 与 PowerShell 7 中均可运行：
 
 ```bash
-command -v npx >/dev/null 2>&1
+npx --version
 ```
 
 如果不可用，暂停并要求用户安装 Node.js/npm（提供 `npx`）。逐字提供以下步骤：
 
 ```bash
-# Playwright
 node --version
 npm --version
 
-# Playwright
-npm install -g @playwright.cli@latest
+npm install -g @playwright/cli@latest
 playwright-cli --help
 ```
 
-一旦 `npx` 存在，继续使用包装脚本。全局安装 `playwright-cli` 是可选的。
+如果该包不可用，可直接改用 `npx playwright` 内置命令替代。
+
+一旦 `npx` 存在，继续使用包装脚本。全局安装 `playwright-cli` 是可选的（npx 调用与全局安装任一方式皆可）。
 
 ## 技能路径（设置一次）
 
+本技能自带包装脚本 `scripts/playwright_cli.sh`，在技能目录（本文件所在目录）下运行：
+
 ```bash
-export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
+export PWCLI="$PWD/scripts/playwright_cli.sh"
 ```
 
-用户范围的技能安装在 `$CODEX_HOME/skills` 下（默认：`~/.codex/skills`）。
+Windows 上该脚本需要 Git Bash（或在 WSL 中运行）；在 PowerShell 7 下可直接用等价的 `npx` 调用：
+
+```powershell
+npx --yes --package @playwright/cli playwright-cli --help
+```
+
+Codex 用户可选将技能链接到 `$CODEX_HOME/skills`（默认 `~/.codex/skills`，Windows 为 `%USERPROFILE%\.codex\skills`）；其他宿主按各自的技能目录安装。
 
 ## 快速开始
 
@@ -55,9 +62,11 @@ export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
 如果用户更喜欢全局安装，这也是有效的：
 
 ```bash
-npm install -g @playwright.cli@latest
+npm install -g @playwright/cli@latest
 playwright-cli --help
 ```
+
+PowerShell 7 下用 `npx --yes --package @playwright/cli playwright-cli <命令>` 替代上面示例中的 `"$PWCLI"`。
 
 ## 核心工作流程
 
@@ -120,7 +129,7 @@ playwright-cli --help
 
 ## 包装脚本
 
-包装脚本使用 `npx --package @playwright/cli playwright-cli`，这样 CLI 可以在没有全局安装的情况下运行：
+包装脚本使用 `npx --yes --package @playwright/cli playwright-cli`，这样 CLI 可以在没有全局安装的情况下运行。Windows 下请在 Git Bash 中运行该脚本，或改用上面的直接 `npx` 调用：
 
 ```bash
 "$PWCLI" --help
@@ -142,5 +151,5 @@ playwright-cli --help
 - 优先使用显式命令而不是 `eval` 和 `run-code`，除非需要。
 - 当您没有新的快照时，使用占位符引用如 `eX` 并说明原因；不要用 `run-code` 绕过引用。
 - 当视觉检查有帮助时使用 `--headed`。
-- 在此仓库中捕获产物时，使用 `output/playwright/` 并避免引入新的顶级产物文件夹。
+- 捕获产物时，保存到项目已有的输出或临时目录（例如 `output/playwright/`），避免在仓库中新增顶级产物文件夹。
 - 默认使用 CLI 命令和工作流程，而不是 Playwright 测试规范。

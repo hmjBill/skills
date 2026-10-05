@@ -2,7 +2,6 @@
 name: agent-browser
 description: 面向 AI 代理的浏览器自动化 CLI。用于网站导航、表单填写、按钮点击、截图、数据提取、Web 应用测试等浏览器任务。
 allowed-tools: Bash(agent-browser:*), Bash(npx agent-browser:*)
-hidden: true
 ---
 
 # 浏览器自动化
@@ -11,7 +10,11 @@ hidden: true
 
 安装：`npm i -g agent-browser && agent-browser install`
 
-##从这里开始
+如果尚未安装 CLI，按上述命令安装（`npx agent-browser ...` 亦可调用）；若确实无法安装（例如没有 Node 环境），改用 `playwright` 技能完成浏览器自动化。
+
+在 Windows 上，`agent-browser install` 依赖本机安装的 Chromium 内核浏览器（Chrome 或 Edge）。
+
+## 从这里开始
 
 本文件是发现存根，而非使用指南。在运行任何 `agent-browser` 命令之前，请从 CLI 加载实际的工作流内容：
 

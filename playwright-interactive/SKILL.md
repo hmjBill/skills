@@ -5,12 +5,18 @@ description: 通过 `js_repl` 实现持久化浏览器和 Electron 交互，用�
 
 # Playwright 交互
 
+## 适用环境
+
+本技能依赖 Codex CLI 的 `js_repl` 特性（在 `$CODEX_HOME/config.toml` 中设置 `[features] js_repl = true`，或用 `--enable js_repl` 启动），并要求以 `--sandbox danger-full-access` 运行。仅适用于 Codex 环境；在 OpenCode、Claude Code 等宿主中不可用，请改用 `playwright` 技能。
+
+注意：`danger-full-access` 会关闭沙箱，仅在受控环境中使用。
+
 使用持久的 `js_repl` Playwright 会话来调试本地 Web 或 Electron 应用，跨迭代保持相同的句柄活跃，并在不重启整个工具链的情况下运行功能和视觉 QA，除非进程所有权发生了变化。
 
 ## 前置条件
 
 - 此技能必须启用 `js_repl`。
-- 如果 `js_repl` 缺失，在 `~/.codex/config.toml` 中启用它：
+- 如果 `js_repl` 缺失，在 `$CODEX_HOME/config.toml`（默认 `~/.codex/config.toml`，Windows 为 `%USERPROFILE%\.codex\config.toml`）中启用它：
 
 ```toml
 [features]
@@ -28,10 +34,7 @@ js_repl = true
 ```bash
 test -f package.json || npm init -y
 npm install playwright
-# Playwright 交互
-# Playwright 交互
-# Playwright 交互
-# Playwright 交互
+# 安装后验证导入
 node -e "import('playwright').then(() => console.log('playwright import ok')).catch((error) => { console.error(error); process.exit(1); })"
 ```
 

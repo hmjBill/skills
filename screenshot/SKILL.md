@@ -10,20 +10,20 @@ description: 当用户明确要求桌面或系统截图（全屏、特定应用�
 
 1) 如果用户指定了路径，就保存到该路径。
 2) 如果用户要求截图但未提供路径，就保存到操作系统默认截图位置。
-3) 如果 Codex 为自身检查需要截图，就保存到临时目录。
+3) 如果代理/AI 助手为自身检查需要截图，就保存到临时目录。
 
-## Tool priority
+## 工具优先级
 
 - 当可用时，优先使用工具特定的截图能力（例如：用于 Figma 文件的 Figma MCP/skill，或用于浏览器与 Electron 应用的 Playwright/agent-browser 工具）。
 - 在被明确要求时、需要整机桌面截图时，或工具特定截图无法满足需求时，使用此 skill。
 - 否则，对于没有更好集成截图工具的桌面应用，将此 skill 作为默认方案。
 
-## macOS permission preflight (reduce repeated prompts)
+## macOS 权限预检（减少重复提示）
 
 在 macOS 上，在窗口/应用截图前先运行一次 preflight 辅助脚本。
 它会检查 Screen Recording 权限，说明为何需要该权限，并在同一处发起权限请求。
 
-这些辅助脚本会将 Swift 的 module cache 定向到 `$TMPDIR/codex-swift-module-cache`，
+这些辅助脚本会将 Swift 的 module cache 定向到固定缓存目录 `$TMPDIR/codex-swift-module-cache`，
 以避免额外的沙箱 module-cache 提示。
 
 ```bash
@@ -37,7 +37,7 @@ bash <path-to-skill>/scripts/ensure_macos_permissions.sh && \
 python3 <path-to-skill>/scripts/take_screenshot.py --app "Codex"
 ```
 
-对于 Codex 的检查执行，请将输出保存在临时目录：
+对于代理/AI 助手的检查执行，请将输出保存在临时目录：
 
 ```bash
 bash <path-to-skill>/scripts/ensure_macos_permissions.sh && \
@@ -46,7 +46,7 @@ python3 <path-to-skill>/scripts/take_screenshot.py --app "<App>" --mode temp
 
 使用随附脚本，避免重复推导各操作系统特定命令。
 
-## macOS and Linux (Python helper)
+## macOS 与 Linux（Python 辅助脚本）
 
 从仓库根目录运行该辅助脚本：
 
@@ -62,7 +62,7 @@ python3 <path-to-skill>/scripts/take_screenshot.py
 python3 <path-to-skill>/scripts/take_screenshot.py
 ```
 
-- 临时位置（Codex 视觉检查）：
+- 临时位置（代理/AI 助手视觉检查）：
 
 ```bash
 python3 <path-to-skill>/scripts/take_screenshot.py --mode temp
@@ -112,7 +112,7 @@ python3 <path-to-skill>/scripts/take_screenshot.py --window-id 12345
 
 脚本会为每次截图输出一个路径。若匹配到多个窗口或显示器，会输出多个路径（每行一个），并附加如 `-w<windowId>` 或 `-d<display>` 的后缀。请使用图像查看工具按顺序查看每个路径，仅在有需要或被要求时再处理图像。
 
-### Workflow examples
+### 工作流示例
 
 - “看看 <App> 并告诉我你看到了什么”：先截图到临时目录，再按顺序查看每个输出路径。
 
@@ -123,12 +123,12 @@ python3 <path-to-skill>/scripts/take_screenshot.py --app "<App>" --mode temp
 
 - “Figma 设计和实际实现不一致”：先用 Figma MCP/skill 抓取设计图，再用此 skill 抓取运行中的应用（通常保存到临时目录），并在做任何处理前先比较原始截图。
 
-### Multi-display behavior
+### 多显示器行为
 
 - 在 macOS 上，连接多显示器时，全屏截图会为每个显示器保存一个文件。
 - 在 Linux 和 Windows 上，全屏截图使用虚拟桌面（所有显示器合并为一张图）；需要时可用 `--region` 分离单个显示器。
 
-### Linux prerequisites and selection logic
+### Linux 前置条件与选择逻辑
 
 该辅助脚本会自动选择第一个可用工具：
 
@@ -143,13 +143,15 @@ python3 <path-to-skill>/scripts/take_screenshot.py --app "<App>" --mode temp
 `--app`、`--window-name` 与 `--list-windows` 仅支持 macOS。在 Linux 上，
 请使用 `--active-window`，或在可用时提供 `--window-id`。
 
-## Windows (PowerShell helper)
+## Windows（PowerShell 辅助脚本）
 
 运行 PowerShell 辅助脚本：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1
 ```
+
+以上命令在 Windows PowerShell 5.1（`powershell`）与 PowerShell 7+（`pwsh`）下均可运行；推荐使用 `pwsh`，将命令开头的 `powershell` 替换为 `pwsh` 即可。辅助脚本通过 `Add-Type` 加载 `System.Windows.Forms` 与 `System.Drawing`（Windows 自带），两种版本都受支持。
 
 常见用法：
 
@@ -159,7 +161,7 @@ powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1
 ```
 
-- 临时位置（Codex 视觉检查）：
+- 临时位置（代理/AI 助手视觉检查）：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1 -Mode temp
@@ -183,13 +185,13 @@ powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1 -Mode temp -ActiveWindow
 ```
 
-- 指定窗口句柄（仅在已提供时）：
+- 指定窗口句柄（可先用 `Get-Process` 获取，如 `(Get-Process -Name chrome | Where-Object MainWindowTitle).MainWindowHandle`；也可省略句柄，直接使用 `-ActiveWindow`）：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <path-to-skill>/scripts/take_screenshot.ps1 -WindowHandle 123456
 ```
 
-## Direct OS commands (fallbacks)
+## 直接操作系统命令（后备方案）
 
 当无法运行辅助脚本时，使用以下命令。
 
@@ -255,11 +257,11 @@ scrot -u output/window.png
 gnome-screenshot -w -f output/window.png
 ```
 
-## Error handling
+## 错误处理
 
 - 在 macOS 上，先运行 `bash <path-to-skill>/scripts/ensure_macos_permissions.sh`，以在同一处请求 Screen Recording 权限。
 - 如果在沙箱环境中看到 “screen capture checks are blocked in the sandbox”、“could not create image from display” 或 Swift `ModuleCache` 权限错误，请使用提升权限后重新运行命令。
 - 如果 macOS 应用/窗口截图未匹配到结果，请运行 `--list-windows --app "AppName"`，然后改用 `--window-id` 重试，并确保该应用在屏幕上可见。
-- 如果 Linux 的区域/窗口截图失败，请用 `command -v scrot`、`command -v gnome-screenshot` 和 `command -v import` 检查工具可用性。
+- 如果 Linux 的区域/窗口截图失败，请检查 `scrot`、`gnome-screenshot` 和 `import` 是否已在 PATH 中可用。
 - 如果在沙箱中保存到操作系统默认位置因权限错误失败，请使用提升权限后重新运行命令。
 - 始终在回复中报告已保存的文件路径。
