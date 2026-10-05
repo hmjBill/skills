@@ -14,14 +14,15 @@ description: 创建具有正确结构、渐进式披露和捆绑资源的新代�
    - 有哪些参考资料要包含？
 
 2. **起草技能** - 创建：
-   - SKILL.md，包含简洁说明
-   - 如果内容超过 500 行，则添加其他参考文件
+   - SKILL.md，包含简洁说明；正文建议不超过 100 行，硬上限 500 行，超过则拆分为单独的参考文件（如 REFERENCE.md 或 references/）
    - 如果需要确定性操作，则添加实用脚本
 
 3. **与用户审查** - 展示草稿并询问：
    - 这是否涵盖您的用例？
    - 是否有遗漏或不清楚的地方？
    - 是否有任何部分需要更详细/更简略？
+
+4. **运行校验** - 在仓库根按 AGENTS.md 运行 PowerShell 校验脚本，检查所有 SKILL.md 的 UTF-8 无 BOM、frontmatter 首行 `---`、`name` 与目录名一致。
 
 ## 技能结构
 
@@ -34,27 +35,37 @@ skill-name/
     └── helper.js
 ```
 
+## 本仓库硬约束
+
+本仓库（Agent Skills 收集与汉化）的 SKILL.md 必须满足：
+
+- 文件为 UTF-8 无 BOM；BOM 会让部分宿主把 frontmatter 判为缺失。
+- frontmatter 首行直接是 `---`，不要有空 frontmatter 或双 `---`。
+- `name` 只能匹配 `^[a-z0-9]+(-[a-z0-9]+)*$`，且必须与目录名完全一致；中文目录名或中文 name 会被宿主拒绝。
+- `description` 使用未加引号的短中文；避免长引号字符串和 `metadata` 字段。
+- 标题和正文使用中文；代码块、命令、路径、变量、wikilink、占位符、专有名词保持原样。
+
 ## SKILL.md 模板
 
 ```md
 ---
-name: write-a-skill
-description: 创建具有正确结构、渐进式披露和捆绑资源的新代理技能。当用户想要创建、编写或构建新技能时使用。
+name: skill-name
+description: 说明技能能做什么，以及何时触发（当用户想要……时使用）。
 ---
 
-# 编写技能
+# 技能标题
 
-## Quick start
+## 快速开始
 
-[Minimal working example]
+[最小可运行示例]
 
-## Workflows
+## 工作流程
 
-[Step-by-step processes with checklists for complex tasks]
+[用清单描述复杂任务的分步流程]
 
-## Advanced features
+## 高级功能
 
-[Link to separate files: See [REFERENCE.md](REFERENCE.md)]
+[链接到独立文件：见 [REFERENCE.md](REFERENCE.md)]
 ```
 
 ## 描述要求
@@ -71,18 +82,19 @@ description: 创建具有正确结构、渐进式披露和捆绑资源的新代�
 - 最多 1024 个字符
 - 用第三人称书写
 - 第一句：做什么
-- 第二句："Use when [specific triggers]"
+- 第二句：触发条件（本仓库用中文，如"当用户想要……时使用"）
+- 不加引号，不使用 `metadata` 字段
 
 **好示例**：
 
 ```
-Extract text and tables from PDF files, fill forms, merge documents. Use when working with PDF files or when user mentions PDFs, forms, or document extraction.
+从 PDF 文件中提取文本和表格、填写表单、合并文档。当用户处理 PDF 文件或提到 PDF、表单、文档提取时使用。
 ```
 
 **坏示例**：
 
 ```
-Helps with documents.
+帮助处理文档。
 ```
 
 坏示例让您的代理无法将其与其他文档技能区分开来。
@@ -95,13 +107,13 @@ Helps with documents.
 - 相同的代码会被反复生成
 - 错误需要显式处理
 
-脚本节省 token 并提高可靠性，而非生成代码。
+把重复逻辑固化为脚本，比每次生成代码更省 token、也更可靠。
 
 ## 何时拆分文件
 
 在以下情况下拆分为单独的文件：
 
-- SKILL.md 超过 100 行
+- SKILL.md 正文超过 100 行（硬上限 500 行，超过必须拆分）
 - 内容有不同的领域（金融 vs 销售 schema）
 - 高级功能很少需要
 
@@ -109,8 +121,11 @@ Helps with documents.
 
 起草后验证：
 
-- [ ] 描述包含触发器（"Use when..."）
-- [ ] SKILL.md 少于 100 行
+- [ ] 描述包含触发条件（如"当用户想要……时使用"）
+- [ ] 文件为 UTF-8 无 BOM，frontmatter 首行是 `---`
+- [ ] `name` 匹配 `^[a-z0-9]+(-[a-z0-9]+)*$` 且与目录名一致
+- [ ] `description` 为未加引号的短中文，且不含 `metadata`
+- [ ] SKILL.md 正文不超过 100 行（硬上限 500 行）
 - [ ] 没有时间敏感信息
 - [ ] 术语一致
 - [ ] 包含具体示例
