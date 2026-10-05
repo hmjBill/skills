@@ -138,7 +138,7 @@ J[/Trapezoid\]
 ### Basic Structure
 
 ```mermaid
-graph TB
+flowchart TB
     # Correct format with ID and display name
     subgraph id["Display Name"]
         direction TB
@@ -160,7 +160,7 @@ graph TB
 ### Nested Subgraphs
 
 ```mermaid
-graph TB
+flowchart TB
     subgraph outer["Outer Group"]
         direction TB
         
@@ -181,7 +181,7 @@ graph TB
 ### Connecting Subgraphs
 
 ```mermaid
-graph TB
+flowchart TB
     subgraph g1["Group 1"]
         A[Node A]
     end
@@ -278,11 +278,11 @@ style A,B,C fill:#d3f9d8,stroke:#2f9e44,stroke-width:2px
 ### Direction Codes
 
 ```mermaid
-graph TB    # Top to Bottom (vertical)
-graph BT    # Bottom to Top
-graph LR    # Left to Right (horizontal)
-graph RL    # Right to Left
-graph TD    # Top Down (same as TB)
+flowchart TB    # Top to Bottom (vertical)
+flowchart BT    # Bottom to Top
+flowchart LR    # Left to Right (horizontal)
+flowchart RL    # Right to Left
+flowchart TD    # Top Down (same as TB)
 ```
 
 ### Layout Control Tips
@@ -292,7 +292,7 @@ graph TD    # Top Down (same as TB)
 3. **Mixed directions:** Set different directions in subgraphs
 
 ```mermaid
-graph TB
+flowchart TB
     subgraph vertical["Vertical Flow"]
         direction TB
         A --> B --> C
@@ -309,7 +309,7 @@ graph TB
 ### Feedback Loop Pattern
 
 ```mermaid
-graph TB
+flowchart TB
     A[Start] --> B[Process]
     B --> C[Output]
     C -.->|Feedback| A
@@ -322,7 +322,7 @@ graph TB
 ### Swimlane Pattern
 
 ```mermaid
-graph TB
+flowchart TB
     subgraph lane1["Lane 1"]
         A[Step 1] --> B[Step 2]
     end
@@ -337,7 +337,7 @@ graph TB
 ### Hub and Spoke
 
 ```mermaid
-graph TB
+flowchart TB
     Hub[Central Hub]
     
     A[Spoke 1] --> Hub
@@ -349,7 +349,7 @@ graph TB
 ### Decision Tree
 
 ```mermaid
-graph TB
+flowchart TB
     Start[Start] --> Decision{Decision Point?}
     Decision -->|Option A| PathA[Path A]
     Decision -->|Option B| PathB[Path B]
@@ -363,7 +363,7 @@ graph TB
 ### Comparison Layout
 
 ```mermaid
-graph TB
+flowchart TB
     Title[Comparison]
     
     subgraph left["System A"]
@@ -432,7 +432,7 @@ graph TB
 
 **Solutions:**
 - Verify all style declarations use valid syntax
-- Check direction is set in graph declaration or subgraph
+- Check direction is set in the flowchart declaration or subgraph
 - Ensure all node IDs are defined before referencing
 
 ### Validation Checklist

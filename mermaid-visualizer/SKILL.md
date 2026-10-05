@@ -15,7 +15,7 @@ description: 将文本内容转换为 Mermaid 图表，适用于流程、架构�
 
 1. **分析内容** — 识别关键概念、关系和流程
 2. **选择图表类型** — 选择最合适的可视化形式（见下方图表类型）
-3. **选择配置** — 确定布局、细节级别和样式
+3. **选择表达约定** — 确定布局、细节级别和样式（可选，仅为模型遵循的生成约定）
 4. **生成图表** — 创建语法正确的 Mermaid 代码
 5. **以 Markdown 输出** — 用正确的代码围栏包裹，可附带简要说明
 
@@ -27,7 +27,7 @@ description: 将文本内容转换为 Mermaid 图表，适用于流程、架构�
 
 ## 图表类型
 
-### 1. 流程图（graph TB/LR）
+### 1. 流程图（flowchart TB/LR）
 **最适用：** 工作流、决策树、顺序流程、AI Agent 架构
 
 **使用场景：** 内容描述步骤、阶段或一系列操作
@@ -38,12 +38,12 @@ description: 将文本内容转换为 Mermaid 图表，适用于流程、架构�
 - 反馈循环与分支
 - 颜色编码的阶段
 
-**配置选项：**
-- `layout`："vertical" (TB)、"horizontal" (LR)
-- `detail`："simple"（仅核心步骤）、"standard"（含描述）、"detailed"（含注释）
-- `style`："minimal"、"professional"、"colorful"
+**可选表达约定（由模型遵循，非 Mermaid 配置）：**
+- 布局方向："vertical" (TB)、"horizontal" (LR)
+- 细节级别："simple"（仅核心步骤）、"standard"（含描述）、"detailed"（含注释）
+- 样式："minimal"、"professional"、"colorful"
 
-### 2. 循环流程图（graph TD 环形布局）
+### 2. 循环流程图（反馈与迭代）
 **最适用：** 循环过程、持续改进循环、Agent 反馈系统
 
 **使用场景：** 内容强调迭代、反馈或循环关系
@@ -53,7 +53,9 @@ description: 将文本内容转换为 Mermaid 图表，适用于流程、架构�
 - 弧形反馈箭头
 - 清晰的循环指示
 
-### 3. 对比图（graph TB 平行路径）
+说明：Mermaid 没有专用的"环形布局"配置；循环感通过反馈箭头和节点的环绕排布近似表达。
+
+### 3. 对比图（flowchart TB）
 **最适用：** 前后对比、A vs B 分析、传统与现代系统对比
 
 **使用场景：** 内容对比两种或多种方案或系统
@@ -133,15 +135,15 @@ description: 将文本内容转换为 Mermaid 图表，适用于流程、架构�
 - `==>` 粗箭头（用于强调）
 - `~~~` 隐形链接（仅用于布局）
 
-完整语法参考和边缘情况参见 [references/syntax-rules.md](references/syntax-rules.md)
+完整语法参考和边缘情况参见 [references/syntax-rules.md](references/syntax-rules.md)（相对技能目录，在技能目录下运行时可访问）
 
-## 配置选项
+## 表达约定（可选）
 
-所有图表接受以下参数：
+以下为可选的表达约定（由模型遵循），**不是 Mermaid 语法或渲染器配置**。Mermaid 本身不接受这些参数，它们仅用于指导生成时的选择。
 
 **布局：**
-- `direction`："vertical" (TB)、"horizontal" (LR)、"right-to-left" (RL)、"bottom-to-top" (BT)
-- `aspect`："portrait"（默认）、"landscape"（宽幅）、"square"
+- 方向："vertical" (TB)、"horizontal" (LR)、"right-to-left" (RL)、"bottom-to-top" (BT)
+- 幅面："portrait"（默认）、"landscape"（宽幅）、"square"
 
 **细节级别：**
 - `simple`：仅核心元素，最少标签
@@ -155,23 +157,23 @@ description: 将文本内容转换为 Mermaid 图表，适用于流程、架构�
 - `colorful`：鲜艳颜色，高对比度
 - `academic`：正式风格，适用于论文/文档
 
-**额外选项：**
-- `show_legend`：true/false — 包含颜色/符号图例
-- `numbered`：true/false — 为步骤添加序号
-- `title`：字符串 — 添加图表标题
+**额外约定：**
+- 图例：是否包含颜色/符号图例
+- 编号：是否为步骤添加序号
+- 标题：是否添加图表标题
 
 ## 使用模式示例
 
 **模式 1：基本请求**
 ```
 用户："可视化软件开发生命周期"
-响应：[分析 → 选择 graph TB → 以 standard 细节级别生成]
+响应：[分析 → 选择 flowchart TB → 按 standard 细节约定生成]
 ```
 
-**模式 2：带配置**
+**模式 2：带表达约定**
 ```
 用户："创建一个水平销售流程图，需要大量细节"
-响应：[分析 → 选择 graph LR → 以 detailed 细节级别生成]
+响应：[分析 → 选择 flowchart LR → 按 detailed 细节约定生成]
 ```
 
 **模式 3：对比**
@@ -192,9 +194,9 @@ description: 将文本内容转换为 Mermaid 图表，适用于流程、架构�
    - 考虑用户的展示场景
    - 模糊时默认使用流程图
 
-3. **选择配置**
-   - 应用用户指定的选项
-   - 未指定选项使用合理默认值
+3. **选择表达约定**
+   - 应用用户指定的约定（非 Mermaid 配置）
+   - 未指定时使用合理默认值
    - 优化可读性
 
 4. **生成 Mermaid 代码**
@@ -229,7 +231,7 @@ description: 将文本内容转换为 Mermaid 图表，适用于流程、架构�
 
 ### 泳道模式（分组）
 ```mermaid
-graph TB
+flowchart TB
     subgraph core["核心流程"]
         A --> B --> C
     end
@@ -242,7 +244,7 @@ graph TB
 
 ### 反馈循环模式
 ```mermaid
-graph TB
+flowchart TB
     A[开始] --> B[处理]
     B --> C[结束]
     C -.->|反馈| A
@@ -250,7 +252,7 @@ graph TB
 
 ### 中心辐射模式
 ```mermaid
-graph TB
+flowchart TB
     Central[中心]
     A[分支 1] --> Central
     B[分支 2] --> Central
