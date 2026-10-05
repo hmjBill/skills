@@ -9,12 +9,12 @@ description: 将对话内容提炼为 AI-Wiki 持久笔记，按 PARA 结构归�
 
 ## 用途
 
-本技能替代 wiki-crystallize。从对话中提取持久知识，创建为 AI-Wiki 格式规范的笔记。
+从对话中提取持久知识，创建为 AI-Wiki 格式规范的笔记。
 
 ## 步骤
 
 1. **分析对话内容** — 从对话或输入中识别可提取的知识
-2. **分类内容类型** — 判断属于：resource（资源）、area（领域）、project（项目）、media（媒体）、person（人物）、inbox（收件箱）
+2. **分类内容类型** — 判断属于：资源（resource）、领域（area）、项目（project）、媒体（media）、人物（person）、收件箱（inbox）
 3. **检查已有笔记** — 在笔记库中搜索是否已有覆盖该内容的笔记：
    - 若已存在，建议更新现有笔记（追加，不替换）
 4. **创建新笔记**：
@@ -23,7 +23,7 @@ description: 将对话内容提炼为 AI-Wiki 持久笔记，按 PARA 结构归�
    - 仅使用合法枚举值填写 frontmatter
    - 填写内容（提炼而非转录 — 保留持久知识，丢弃脚手架内容）
    - 按模板规则添加 `## 相关链接`（知识笔记 1-3 条高可信度跨领域链接）
-   - 更新目录 `README.md` `## 导航入口`
+   - 仅新建笔记时更新目录 `README.md` 的 `## 导航入口`；条目保持一行一个 wikilink，不附加说明文字
 5. **报告结果** — 告知用户创建或更新了什么
 
 ## 提炼原则
@@ -38,7 +38,7 @@ description: 将对话内容提炼为 AI-Wiki 持久笔记，按 PARA 结构归�
 - 仅使用合法枚举值
 - 知识笔记：1-3 条高可信度跨领域链接
 - 执行笔记：链接到最近的 README/MOP
-- 禁止在 `00_系统/` 或 `09_受控信息/` 中创建笔记，除非用户明确要求
+- `00_系统/` 与 `09_受控信息/` 为受保护目录：未经用户明确要求，禁止创建或修改其中文件
 - 创建新文件后必须更新对应目录的 README 导航
 - frontmatter 修改使用 `patchField`/`patchFields`，禁止使用 `processFrontMatter`
 
@@ -56,4 +56,4 @@ description: 将对话内容提炼为 AI-Wiki 持久笔记，按 PARA 结构归�
 
 - 模板目录：`00_系统/模板/`
 - 枚举注册表：`.obsidian/types.json`
-- 三层链接体系：README 导航 → 高可信度 wikilink（知识笔记 1-3 条）→ DataviewJS
+- 三层链接体系：README 导航 → 高可信度 wikilink（知识笔记 1-3 条）→ DataviewJS（需启用 Dataview 插件；未启用时降级为普通 wikilink）
