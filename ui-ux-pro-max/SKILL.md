@@ -1,11 +1,11 @@
 ---
 name: ui-ux-pro-max
-description: Web 和移动端的 UI/UX 设计智能。包含 50+ 风格、161 色板、57 字体搭配、161 产品类型、99 UX 指南和 25 图表类型，覆盖 10 种技术栈。
+description: Web 和移动端的 UI/UX 设计智能。包含 84 种风格、161 色板、73 字体搭配、161 产品类型、99 UX 指南和 25 图表类型，覆盖 16 种技术栈。
 ---
 
 # UI-UX 专家
 
-Web 和移动应用综合设计指南。包含 50+ 样式、161 个配色方案、57 种字体搭配、161 种产品类型及其推理规则、99 条 UX 指南，以及横跨 10 个技术栈的 25 种图表类型。可搜索的数据库，带有基于优先级的推荐。
+Web 和移动应用综合设计指南。包含 84 种样式、161 个配色方案、73 种字体搭配、161 种产品类型及其推理规则、99 条 UX 指南，以及横跨 16 种技术栈的 25 种图表类型。可搜索的数据库，带有基于优先级的推荐。
 
 ## 适用场景
 
@@ -301,7 +301,7 @@ Web 和移动应用综合设计指南。包含 50+ 样式、161 个配色方案�
 
 ## 如何使用
 
-使用下面的 CLI 工具搜索特定领域。
+使用下面的 CLI 工具搜索特定领域。以下命令均在技能目录（`ui-ux-pro-max/`）下运行；macOS/Linux 如无 `python` 命令，可改用 `python3`。
 
 ---
 
@@ -310,7 +310,7 @@ Web 和移动应用综合设计指南。包含 50+ 样式、161 个配色方案�
 检查 Python 是否已安装：
 
 ```bash
-python3 --version || python --version
+python --version || python3 --version
 ```
 
 如果 Python 未安装，请根据用户的操作系统安装：
@@ -356,14 +356,14 @@ winget install Python.Python.3.12
 - **产品类型**：娱乐（社交、视频、音乐、游戏）、工具（扫描仪、编辑器、转换器）、生产力（任务管理器、笔记、日历）或混合型
 - **目标受众**：C 端消费者用户；考虑年龄组、使用场景（通勤、休闲、工作）
 - **风格关键词**：活泼、鲜艳、简约、深色模式、内容优先、沉浸式等
-- **技术栈**：React Native（此项目唯一技术栈）
+- **技术栈**：项目实际使用的技术栈，见"可用技术栈"（React、Next.js、Vue、Svelte、Astro、React Native、Flutter、SwiftUI、Angular、Laravel 等）
 
 ### 步骤 2：生成设计系统（必需）
 
 **始终使用 `--design-system`** 获取带推理的全面推荐：
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<product_type> <industry> <keywords>" --design-system [-p "Project Name"]
+python scripts/search.py "<product_type> <industry> <keywords>" --design-system [-p "Project Name"]
 ```
 
 此命令：
@@ -374,7 +374,7 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<product_type> <industry> <keywo
 
 **示例：**
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "beauty spa wellness service" --design-system -p "Serenity Spa"
+python scripts/search.py "beauty spa wellness service" --design-system -p "Serenity Spa"
 ```
 
 ### 步骤 2b：持久化设计系统（主文件 + 覆盖模式）
@@ -382,7 +382,7 @@ python3 skills/ui-ux-pro-max/scripts/search.py "beauty spa wellness service" --d
 要将设计系统**跨会话分层检索**，请添加 `--persist`：
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "Project Name"
+python scripts/search.py "<query>" --design-system --persist -p "Project Name"
 ```
 
 这将创建：
@@ -391,7 +391,7 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persi
 
 **带页面特定覆盖：**
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "Project Name" --page "dashboard"
+python scripts/search.py "<query>" --design-system --persist -p "Project Name" --page "dashboard"
 ```
 
 这还将创建：
@@ -416,7 +416,7 @@ Now, generate the code...
 获取设计系统后，使用领域搜索获取额外详情：
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> [-n <max_results>]
+python scripts/search.py "<keyword>" --domain <domain> [-n <max_results>]
 ```
 
 **何时使用详细搜索：**
@@ -434,14 +434,14 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> [-n
 | 着陆页结构 | `landing` | `--domain landing "hero social-proof"` |
 | React Native 性能 | `react` | `--domain react "rerender memo list"` |
 | 应用界面无障碍 | `web` | `--domain web "accessibilityLabel touch safe-areas"` |
-| AI 提示词 / CSS 关键词 | `prompt` | `--domain prompt "minimalism"` |
+| 图标选择 | `icons` | `--domain icons "navigation social"` |
 
-### 步骤 4：技术栈指南（React Native）
+### 步骤 4：技术栈指南
 
-获取特定于 React Native 实现的最佳实践：
+获取特定于所选技术栈实现的最佳实践（示例为 React Native）：
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-native
+python scripts/search.py "<keyword>" --stack react-native
 ```
 
 ---
@@ -462,13 +462,28 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-native
 | `google-fonts` | 单个 Google 字体查询 | sans serif、monospace、japanese、variable font、popular |
 | `react` | React/Next.js 性能 | waterfall、bundle、suspense、memo、rerender、cache |
 | `web` | 应用界面指南（iOS/Android/React Native）| accessibilityLabel、touch targets、safe areas、Dynamic Type |
-| `prompt` | AI 提示词、CSS 关键词 | （风格名称）|
+| `icons` | 图标库与用法 | lucide、heroicons、navigation、social、svg icon |
 
 ### 可用技术栈
 
 | 技术栈 | 重点 |
 |-------|-------|
+| `react` | 组件、状态与渲染性能 |
+| `nextjs` | 路由、数据获取与性能 |
+| `vue` | 组件与组合式 API |
+| `svelte` | 响应式与性能 |
+| `astro` | 岛屿架构与内容站点 |
+| `swiftui` | 声明式界面与导航 |
 | `react-native` | 组件、导航、列表 |
+| `flutter` | Widget、布局与性能 |
+| `nuxtjs` | 路由、数据获取与渲染 |
+| `nuxt-ui` | Nuxt UI 组件库集成 |
+| `html-tailwind` | 原生 HTML + Tailwind 样式 |
+| `shadcn` | shadcn/ui 组件集成 |
+| `jetpack-compose` | Android Compose 界面 |
+| `threejs` | 3D 场景与性能 |
+| `angular` | 组件、模板与依赖注入 |
+| `laravel` | Blade 模板与前端集成 |
 
 ---
 
@@ -480,12 +495,12 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-native
 - 产品类型：工具（AI 搜索引擎）
 - 目标受众：寻求快速、智能搜索的 C 端用户
 - 风格关键词：现代、简约、内容优先、深色模式
-- 技术栈：React Native
+- 技术栈：React Native（示例；按项目实际选择）
 
 ### 步骤 2：生成设计系统（必需）
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" --design-system -p "AI Search"
+python scripts/search.py "AI search tool modern minimal" --design-system -p "AI Search"
 ```
 
 **输出：** 带模式、风格、颜色、排版、效果和反模式的完整设计系统。
@@ -494,16 +509,16 @@ python3 skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" -
 
 ```bash
 # UI-UX 专家
-python3 skills/ui-ux-pro-max/scripts/search.py "minimalism dark mode" --domain style
+python scripts/search.py "minimalism dark mode" --domain style
 
 # UI-UX 专家
-python3 skills/ui-ux-pro-max/scripts/search.py "search loading animation" --domain ux
+python scripts/search.py "search loading animation" --domain ux
 ```
 
 ### 步骤 4：技术栈指南
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "list performance navigation" --stack react-native
+python scripts/search.py "list performance navigation" --stack react-native
 ```
 
 **然后：** 综合设计系统 + 详细搜索并实现设计。
@@ -516,10 +531,10 @@ python3 skills/ui-ux-pro-max/scripts/search.py "list performance navigation" --s
 
 ```bash
 # UI-UX 专家
-python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system
+python scripts/search.py "fintech crypto" --design-system
 
 # UI-UX 专家
-python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system -f markdown
+python scripts/search.py "fintech crypto" --design-system -f markdown
 ```
 
 ---
@@ -531,7 +546,7 @@ python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system 
 - 使用**多维关键词**——结合产品 + 行业 + 语气 + 密度："entertainment social vibrant content-dense" 而不仅仅是 "app"
 - 为同一需求尝试不同关键词："playful neon" → "vibrant dark" → "content-first minimal"
 - 首先使用 `--design-system` 获取完整推荐，然后使用 `--domain` 深入你不确定的任何维度
-- 始终添加 `--stack react-native` 以获取特定于实现的指导
+- 需要实现细节时按项目技术栈添加 `--stack <stack>`（如 `--stack react`、`--stack react-native`）以获取特定于实现的指导
 
 ### 常见问题
 

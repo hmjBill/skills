@@ -37,11 +37,11 @@ description: 为不熟悉的代码仓库生成全面的分层代码地图。高�
      - 文档：`docs/**`、`*.md`（需要的根 `README.md` 除外）、`LICENSE`
      - 构建/依赖：`node_modules/**`、`dist/**`、`build/**`、`*.min.js`
    - 自动尊重 `.gitignore`
-3. **运行 codemap.mjs init**：
+3. **运行 codemap.mjs init**（在技能目录下运行；`--root` 指向目标仓库）：
 
 ```bash
-node ~/.config/opencode/skills/codemap/scripts/codemap.mjs init \
-  --root ./ \
+node scripts/codemap.mjs init \
+  --root <目标仓库路径> \
   --include "src/**/*.ts" \
   --exclude "**/*.test.ts" --exclude "dist/**" --exclude "node_modules/**"
 ```
@@ -50,15 +50,16 @@ node ~/.config/opencode/skills/codemap/scripts/codemap.mjs init \
 - `.slim/codemap.json` — 用于变更检测的文件和文件夹哈希
 - 所有相关子目录中的空 `codemap.md` 文件
 
-4. **将代码地图编写委托给 Fixer 代理** — 每个文件夹生成一个 fixer 来阅读代码并创建或更新其特定的 `codemap.md` 文件。
+4. **将代码地图编写委托给宿主提供的子代理机制（如 Task/task）** — 每个文件夹一个子代理，阅读代码并创建或更新其特定的 `codemap.md` 文件；宿主不支持子代理时顺序执行。
 
 ### 步骤 3：检测变更（如果状态已存在）
 
 1. **运行 codemap.mjs changes** 查看变化：
 
 ```bash
-node ~/.config/opencode/skills/codemap/scripts/codemap.mjs changes \
-  --root ./
+# 在技能目录下运行；--root 指向目标仓库
+node scripts/codemap.mjs changes \
+  --root <目标仓库路径>
 ```
 
 2. **审查输出** — 显示：
@@ -67,17 +68,18 @@ node ~/.config/opencode/skills/codemap/scripts/codemap.mjs changes \
    - 修改文件
    - 受影响的文件夹
 
-3. **仅更新受影响的代码地图** — 为每个受影响的文件夹生成一个 fixer 来更新其 `codemap.md`。
+3. **仅更新受影响的代码地图** — 为每个受影响的文件夹生成一个子代理来更新其 `codemap.md`（不支持子代理时顺序执行）。
 4. **运行 update 保存新状态**：
 
 ```bash
-node ~/.config/opencode/skills/codemap/scripts/codemap.mjs update \
-  --root ./
+# 在技能目录下运行；--root 指向目标仓库
+node scripts/codemap.mjs update \
+  --root <目标仓库路径>
 ```
 
 ### 步骤 4：完成仓库地图集（根代码地图）
 
-所有特定目录映射完成后，协调器必须创建或更新根 `codemap.md`。此文件作为任何进入仓库的代理或人类的**主入口点**。
+所有特定目录映射完成后，调度方必须创建或更新根 `codemap.md`。此文件作为任何进入仓库的代理或人类的**主入口点**。
 
 1. **映射根资源**：记录根级文件（如 `package.json`、`index.ts`、`plugin.json`）和项目的整体目的。
 2. **聚合子地图**：创建"仓库目录地图"部分。对于每个有 `codemap.md` 的文件夹，提取其**职责**摘要并将其包含在根地图的表格或列表中。
@@ -108,7 +110,7 @@ node ~/.config/opencode/skills/codemap/scripts/codemap.mjs update \
 
 ## 代码地图内容
 
-Fixer 负责在此工作流程中编写 `codemap.md` 文件。使用精确的技术术语记录实现：
+`codemap.md` 由宿主提供的子代理机制（不支持时由当前代理顺序执行）编写。使用精确的技术术语记录实现：
 
 - **职责** — 使用标准软件工程术语定义此目录的特定角色（如"服务层"、"数据访问对象"、"中间件"）。
 - **设计模式** — 识别并命名使用的特定模式（如"观察者"、"单例"、"工厂"、"策略"）。详细说明抽象和接口。
@@ -125,8 +127,8 @@ Fixer 负责在此工作流程中编写 `codemap.md` 文件。使用精确的技
 
 ## 设计
 每个代理是一个提示 + 权限集。配置系统使用：
-- 默认提示（orchestrator.ts、explorer.ts 等）
-- 来自 ~/.config/opencode/oh-my-opencode-slim.json 的用户覆盖
+- 默认提示（各代理的内置提示）
+- 来自用户配置文件的覆盖
 - 技能/MCP 访问控制的权限通配符
 
 ## 流程
@@ -134,7 +136,7 @@ Fixer 负责在此工作流程中编写 `codemap.md` 文件。使用精确的技
 2. 读取用户配置预设
 3. 合并默认值与覆盖
 4. 应用权限规则（通配符扩展）
-5. 返回代理配置给 OpenCode
+5. 返回代理配置给宿主
 
 ## 集成
 - 被消费：主插件（src/index.ts）
@@ -147,17 +149,17 @@ Fixer 负责在此工作流程中编写 `codemap.md` 文件。使用精确的技
 # 代码地图
 
 ## 项目职责
-面向 OpenCode 的高性能、低延迟代理编排插件，专注于专业子代理委托和多路复用器辅助的子会话。
+面向宿主的高性能、低延迟代理编排插件，专注于专业子代理委托和多路复用器辅助的子会话。
 
 ## 系统入口点
-- `src/index.ts`：插件初始化和 OpenCode 集成。
+- `src/index.ts`：插件初始化和宿主集成。
 - `package.json`：依赖清单和构建脚本。
-- `oh-my-opencode-slim.json`：用户配置模式。
+- `config.json`：用户配置模式。
 
 ## 目录地图（聚合）
 | 目录 | 职责摘要 | 详细地图 |
 |-----------|------------------------|--------------|
-| `src/agents/` | 定义代理个性（协调器、探索者）并管理模型路由。 | [查看地图](src/agents/codemap.md) |
-| `src/features/` | tmux 集成和会话状态的核心逻辑。 | [查看地图](src/features/codemap.md) |
-| `src/config/` | 实现配置加载管道和环境变量注入。 | [查看地图](src/config/codemap.md) |
+| `path/to/module-a/` | 模块 A 的职责摘要。 | [查看地图](path/to/module-a/codemap.md) |
+| `path/to/module-b/` | 模块 B 的职责摘要。 | [查看地图](path/to/module-b/codemap.md) |
+| `path/to/module-c/` | 模块 C 的职责摘要。 | [查看地图](path/to/module-c/codemap.md) |
 ```

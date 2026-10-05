@@ -5,7 +5,7 @@ description: 创建包含章节、问题、解决方案和说明的练习目录�
 
 # 练习脚手架
 
-创建能够通过 `pnpm ai-hero-cli internal lint` 检查的练习目录结构，然后使用 `git commit` 提交。
+创建能够通过练习 lint 检查的练习目录结构，然后使用 `git commit` 提交。`pnpm ai-hero-cli internal lint` 属于 ai-hero 课程环境；通用仓库改用仓库自带的 lint 命令，没有则跳过后续 lint 步骤。
 
 ## 目录命名规范
 
@@ -20,7 +20,7 @@ description: 创建包含章节、问题、解决方案和说明的练习目录�
 
 - `problem/` - 学生工作区，包含 TODOs
 - `solution/` - 参考实现
-- `explainer/` - 概念性材料，无 TODOs
+- `explainer/` - 概念性材料，无 TODOs；需要多个讲解时使用编号变体 `explainer.1/`、`explainer.2/`
 
 创建占位时，默认使用 `explainer/`，除非计划另有指定。
 
@@ -39,28 +39,28 @@ description: 创建包含章节、问题、解决方案和说明的练习目录�
 Description here
 ```
 
-如果子文件夹包含代码，还需要一个 `main.ts`（>1 行）。但对于占位符，仅有 readme 的练习即可。
+如果子文件夹包含代码，还需要一个 `main.ts`（>1 行）；纯占位（仅含 readme）的子文件夹不需要 `main.ts`。
 
 ## 工作流程
 
 1. **解析计划** - 提取章节名称、练习名称和变体类型
-2. **创建目录** - 使用 `mkdir -p` 为每个路径创建目录
+2. **创建目录** - macOS / Linux 用 `mkdir -p`，Windows PowerShell 7 用 `New-Item -ItemType Directory -Force -Path`，逐一创建每个路径
 3. **创建占位 readme** - 每个变体文件夹一个 `readme.md`，包含标题
-4. **运行 lint** - 使用 `pnpm ai-hero-cli internal lint` 进行验证
+4. **运行 lint** - 使用仓库自带的 lint 命令验证（ai-hero 课程环境为 `pnpm ai-hero-cli internal lint`）；没有 lint 命令则跳过
 5. **修复错误** - 迭代直到 lint 通过
 
 ## Lint 规则摘要
 
-Linter（`pnpm ai-hero-cli internal lint`）检查：
+Linter（ai-hero 课程环境为 `pnpm ai-hero-cli internal lint`，通用仓库以仓库自带 lint 为准）检查：
 
 - 每个练习都有子文件夹（`problem/`、`solution/`、`explainer/`）
-- 至少存在 `problem/`、`explainer/` 或 `explainer.1/` 之一
+- 至少存在 `problem/`、`explainer/` 或编号讲解 `explainer.1/` 之一
 - 主子文件夹中存在非空的 `readme.md`
 - 不存在 `.gitkeep` 文件
 - 不存在 `speaker-notes.md` 文件
 - readme 中没有失效链接
 - readme 中没有 `pnpm run exercise` 命令
-- 每个子文件夹都需要 `main.ts`，除非仅为 readme
+- 包含代码的子文件夹都需要 `main.ts`；仅含 readme 的占位子文件夹除外
 
 ## 移动/重命名练习
 
@@ -90,9 +90,21 @@ Section 05: Memory Skill Building
 创建：
 
 ```bash
+# macOS / Linux
 mkdir -p exercises/05-memory-skill-building/05.01-introduction-to-memory/explainer
-mkdir -p exercises/05-memory-skill-building/05.02-short-term-memory/{explainer,problem,solution}
+mkdir -p exercises/05-memory-skill-building/05.02-short-term-memory/explainer
+mkdir -p exercises/05-memory-skill-building/05.02-short-term-memory/problem
+mkdir -p exercises/05-memory-skill-building/05.02-short-term-memory/solution
 mkdir -p exercises/05-memory-skill-building/05.03-long-term-memory/explainer
+```
+
+```powershell
+# Windows PowerShell 7
+New-Item -ItemType Directory -Force -Path exercises/05-memory-skill-building/05.01-introduction-to-memory/explainer
+New-Item -ItemType Directory -Force -Path exercises/05-memory-skill-building/05.02-short-term-memory/explainer
+New-Item -ItemType Directory -Force -Path exercises/05-memory-skill-building/05.02-short-term-memory/problem
+New-Item -ItemType Directory -Force -Path exercises/05-memory-skill-building/05.02-short-term-memory/solution
+New-Item -ItemType Directory -Force -Path exercises/05-memory-skill-building/05.03-long-term-memory/explainer
 ```
 
 然后创建 readme 占位符：
