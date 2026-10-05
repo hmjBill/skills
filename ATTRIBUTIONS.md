@@ -25,14 +25,12 @@
 | ui-styling | https://github.com/Dimnas/skill-ui-styling | MIT（SKILL.md 声明）/ Apache 2.0（LICENSE.txt） |
 | ui-ux-pro-max | https://github.com/Dimnas/skill-ui-ux-pro-max | 未明确 |
 
-### Matt Pocock 系列（via cc-pocock-picks）
+### Matt Pocock 系列（原经 cc-pocock-picks 镜像引入，该镜像已失效）
 
 | Skill | 来源仓库 | 许可证 |
 |-------|---------|--------|
-| grill-me | https://github.com/x-zheng16/cc-pocock-picks（上游: mattpocock/skills） | MIT |
-| improve-codebase-architecture | https://github.com/x-zheng16/cc-pocock-picks（上游: mattpocock/skills） | MIT |
-| tdd | https://github.com/x-zheng16/cc-pocock-picks（上游: mattpocock/skills） | MIT |
-| zoom-out | https://github.com/x-zheng16/cc-pocock-picks（上游: mattpocock/skills） | MIT |
+| improve-codebase-architecture | https://github.com/mattpocock/skills | MIT |
+| tdd | https://github.com/mattpocock/skills | MIT |
 
 ### LLM Wiki Skills 系列（已适配 AI-Wiki）
 
@@ -103,7 +101,6 @@
 | diagnose | https://github.com/Digidai/product-manager-skills | 未明确 |
 | env-bootstrap | https://github.com/NathanMaine/memoriant-env-bootstrap-skill | 未明确 |
 | git-guardrails-claude-code | https://github.com/tombakerjr/claude-code-workflows | 未明确 |
-| gstack | https://github.com/fagemx/gstack-game | 未明确 |
 | handoff | 未确认 | 未明确 |
 | obsidian-vault | https://github.com/raja-patnaik/obsidian-agent | 未明确 |
 | prototype | https://github.com/nexu-io/open-design | 未明确 |

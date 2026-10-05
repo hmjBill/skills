@@ -6,25 +6,23 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（69 个，68 个含 SKILL.md）
+## 收录条目（66 个，均含 SKILL.md）
 
 ### 开发与架构
 
 | Skill | 说明 |
 |-------|------|
-| [caveman](caveman/SKILL.md) | 用最原始的方式解决问题，拒绝过度工程 |
+| [caveman](caveman/SKILL.md) | 极致压缩的沟通模式，大幅减少 token 消耗 |
 | [codemap](codemap/SKILL.md) | 生成代码地图，快速理解项目结构 |
 | [improve-codebase-architecture](improve-codebase-architecture/SKILL.md) | 改善代码库架构 |
 | [migrate-to-shoehorn](migrate-to-shoehorn/SKILL.md) | 迁移到 Shoehorn 框架 |
 | [request-refactor-plan](request-refactor-plan/SKILL.md) | 请求重构计划 |
 | [simplify](simplify/SKILL.md) | 简化代码，提升可读性和可维护性 |
-| [zoom-out](zoom-out/SKILL.md) | 纵观全局，制定架构策略 |
 
 ### 测试与质量
 
 | Skill | 说明 |
 |-------|------|
-| [grill-me](grill-me/SKILL.md) | 对计划或设计进行深度追问 |
 | [grill-with-docs](grill-with-docs/SKILL.md) | 结合项目文档进行追问 |
 | [prototype](prototype/SKILL.md) | 快速原型开发 |
 | [qa](qa/SKILL.md) | 质量保证与测试 |
@@ -79,7 +77,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [gh-address-comments](gh-address-comments/SKILL.md) | 处理 GitHub PR Review 评论 |
 | [gh-fix-ci](gh-fix-ci/SKILL.md) | 修复 GitHub Actions CI 失败 |
 | [git-guardrails-claude-code](git-guardrails-claude-code/SKILL.md) | Git 操作护栏 |
-| [to-issues](to-issues/SKILL.md) | 转换为 GitHub Issues |
+| [to-issues](to-issues/SKILL.md) | 将计划拆分为可独立领取的 Issue |
 | [workflow-checker](workflow-checker/SKILL.md) | 工作流检查 |
 
 ### 文档与写作
@@ -130,7 +128,6 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 |-------|------|
 | [env-bootstrap](env-bootstrap/SKILL.md) | 环境引导配置 |
 | [defuddle](defuddle/SKILL.md) | 从网页提取干净 Markdown 内容 |
-| [gstack](gstack/llms.txt) | 技术栈管理 |
 | [setup-matt-pocock-skills](setup-matt-pocock-skills/SKILL.md) | 安装 Matt Pocock Skills |
 | [setup-pre-commit](setup-pre-commit/SKILL.md) | 配置 pre-commit 钩子 |
 | [write-a-skill](write-a-skill/SKILL.md) | 创建新的 Skill |

@@ -4,7 +4,7 @@ Agent Skills 收集与汉化仓库；无构建系统、无测试、无 CI，改�
 
 ## 仓库形状
 
-- 68 个顶层 skill 条目；67 个含 `SKILL.md`，`gstack` 只有 `llms.txt`。
+- 66 个顶层 skill 条目，均含 `SKILL.md`。
 - `SKILL.md` 是核心文件；部分 skill 还有按需加载的参考文件，如 `tdd/tests.md`、`prototype/UI.md`、`obsidian-canvas-creator/assets/`、`obsidian-canvas-creator/references/`、`excalidraw-diagram/references/`、`mermaid-visualizer/references/`。
 - 新增或同步外部 skill 时，同步更新 `README.md` 分类/数量和 `ATTRIBUTIONS.md` 来源/许可证。
 - 面向用户的安装/缺失提示应指向本仓库或本地 skill 目录；上游 GitHub 链接只用于 `ATTRIBUTIONS.md` 等来源归属。
@@ -22,7 +22,7 @@ Agent Skills 收集与汉化仓库；无构建系统、无测试、无 CI，改�
 仓库没有 lint/test 命令。改动 `SKILL.md` 后至少运行以下 PowerShell 校验：
 
 ```powershell
-$bad=@(); Get-ChildItem -Directory | ? Name -ne '.git' | % { $p=Join-Path $_.FullName 'SKILL.md'; if(Test-Path $p){ $b=[IO.File]::ReadAllBytes($p); if($b.Length -ge 3 -and $b[0]-eq 0xEF -and $b[1]-eq 0xBB -and $b[2]-eq 0xBF){$bad+="$($_.Name): BOM"}; $lines=[IO.File]::ReadAllLines($p); if($lines[0] -ne '---'){$bad+="$($_.Name): bad frontmatter"}; $name=($lines | ? {$_ -match '^name: '} | select -First 1) -replace '^name: ',''; if($name -ne $_.Name){$bad+="$($_.Name): name=$name"} } elseif($_.Name -ne 'gstack'){$bad+="$($_.Name): missing SKILL.md"} }; if($bad){$bad; exit 1}else{'skills ok'}
+$bad=@(); Get-ChildItem -Directory | ? Name -ne '.git' | % { $p=Join-Path $_.FullName 'SKILL.md'; if(Test-Path $p){ $b=[IO.File]::ReadAllBytes($p); if($b.Length -ge 3 -and $b[0]-eq 0xEF -and $b[1]-eq 0xBB -and $b[2]-eq 0xBF){$bad+="$($_.Name): BOM"}; $lines=[IO.File]::ReadAllLines($p); if($lines[0] -ne '---'){$bad+="$($_.Name): bad frontmatter"}; $name=($lines | ? {$_ -match '^name: '} | select -First 1) -replace '^name: ',''; if($name -ne $_.Name){$bad+="$($_.Name): name=$name"} } else {$bad+="$($_.Name): missing SKILL.md"} }; if($bad){$bad; exit 1}else{'skills ok'}
 ```
 
 ## Git 工作流
