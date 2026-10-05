@@ -1,7 +1,9 @@
 ---
 name: request-refactor-plan
-description: 通过用户访谈创建详细的重构计划和微小提交，然后作为 GitHub Issue 归档。当用户想要规划重构、创建重构 RFC 或将重构拆分为安全的增量步骤时使用。
+description: 通过用户访谈创建详细的重构计划和微小提交，然后归档到项目问题跟踪器。当用户想要规划重构、创建重构 RFC 或将重构拆分为安全的增量步骤时使用；问题简单、直接修复即可时不要使用。
 ---
+
+# 重构计划请求
 
 当用户想要创建重构请求时，将调用此技能。您应该按照以下步骤进行。如果你不认为某些步骤是必要的，可以跳过。
 
@@ -19,7 +21,7 @@ description: 通过用户访谈创建详细的重构计划和微小提交，然�
 
 7. 将实现分解为微小 commits 的计划。记住 Martin Fowler 的建议："使每个重构步骤尽可能小，以便您始终可以看到程序工作。"
 
-8. 创建一个包含重构计划的 GitHub issue。使用以下模板作为 issue 描述：
+8. 将重构计划归档到项目问题跟踪器。优先读取项目的 `docs/agents/issue-tracker.md`（由 setup-matt-pocock-skills 生成），按其中约定的跟踪器执行：GitHub 使用 `gh issue create` 创建 issue，本地 markdown 跟踪器写入约定的文件；文件缺失时先使用 setup-matt-pocock-skills skill 生成。默认先将计划给用户确认，确认后再发布。使用以下模板作为 issue 描述：
 
 <refactor-plan-template>
 
@@ -66,3 +68,5 @@ description: 通过用户访谈创建详细的重构计划和微小提交，然�
 关于重构的任何进一步说明。
 
 </refactor-plan-template>
+
+发布后，将 issue URL 分享给用户，并清理访谈中产生的临时文件。
