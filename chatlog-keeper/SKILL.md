@@ -81,7 +81,7 @@ chatlog-keeper probe
 
 `probe` 只做本机状态探测：数据目录能否发现、客户端是否运行、**缓存里**有没有已验证的 key。它**不会取钥、不会扫描进程内存**，可以随时放心跑。
 
-实测输出（本机，`available: false`，两个客户端都在运行但缓存无 key）：
+输出示例（`available: false`：客户端在运行，但本机没探测到可用数据目录、缓存里也没有 key）：
 
 ```json
 {
@@ -99,7 +99,7 @@ chatlog-keeper probe
     "source": "wechat",
     "available": false,
     "client_running": true,
-    "wxid_dir": "B:\\Users\\Documents\\WeChat Files\\wxid_c0ha6n6tr7un12",
+    "wxid_dir": "<本机微信数据目录>\\wxid_xxxxx",
     "enc_keys_present": false,
     "needs_key": false,
     "protocol_capabilities": ["key-identity-v1"],
@@ -107,6 +107,8 @@ chatlog-keeper probe
   }
 }
 ```
+
+> `wxid_dir`、`db_path` 这类字段给的是**本机实际探测到的绝对路径**，示例里已换成占位符。换台机器字段形状相同、值不同——这正是需要 `--data-root` 的原因，见下节。
 
 ### extract-key —— 取钥
 
@@ -235,6 +237,88 @@ chatlog-keeper participant-directory-v1 --selection-stdin
 
 > 顶层帮助里还列了一个 `key-recovery-v1`，其说明被上游刻意屏蔽（显示为 `==SUPPRESS==`），属内部/未公开接口，不要依赖。
 
+## 定位数据目录
+
+`--data-root` 填的是**数据根目录**，不是数据库文件本身：
+
+| 数据源 | `--data-root` 填什么 | 数据库文件实际在哪 |
+|---|---|---|
+| `qq` | `Tencent Files` 目录 | `<Tencent Files>\<QQ号>\nt_qq\nt_db\nt_msg.db` |
+| `wechat` | `xwechat_files` 目录（也可直接填某个**账号子目录**） | 在该目录下的各账号子目录中 |
+
+### 自动探测只覆盖固定布局
+
+探测按固定顺序试以下位置，**不是**全盘搜索：
+
+1. 环境变量（`CHATLOG_QQ_DATA_ROOT` / `CHATLOG_WECHAT_DATA_ROOT`）
+2. `qq`：文档目录（含 Windows 文件夹重定向与 OneDrive 的 `Documents` / `文档` 变体）下的 `Tencent Files`；每个盘根下的 `Tencent Files` 与 `<盘根>\Documents\Tencent Files`
+3. `wechat`：每个盘根下的 `wechat files\xwechat_files`、`<盘根>\xwechat_files`、`<盘根>\WeChat Files`；文档目录下的 `xwechat_files` 与 `WeChat Files`
+
+**很多用户会把数据目录挪到这些布局之外**——自定义目录、改过名的目录、网盘同步目录、深度嵌套的应用数据目录等。这时 `probe` / `directory` 会报 `available: false`（退出码 `1`），必须显式传 `--data-root` 或设环境变量。
+
+### 跨盘搜索（通用）
+
+`available: false` 时，先在 PowerShell 里全盘找 `nt_msg.db`：
+
+```powershell
+Get-PSDrive -PSProvider FileSystem | ForEach-Object {
+  & where.exe /r "$($_.Root)" nt_msg.db 2>$null
+}
+```
+
+输出形如（路径因人而异）：
+
+```
+C:\Users\<用户名>\Documents\Tencent Files\<QQ号>\nt_qq\nt_db\nt_msg.db
+E:\Tencent Files\<QQ号>\nt_qq\nt_db\nt_msg.db
+```
+
+要传给 `--data-root` 的是 **`nt_db` 的上一级、也就是 `Tencent Files` 目录**（`\<QQ号>` 的父目录）：
+
+```powershell
+# 目录名通常带空格，务必加引号
+chatlog-keeper probe --data-root "E:\Tencent Files"
+chatlog-keeper qq --days 30 --out .\out --data-root "E:\Tencent Files"
+```
+
+> 这是只读的目录遍历，全盘扫描可能要几分钟；先确认 `probe` 报 `available: false` 再跑。
+
+微信同理（全盘找 `db_storage`，或找账号子目录名）：
+
+```powershell
+Get-PSDrive -PSProvider FileSystem | ForEach-Object {
+  & where.exe /r "$($_.Root)" db_storage 2>$null
+}
+chatlog-keeper probe --data-root "<某个 xwechat_files 目录>"
+```
+
+### 用环境变量代替每次传参
+
+```powershell
+$env:CHATLOG_QQ_DATA_ROOT = "<Tencent Files 目录>"
+chatlog-keeper probe
+```
+
+微信把变量名换成 `CHATLOG_WECHAT_DATA_ROOT`、值填 `xwechat_files` 目录：
+
+```powershell
+$env:CHATLOG_WECHAT_DATA_ROOT = "<xwechat_files 目录>"
+chatlog-keeper probe
+```
+
+写成用户级变量可长期生效（需新开终端）：
+
+```powershell
+[Environment]::SetEnvironmentVariable("CHATLOG_QQ_DATA_ROOT", "<Tencent Files 目录>", "User")
+```
+
+### 传对了还是 `available: false`
+
+1. **QQ 账号子目录名必须是纯数字**。Windows 上只认纯数字目录名（macOS / Linux 才允许哈希式不透明目录名）。若你的 QQ 账号目录不是纯数字，手动指定到该账号目录通常无效——这种情况用 `directory --source qq` 配合 `--data-root` 再确认一次。
+2. **数据库存在但为空**：探测要求 `nt_msg.db` 存在**且大小大于 0**。刚装客户端还没产生消息时，先在客户端里收发一条再试。
+3. **目录名被改过**：只要下面这种结构在（`<Tencent Files>\<账号>\nt_qq\nt_db\nt_msg.db`，旧版也可能少一层 `nt_qq`），`--data-root` 直接填改名后的根目录即可，不必非得叫 `Tencent Files`。
+4. **多账号**：一个 `Tencent Files` 下可以有多个纯数字账号目录，导出时用 `--account <QQ号>` 指定。
+
 ## 输出格式
 
 - `qq` / `wechat`：把 JSON + HTML 写进 `--out` 目录，完成后用浏览器打开 `out/*_messages.html` 即可回看
@@ -268,7 +352,7 @@ chatlog-keeper participant-directory-v1 --selection-stdin
 4. **日常客户端运行中别跑 active**：单实例冲突；上游要求先从菜单正常退出客户端，不要强制结束进程。
 5. **腾讯的现实风险主要是项目级**：上游指出对这类工具的主要执法手段是要求代码托管平台把仓库下架（DMCA），而非封个人账号——这与"导出自己数据"的个人风险是两回事。
 6. **降低风险的做法**：优先被动、复用缓存而不是反复重取、甚至可以**退出客户端后离线解密**。
-7. **数据目录必须能被发现或显式指定**：QQ 数据根是 `<Documents>/Tencent Files/<qq-id>/nt_qq/nt_db/nt_msg.db`（含 OneDrive 重定向与"数据目录被挪到任意盘"的探测），微信是 `xwechat_files` 目录；探测不到就用 `--data-root`。
+7. **数据目录必须能被发现或显式指定**：自动探测只覆盖固定布局（QQ 看 `<文档>\Tencent Files`，微信看各盘根下的 `wechat_files\xwechat_files` / `xwechat_files` / `WeChat Files`）。数据目录被挪到别处就会报 `available: false`——按「定位数据目录」一节跨盘搜索后用 `--data-root` 或 `CHATLOG_QQ_DATA_ROOT` / `CHATLOG_WECHAT_DATA_ROOT` 指定。
 8. **Windows 没有 `--version`**：用 `uv tool list` 查版本；退出码 `1` 表示 `available: false`，不代表程序崩了。
 9. **`--key` 会泄露密钥**：只在必要时用 `--key-stdin`。
 10. **上游仍是较年轻的 CLI 优先项目**（JSON/HTML 输出，没有内置统计分析），macOS 目标平台是 Apple Silicon、Linux 面向官方 x86_64 客户端（非 Wine），新版本客户端的适配可能滞后。
