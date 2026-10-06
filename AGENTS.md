@@ -4,7 +4,7 @@ Agent Skills 收集与汉化仓库；无构建系统、无测试、无 CI，改�
 
 ## 仓库形状
 
-- 67 个顶层 skill 目录，全部含 `SKILL.md`；许多 skill 还有按需加载的 `references/`、`scripts/`、`assets/`（如 `tdd/tests.md`、`prototype/UI.md`、`mermaid-visualizer/references/`）。
+- 68 个顶层 skill 目录，全部含 `SKILL.md`；许多 skill 还有按需加载的 `references/`、`scripts/`、`assets/`（如 `tdd/tests.md`、`prototype/UI.md`、`mermaid-visualizer/references/`）。
 - 新增/移除 skill 时，同步更新 `README.md`（分类/数量）、`ATTRIBUTIONS.md`（来源/许可证）和本文件的条目数。
 - 部分 skill 带 `agents/openai.yaml`（Codex 专有元数据，其他宿主忽略，保留即可）。
 - 面向用户的安装/缺失提示指向本仓库或本地 skill 目录；上游 GitHub 链接只用于 `ATTRIBUTIONS.md` 等来源归属。
