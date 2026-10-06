@@ -122,6 +122,7 @@
 | simplify | https://github.com/runkids/skillshare | 未明确 |
 | write-a-skill | https://github.com/DurdeuVlad/easyskillz | 未明确 |
 | wechat-cli | 原创；调用 [huohuoer/wechat-cli](https://github.com/huohuoer/wechat-cli)（npm `@canghe_ai/wechat-cli` 仅 macOS arm64；Windows/Linux 从 GitHub 源码安装，PyPI 无此包） | MIT（原创）/ Apache-2.0（依赖） |
+| chatlog-keeper | 原创；调用 [labazhou2024/chatlog-keeper](https://github.com/labazhou2024/chatlog-keeper)（本地从源码经 uv tool 安装；未发布到 PyPI） | MIT（原创）/ MIT（依赖） |
 
 ## 未溯源的 Skills
 
