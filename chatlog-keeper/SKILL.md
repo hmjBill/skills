@@ -52,6 +52,18 @@ Unblock-File "$dir\chatlog-keeper.exe"   # 解除"下载自网络"标记
 
 本机实际放置：`B:\Program Files\chatlog-keeper\chatlog-keeper.exe`。
 
+把它加入用户 PATH，之后可直接用 `chatlog-keeper`（新开终端生效）：
+
+```powershell
+$dir = "B:\Program Files\chatlog-keeper"
+$cur = [Environment]::GetEnvironmentVariable("Path","User")
+if (($cur -split ';') -notcontains $dir) {
+  [Environment]::SetEnvironmentVariable("Path", $cur.TrimEnd(';') + ';' + $dir, "User")
+}
+```
+
+不改 PATH 也行——直接用全路径调用即可。数据目录若不自动探测到，再按「定位数据目录」一节设置 `CHATLOG_QQ_DATA_ROOT` / `CHATLOG_WECHAT_DATA_ROOT`。
+
 ### macOS / Linux（源码 + uv tool）
 
 Windows 专属的 shifted 读取器不适用于 macOS / Linux，用常规 `uv tool install`：
