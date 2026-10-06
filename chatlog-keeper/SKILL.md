@@ -13,12 +13,12 @@ description: 导出本地 QQ 与微信聊天记录（会话目录、消息流、
 
 | 平台 | 支持 | 备注 |
 |---|---|---|
-| Windows | ✅ | 需登录运行本机的 QQ / 微信；key 走被动内存扫描或一次性调试器 |
+| Windows | ✅ | 需登录运行本机的 QQ / 微信；**用 Release 独立 exe 安装**（venv / uv tool 装法读 QQ 会失败，见「安装」）；key 走被动内存扫描或一次性调试器 |
 | macOS | ✅ | 官方仅测 Apple Silicon；主动取钥需先从菜单正常退出日常客户端 |
 | Linux | ✅ | 仅官方 Ubuntu / Debian x86_64 客户端；WeChat 取钥需带 Python 支持的 GDB |
 
-- Python ≥ 3.9（`requires-python = ">=3.9"`）
-- 本机安装方式：`uv tool install`（隔离环境 + shim，不污染系统 Python）
+- Python ≥ 3.9（`requires-python = ">=3.9"`）——仅源码安装需要；**Windows 用独立 exe 时无需本机 Python**
+- Windows 安装方式：Release 独立 `chatlog-keeper.exe`（见「安装」）；macOS / Linux 可用 `uv tool install`
 - **不需要管理员 / UAC**：上游说明 Windows 主动取钥"只在当前用户下启动并调试一个全新的子进程，不请求 UAC/admin"
 - **QQ / 微信客户端需处于登录运行状态**（取钥与在线读取都要用到你本机的数据）
 
@@ -28,30 +28,49 @@ description: 导出本地 QQ 与微信聊天记录（会话目录、消息流、
 
 > ⚠️ **PyPI 上没有 `chatlog-keeper`**（上游在 `pyproject.toml` 里明确写了本包**故意只发源码、不发布到 PyPI**）。不要用 `pip install chatlog-keeper`，一律从源码安装。
 
-**本机约定（vendor 源码目录 + uv tool，Windows 已验证）**：
+### Windows（推荐：独立可执行文件）
+
+**为什么不直接用 uv tool / venv 安装**：Windows 上读 QQ 的 NTQQ"shifted"数据库时，工具会启动一个隔离读取器，它**硬性要求 SQLite 恰好为 `3.53.2`**，并要求 sqlite3 DLL 位于 Python 前缀内。结果是：
+
+- `uv tool install`、`pipx`、venv 内的 `pip install` **在 Windows 上读 QQ 都会失败**并报 `QQShiftedSQLiteError`；
+- 只有**非 venv** 的 `python -m pip install .` 且该 Python 恰好自带 SQLite `3.53.2` 才有机会工作（罕见且难凑）；
+- **最省事、上游支持的方式 = Release 独立 exe**（自带锁定的 SQLite 3.53.2）。
+
+从 GitHub Release 下载独立 exe 并校验（`gh` 或浏览器均可）：
 
 ```powershell
-git clone https://github.com/labazhou2024/chatlog-keeper "B:\Develops\Projects\vendor\chatlog-keeper"
-uv tool install --force "B:\Develops\Projects\vendor\chatlog-keeper"
+$tag = "v0.3.7-preview"   # 换成最新 tag：gh release list -R labazhou2024/chatlog-keeper
+$dir = "B:\Program Files\chatlog-keeper"   # 本机约定：便携工具放 B:\Program Files\<名称>\
+New-Item -ItemType Directory -Force -Path $dir | Out-Null
+gh release download -R labazhou2024/chatlog-keeper $tag `
+  -p chatlog-keeper.exe -p chatlog-keeper.exe.sha256 -D $dir --clobber
+# 校验 sha256
+$exp = (Get-Content "$dir\chatlog-keeper.exe.sha256").Trim().Split()[0]
+(Get-FileHash "$dir\chatlog-keeper.exe" -Algorithm SHA256).Hash.ToLower() -eq $exp
+Unblock-File "$dir\chatlog-keeper.exe"   # 解除"下载自网络"标记
 ```
 
-已安装路径示例：shim 在 `B:\Develops\DevRuntimes\uv-tools-bin\chatlog-keeper.exe`（uv tool 的 shim 目录，通常已在 PATH）。
+本机实际放置：`B:\Program Files\chatlog-keeper\chatlog-keeper.exe`。
 
-**通用写法（任意持久目录）**：
+### macOS / Linux（源码 + uv tool）
+
+Windows 专属的 shifted 读取器不适用于 macOS / Linux，用常规 `uv tool install`：
 
 ```powershell
 git clone https://github.com/labazhou2024/chatlog-keeper.git "<持久目录>\chatlog-keeper"
 uv tool install --force "<持久目录>\chatlog-keeper"
 ```
 
-**更新已有源码**（不要用 `uv tool upgrade`，那会走 PyPI）：
+更新已有源码（不要用 `uv tool upgrade`，那会走 PyPI）：
 
 ```powershell
 git -C "<持久目录>\chatlog-keeper" pull --ff-only
 uv tool install --force "<持久目录>\chatlog-keeper"
 ```
 
-**备选（venv 内 pip install .，上游 README 的方式）**：
+macOS 另有 release 二进制 `chatlog-keeper-macos-arm64`。源码安装首次取钥时会现场编译只读的 C 辅助程序（macOS 需 Xcode Command Line Tools，Linux 需 `build-essential`）。
+
+### 通用源码安装（⚠️ 非 Windows 推荐路径）
 
 ```powershell
 git clone https://github.com/labazhou2024/chatlog-keeper.git "<持久目录>\chatlog-keeper"
@@ -59,7 +78,7 @@ cd "<持久目录>\chatlog-keeper"
 python -m pip install .
 ```
 
-上游还为 tag 版本提供独立可执行文件（Windows `chatlog-keeper.exe`、macOS `chatlog-keeper-macos-arm64`、Linux `chatlog-keeper-linux-x86_64`），从同一 GitHub Release 下载并用旁边的 `.sha256` 校验；源码安装在首次取钥时会现场编译几个只读的 C 辅助程序（macOS 需 Xcode Command Line Tools，Linux 需 `build-essential`）。
+> ⚠️ Windows 上源码 / venv 安装**不能读 QQ**（原因见上），请改用上面的独立 exe。
 
 验证安装：
 
@@ -67,11 +86,13 @@ python -m pip install .
 chatlog-keeper --help
 ```
 
-> ⚠️ **没有 `--version` 参数**。`chatlog-keeper --version` 会因 argparse 报 `the following arguments are required: cmd` 并以退出码 **2** 结束。版本请用 `uv tool list` 查看。
+> ⚠️ **没有 `--version` 参数**。`chatlog-keeper --version` 会因 argparse 报 `the following arguments are required: cmd` 并以退出码 **2** 结束。独立 exe 无内嵌版本号，看 Release tag 或用 `probe` 输出判断。
 >
 > 退出码约定（读 stdout 时用得上）：`0` = 正常；`1` = JSON 里 `available: false` 或含 `error`（**不是崩溃**，内部异常会被刻意折叠成同一份安全 JSON 形状）；`2` = 参数用法错误。
 
 ## 密钥与初始化
+
+> 下文示例用 `chatlog-keeper` 代指可执行文件；Windows 上的实际调用路径见「命令参考」开头的约定。
 
 ### probe —— 先看状态（安全、瞬时、不扫内存）
 
@@ -161,7 +182,7 @@ macOS / Linux 下目录权限 `0700`、密钥文件 `0600`；Windows 下用受�
 
 ## 命令参考
 
-> 统一用 `chatlog-keeper`。若不在 PATH，改用 `uv tool run chatlog-keeper ...`；在 venv 内 pip 安装的场景用 `python -m chatlog_keeper.cli ...`。
+> 下文示例把可执行文件统一记作 `chatlog-keeper`。**Windows**：`& "B:\Program Files\chatlog-keeper\chatlog-keeper.exe" <子命令>`（把该目录加入 PATH 后可省略路径）；**macOS / Linux**：`chatlog-keeper`，不在 PATH 时用 `uv tool run chatlog-keeper`（venv 内 pip 安装用 `python -m chatlog_keeper.cli ...`）。
 
 ### probe —— 状态探测
 
@@ -353,6 +374,6 @@ chatlog-keeper probe
 5. **腾讯的现实风险主要是项目级**：上游指出对这类工具的主要执法手段是要求代码托管平台把仓库下架（DMCA），而非封个人账号——这与"导出自己数据"的个人风险是两回事。
 6. **降低风险的做法**：优先被动、复用缓存而不是反复重取、甚至可以**退出客户端后离线解密**。
 7. **数据目录必须能被发现或显式指定**：自动探测只覆盖固定布局（QQ 看 `<文档>\Tencent Files`，微信看各盘根下的 `wechat_files\xwechat_files` / `xwechat_files` / `WeChat Files`）。数据目录被挪到别处就会报 `available: false`——按「定位数据目录」一节跨盘搜索后用 `--data-root` 或 `CHATLOG_QQ_DATA_ROOT` / `CHATLOG_WECHAT_DATA_ROOT` 指定。
-8. **Windows 没有 `--version`**：用 `uv tool list` 查版本；退出码 `1` 表示 `available: false`，不代表程序崩了。
+8. **Windows 没有 `--version`**：独立 exe 看 Release tag；退出码 `1` 表示 `available: false`，不代表程序崩了。
 9. **`--key` 会泄露密钥**：只在必要时用 `--key-stdin`。
 10. **上游仍是较年轻的 CLI 优先项目**（JSON/HTML 输出，没有内置统计分析），macOS 目标平台是 Apple Silicon、Linux 面向官方 x86_64 客户端（非 Wine），新版本客户端的适配可能滞后。
