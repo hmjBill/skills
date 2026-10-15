@@ -6,7 +6,7 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（68 个，均含 SKILL.md）
+## 收录条目（69 个，均含 SKILL.md）
 
 ### 开发与架构
 
@@ -134,6 +134,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [write-a-skill](write-a-skill/SKILL.md) | 创建新的 Skill |
 | [wechat-cli](wechat-cli/SKILL.md) | 查询本地微信数据（聊天记录、联系人、会话、收藏、统计等） |
 | [chatlog-keeper](chatlog-keeper/SKILL.md) | 查询并导出本地 QQ / 微信聊天记录（会话目录、消息流、图片解密、密钥管理） |
+| [bitwarden-cli](bitwarden-cli/SKILL.md) | 用 Bitwarden 官方 CLI 管理个人密码库（查询、增删改、文件夹整理、生成密码、Send、备份导出） |
 
 ## 使用方式
 
