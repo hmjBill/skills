@@ -13,25 +13,13 @@
 const fs = require('fs');
 const path = require('path');
 
-// Find project root (look for assets/design-tokens.css)
-function findProjectRoot(startDir) {
-  let dir = startDir;
-  while (dir !== '/') {
-    if (fs.existsSync(path.join(dir, 'assets', 'design-tokens.css'))) {
-      return dir;
-    }
-    dir = path.dirname(dir);
-  }
-  return null;
-}
-
-const projectRoot = findProjectRoot(process.cwd());
-if (!projectRoot) {
-  console.error('Error: Could not find assets/design-tokens.css');
+// Tokens live in this skill's own assets directory; never guess a project root from cwd
+const tokensPath = path.resolve(__dirname, '..', 'assets', 'design-tokens.css');
+if (!fs.existsSync(tokensPath)) {
+  console.error(`Error: design tokens file not found: ${tokensPath}`);
+  console.error('   Install the design-system skill completely (assets/design-tokens.css is required) and re-run.');
   process.exit(1);
 }
-
-const tokensPath = path.join(projectRoot, 'assets', 'design-tokens.css');
 
 // Minimal tokens commonly used in infographics/slides
 const MINIMAL_TOKENS = [

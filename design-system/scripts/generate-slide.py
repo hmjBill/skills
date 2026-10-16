@@ -8,6 +8,7 @@ NO hardcoded colors, fonts, or spacing allowed
 
 import argparse
 import json
+import os
 from pathlib import Path
 from datetime import datetime
 
@@ -629,8 +630,9 @@ def generate_deck(slides_data, title="Pitch Deck"):
         else:
             print(f"Warning: Unknown slide type '{slide_type}'")
 
-    # Calculate relative path to tokens CSS
-    tokens_rel_path = "../../../assets/design-tokens.css"
+    # Link to the tokens CSS, derived from this skill's own directories
+    # (SCRIPT_DIR -> ASSETS_DIR) instead of a hardcoded relative depth
+    tokens_rel_path = Path(os.path.relpath(TOKENS_CSS, OUTPUT_DIR)).as_posix()
 
     return SLIDE_TEMPLATE.format(
         title=title,

@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-# Token-bounded rendered capture in the real Chrome profile.
-# Usage: capture-workflow.sh URL [output-dir] [selector]
+# 在真实 Chrome profile 中按 token 预算执行渲染结果采集。
+# 用法：capture-workflow.sh URL [output-dir] [selector]
 
 set -euo pipefail
 
-target_url="${1:?Usage: capture-workflow.sh URL [output-dir] [selector]}"
+target_url="${1:?用法：capture-workflow.sh URL [output-dir] [selector]}"
 output_dir="${2:-.}"
 selector="${3:-}"
+# 读取任务 UUID：此写法需 Linux/WSL；纯 Git Bash 无 /proc，可在 PowerShell 用 `[guid]::NewGuid()` 代替
 IFS= read -r task_uuid </proc/sys/kernel/random/uuid
 task_session="capture-${task_uuid//-/}"
 browser_bin="$(command -v agent-browser)"
@@ -18,7 +19,7 @@ cleanup() {
   trap - EXIT
   if [[ "$cleanup_armed" == 1 ]]; then
     if ! "$browser_bin" --session "$task_session" close; then
-      printf 'Agent Browser cleanup failed for session %s.\n' "$task_session" >&2
+      printf 'Agent Browser 清理失败，会话 %s。\n' "$task_session" >&2
       if [[ "$prior_status" -eq 0 ]]; then
         prior_status=1
       fi
@@ -31,11 +32,11 @@ trap cleanup EXIT
 cleanup_armed=1
 "$browser_bin" --session "$task_session" open "$target_url"
 "$browser_bin" --session "$task_session" snapshot -i --compact >"$output_dir/page-structure.txt"
-# Full-page repairs have candidate proof but are not in the default installed engine.
+# 整页修复已有候选证明，但默认安装的引擎尚不支持。
 "$browser_bin" --session "$task_session" screenshot "$output_dir/page-viewport.png"
 
 if [[ -n "$selector" ]]; then
   "$browser_bin" --session "$task_session" get text "$selector" >"$output_dir/selected-text.txt"
 fi
 
-printf 'Saved rendered capture in %s\n' "$output_dir"
+printf '渲染结果已保存到 %s\n' "$output_dir"
