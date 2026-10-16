@@ -18,7 +18,9 @@ param(
     # Adds an integrity check that also reads pack data (slow, I/O heavy).
     [switch]$Deep,
     # Keep the restic cache off the system drive.
-    [string]$CacheDir
+    [string]$CacheDir,
+    # Per-command timeout. Matters for network backends that retry with backoff.
+    [int]$TimeoutSec = 120
 )
 
 $ErrorActionPreference = 'Continue'
@@ -30,12 +32,33 @@ function Write-Bad  { param($m) Write-Host "  [BAD]  $m" -ForegroundColor Red }
 
 function Invoke-Restic {
     param([Parameter(ValueFromRemainingArguments = $true)][string[]]$ResticArgs)
-    $out = & $Restic @ResticArgs 2>&1
+
+    # Network backends (s3/b2/sftp/rest) retry with backoff on an unreachable host, so a
+    # plain call can hang for minutes inside a cron job. Bound every call.
+    $job = Start-Job -ScriptBlock {
+        param($exe, $a)
+        $out = & $exe @a 2>&1
+        [PSCustomObject]@{ Exit = $LASTEXITCODE; Text = ($out | ForEach-Object { "$_" }) -join "`n" }
+    } -ArgumentList $Restic, $ResticArgs
+
+    if (Wait-Job $job -Timeout $TimeoutSec) {
+        $res = Receive-Job $job
+        Remove-Job $job -Force
+        return [PSCustomObject]@{ Exit = $res.Exit; Text = $res.Text; TimedOut = $false }
+    }
+    Stop-Job $job
+    Remove-Job $job -Force
     [PSCustomObject]@{
-        Exit = $LASTEXITCODE
-        Text = ($out | ForEach-Object { "$_" }) -join "`n"
+        Exit   = 124
+        Text   = "no response within $TimeoutSec s (unreachable backend, or the operation is simply slow - raise -TimeoutSec)"
+        TimedOut = $true
     }
 }
+
+# A local path is a filesystem repository; everything else is a remote/network backend.
+$isLocal = ($Repository -match '^[A-Za-z]:[\\/]') -or
+           ($Repository -match '^\\\\') -or
+           ($Repository.StartsWith('/') -and $Repository.StartsWith('//') -eq $false)
 
 # ---------------------------------------------------------------- environment
 Write-Host ""
@@ -44,9 +67,11 @@ Write-Host "  repo     : $Repository"
 Write-Host "  password : $PasswordFile"
 
 $ver = Invoke-Restic 'version'
-if ($ver.Exit -ne 0) {
-    Write-Bad "cannot run '$Restic' (exit $($ver.Exit)). Is restic installed and on PATH?"
-    Write-Host "         Windows install: https://github.com/restic/restic/releases"
+if ($ver.TimedOut -or $ver.Exit -ne 0) {
+    Write-Bad "cannot run '$Restic'. Is restic installed and on PATH?"
+    Write-Host "         Windows : https://github.com/restic/restic/releases"
+    Write-Host "         macOS   : brew install restic"
+    Write-Host "         Debian  : apt install restic"
     exit 2
 }
 Write-Ok "restic $($ver.Text.Trim())"
@@ -65,21 +90,37 @@ $env:RESTIC_REPOSITORY    = $Repository
 $env:RESTIC_PASSWORD_FILE = $PasswordFile
 
 # The password file is the encryption key. If other local users can read it,
-# the repository is only as private as that file's ACL.
-$acl = Get-Acl -LiteralPath $PasswordFile
-$broad = $acl.Access | Where-Object {
-    $_.AccessControlType -eq 'Allow' -and
-    $_.IdentityReference -match 'BUILTIN\\Users$|Authenticated Users$|Everyone$'
-}
-if ($broad) {
-    Write-Warn "password file is readable by $($broad.IdentityReference -join ', ') - tighten the ACL"
-    Write-Host "         icacls `"$PasswordFile`" /inheritance:r /grant:r `"$env:USERNAME`":F"
+# the repository is only as private as that file's permissions.
+if ($IsWindows) {
+    $acl = Get-Acl -LiteralPath $PasswordFile
+    $broad = $acl.Access | Where-Object {
+        $_.AccessControlType -eq 'Allow' -and
+        $_.IdentityReference -match 'BUILTIN\\Users$|Authenticated Users$|Everyone$'
+    }
+    if ($broad) {
+        Write-Warn "password file is readable by $($broad.IdentityReference -join ', ') - tighten the ACL"
+        Write-Host "         icacls `"$PasswordFile`" /inheritance:r /grant:r `"$env:USERNAME`":F"
+    } else {
+        Write-Ok "password file ACL is not world/group readable"
+    }
 } else {
-    Write-Ok "password file ACL is not world/group readable"
+    # On POSIX the mode is what matters; anything group/other-readable is a finding.
+    $mode = (Get-Item -LiteralPath $PasswordFile).UnixFileMode
+    if ($null -ne $mode -and ($mode -band 'GroupRead','OtherRead')) {
+        Write-Warn "password file mode is $mode - group/other can read the encryption key"
+        Write-Host "         chmod 600 `"$PasswordFile`""
+    } else {
+        Write-Ok "password file mode is $mode (not group/other readable)"
+    }
 }
 
 # ---------------------------------------------------------------- snapshots
 $snapRaw = Invoke-Restic 'snapshots' '--json'
+if ($snapRaw.TimedOut) {
+    Write-Bad "repository did not answer within $TimeoutSec s: $Repository"
+    Write-Host "         $(if ($isLocal) { 'a local repository answering this slowly usually means the disk is busy' } else { 'remote backend unreachable, or the credentials/network are wrong' })"
+    exit 2
+}
 switch ($snapRaw.Exit) {
     0  { }
     10 { Write-Bad "repository does not exist at $Repository"; exit 2 }
@@ -124,7 +165,9 @@ if ($byPaths.Count -gt 1 -and $byPaths.Count -gt $byTags.Count) {
 # ---------------------------------------------------------------- size
 if ($Deep) {
     $st = Invoke-Restic 'stats' '--mode' 'raw-data'
-    if ($st.Exit -eq 0) {
+    if ($st.TimedOut) {
+        Write-Warn "stats did not finish within $TimeoutSec s (it walks every snapshot)"
+    } elseif ($st.Exit -eq 0) {
         ($st.Text -split "`n" | Where-Object { $_ -match 'Total Size|Total Uncompressed|Compression Ratio|Snapshots processed' }) |
             ForEach-Object { Write-Host "  $_".TrimEnd() }
     } else {
@@ -138,6 +181,10 @@ if ($Deep) {
 $checkArgs = @('check')
 if ($Deep) { $checkArgs += '--read-data-subset=5%' } else { $checkArgs += '--read-data-subset=1/50' }
 $chk = Invoke-Restic @checkArgs
+if ($chk.TimedOut) {
+    Write-Bad "integrity check did not finish within $TimeoutSec s - raise -TimeoutSec for a large repository"
+    exit 1
+}
 if ($chk.Exit -eq 0) {
     Write-Ok "integrity check passed ($($checkArgs -join ' '))"
 } else {
@@ -148,14 +195,23 @@ if ($chk.Exit -eq 0) {
 }
 
 # ---------------------------------------------------------------- local repo extras
-$isLocal = $Repository -match '^[A-Za-z]:[\\/]' -or $Repository.StartsWith('/')
+# $isLocal was computed up front, before any repository call.
 if ($isLocal) {
-    $root = [IO.Path]::GetPathRoot((Resolve-Path -LiteralPath $Repository).Path)
-    $drive = Get-PSDrive -Name $root.TrimEnd('\','/') -ErrorAction SilentlyContinue
-    if ($drive) {
-        $freeGB = [math]::Round($drive.Free / 1GB, 1)
-        Write-Host "  volume   : $root  $([math]::Round($drive.Used/1GB,1)) GB used, $freeGB GB free"
-        if ($drive.Free -lt 20GB) { Write-Warn "less than 20 GB free on the repository volume" }
+    # UNC paths have no drive letter to measure, and the root may not resolve for a
+    # path that is reachable but not yet mounted - never let this become fatal.
+    try {
+        $resolved = (Resolve-Path -LiteralPath $Repository -ErrorAction Stop).Path
+        $root = [IO.Path]::GetPathRoot($resolved)
+        $driveName = $root.TrimEnd('\', '/')
+        $drive = if ($IsWindows) { Get-PSDrive -Name $driveName -ErrorAction SilentlyContinue }
+                 else { Get-PSDrive -Name '/' -ErrorAction SilentlyContinue }
+        if ($drive) {
+            $freeGB = [math]::Round($drive.Free / 1GB, 1)
+            Write-Host "  volume   : $root  $([math]::Round($drive.Used/1GB,1)) GB used, $freeGB GB free"
+            if ($drive.Free -lt 20GB) { Write-Warn "less than 20 GB free on the repository volume" }
+        }
+    } catch {
+        Write-Warn "could not measure free space for $Repository : $($_.Exception.Message)"
     }
 
     # Stale locks survive a hard kill and block every later run.
@@ -174,6 +230,9 @@ if ($isLocal) {
     Write-Host "  note     : a local repository on the same machine protects against accidental"
     Write-Host "             deletion, not against losing the machine. Add a second repository"
     Write-Host "             (S3/B2/SFTP/rest-server) via: restic copy"
+} else {
+    Write-Host "  backend  : network repository - remote data is never verified by default."
+    Write-Host "             Consider restic copy to a second, independent repository."
 }
 
 Write-Host ""
