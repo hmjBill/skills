@@ -80,6 +80,15 @@ pwcli screenshot e5
 pwcli pdf
 ```
 
+- `screenshot` 不带参数时对当前页面截图；`screenshot e5` 只截取快照中引用为 `e5` 的元素（先 `pwcli snapshot` 拿到引用）。
+- 全页截图与「输出到指定文件」的写法本文档未固化：先运行 `pwcli screenshot --help` 查当前版本的实际参数，不要凭猜测拼 flag。
+
+```bash
+pwcli pdf --help
+```
+
+`pdf` 把当前页面导出为 PDF；输出路径参数本文档未固化，同样以 `pwcli pdf --help` 的实际输出为准。
+
 ## 标签页
 
 ```bash
@@ -102,6 +111,11 @@ pwcli tracing-start
 pwcli tracing-stop
 ```
 
+- `console` 读取控制台消息，`console warning` 按级别过滤。
+- 清空/重置已收集消息的 flag 本文档未固化（不同版本命名可能不同），以 `pwcli console --help` 为准，本文不写猜测的 flag 名。
+- `network` 的子命令与过滤参数以 `pwcli network --help` 为准。
+- `tracing-start` / `tracing-stop` 的 trace 输出文件参数本文档未固化，以 `pwcli tracing-stop --help` 为准。
+
 ## 会话
 
 使用命名会话隔离工作：
@@ -117,3 +131,16 @@ pwcli --session todo snapshot
 export PLAYWRIGHT_CLI_SESSION=todo
 pwcli open https://demo.playwright.dev/todomvc
 ```
+
+## 版本说明
+
+当前安装策略是跟随 `@latest`，没有锁定版本：`scripts/playwright_cli.sh` 用的是 `npx --yes --package @playwright/cli playwright-cli`，`SKILL.md` 的全局安装步骤写的也是 `@playwright/cli@latest`。
+
+因此子命令与 flag 都可能随版本漂移。本文档只固化已验证的用法；未固化的参数一律以 `--help` 为准：
+
+```bash
+pwcli <命令> --help
+npx --yes --package @playwright/cli playwright-cli <命令> --help
+```
+
+升级后若某条命令失效或报参数错误，先跑上面的 `--help` 对照本文档，再改命令，不要沿用记忆中的 flag。

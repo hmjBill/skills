@@ -118,6 +118,8 @@ PowerShell 7 下用 `npx --yes --package @playwright/cli playwright-cli <命令>
 "$PWCLI" tracing-stop
 ```
 
+trace 的输出文件参数没有在 `references/cli.md` 中固化，以 `"$PWCLI" tracing-stop --help` 的实际输出为准（PowerShell 7 下用 `npx --yes --package @playwright/cli playwright-cli tracing-stop --help`）。
+
 ### 多标签页工作
 
 ```bash

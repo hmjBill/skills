@@ -19,5 +19,11 @@ description: 处理 GitHub PR 审查评论，汇总待处理评论并按选择�
 ## 3) 如果用户选择了评论
 - 为选定的评论应用修复
 
+## 命令面
+- 获取：`scripts/fetch_comments.py` 内部走 `gh api graphql`，一次拉取 PR 的会话评论、reviews 和行内 review 线程（自动翻页）。
+- 手动回退（脚本不可用时）：review 评论用 `gh api repos/{owner}/{repo}/pulls/{n}/comments`，issue 评论用 `gh api repos/{owner}/{repo}/issues/{n}/comments`。
+- 回写评论回复：`gh pr comment <n> --body "<回复>"`。
+- 回写审查结论：`gh pr review <n> --approve`，或 `gh pr review <n> --request-changes --body "..."`。
+
 注意事项：
 - 如果 gh 在运行中途遇到认证/速率限制问题，提示用户使用 `gh auth login` 重新认证，然后重试。

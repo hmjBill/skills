@@ -72,6 +72,8 @@ macOS/Linux：
 soffice -env:UserInstallation=file:///tmp/lo_profile_$$ --headless --convert-to pdf --outdir "$OUTDIR" "$INPUT_DOCX"
 ```
 
+`--convert-to` 亦支持其他格式（如 `docx`、`png`），按 LibreOffice 支持的过滤器名书写。
+
 PDF -> PNG（PowerShell 7，Windows）：
 ```
 pdftoppm -png "$env:OUTDIR\$env:BASENAME.pdf" "$env:OUTDIR\$env:BASENAME"
@@ -80,6 +82,8 @@ macOS/Linux：
 ```
 pdftoppm -png "$OUTDIR/$BASENAME.pdf" "$OUTDIR/$BASENAME"
 ```
+
+需要更清晰的渲染或只需部分页面时，加 `-r <DPI>` 提高分辨率、加 `-f <首页> -l <末页>` 只渲染指定页范围。
 
 打包的辅助脚本（在技能目录下运行）：
 ```

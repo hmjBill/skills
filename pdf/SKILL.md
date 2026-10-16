@@ -67,6 +67,9 @@ macOS/Linux：
 pdftoppm -png "$INPUT_PDF" "$OUTPUT_PREFIX"
 ```
 
+`pdftoppm` 常用选项：`-r <DPI>` 指定渲染分辨率；`-f <首页> -l <末页>` 只渲染该页范围；`-jpeg` 输出 JPEG 而非 PNG。
+同属 Poppler 的 `pdfinfo`（查看页数与元信息）和 `pdftotext`（提取文本）可在渲染前做快速检查。
+
 ## 质量期望
 - 保持精致的视觉设计：一致的排版、间距、边距和章节层次。
 - 避免渲染问题：文本被裁剪、元素重叠、表格破损、黑方块或无法读取的字形。
