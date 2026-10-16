@@ -136,7 +136,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [chatlog-keeper](chatlog-keeper/SKILL.md) | 查询并导出本地 QQ / 微信聊天记录（会话目录、消息流、图片解密、密钥管理） |
 | [bitwarden-cli](bitwarden-cli/SKILL.md) | 用 Bitwarden 官方 CLI 管理个人密码库（查询、增删改、文件夹整理、生成密码、Send、备份导出） |
 | [restic-backup](restic-backup/SKILL.md) | 用 restic 做加密备份与仓库巡检（建仓、备份、快照比对、保留策略清理、完整性校验、恢复，含只读健康检查脚本） |
-| [openssh-server](openssh-server/SKILL.md) | 在 Windows 11 上部署与加固 OpenSSH Server（系统能力安装、只认公钥、主机密钥 ACL 属主、服务起不来定位、实测验证） |
+| [ssh](ssh/SKILL.md) | SSH 完整用法：作为客户端连接任意服务器（密钥、config 别名、跳板机、端口转发、文件传输、排障），以及部署加固 sshd 供他人连接 |
 | [canvas-cookie-bridge](canvas-cookie-bridge/SKILL.md) | 用本机只读 cookie 桥让 Canvas MCP 在学校禁用学生 token 时照常可用（读课程、作业、成绩、待办） |
 
 ## 使用方式
