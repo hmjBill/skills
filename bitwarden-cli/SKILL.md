@@ -30,7 +30,7 @@ bw --version
 
 升级用 `npm i -g @bitwarden/cli@latest`；不要用 `npm update -g`（会把无关包一起动）。
 
-本机实际落点：`B:\Develops\DevRuntimes\npm-global\bw`，该目录已在 PATH 中，直接敲 `bw` 即可。
+全局安装目录不一定在 PATH 里。Windows 上 npm 全局目录是 `%APPDATA%\npm`，用 `npm prefix -g` 查实际落点；若不在 PATH 中，把该目录加入 PATH 后直接敲 `bw` 即可。
 
 ### macOS / Linux
 
@@ -38,15 +38,21 @@ bw --version
 brew install bitwarden-cli        # 或 npm i -g @bitwarden/cli
 ```
 
-### 数据目录（C 盘敏感者注意）
+### 数据目录
 
-CLI 的状态文件 `data.json` 默认在 `%APPDATA%\Bitwarden CLI\data.json`，落在 C 盘。想挪到 B 盘，设用户级环境变量（已实测生效）：
+CLI 的状态文件 `data.json` 默认在用户配置目录（Windows：`%APPDATA%\Bitwarden CLI\`；macOS/Linux：`~/.config/Bitwarden CLI/`）。想换位置就设 `BITWARDENCLI_APPDATA_DIR` 指向任意可写目录：
 
 ```powershell
-[Environment]::SetEnvironmentVariable("BITWARDENCLI_APPDATA_DIR", "B:\Develops\DevRuntimes\bw-data", "User")
+# Windows：用户级环境变量
+[Environment]::SetEnvironmentVariable("BITWARDENCLI_APPDATA_DIR", "D:\path\to\bw-data", "User")
 ```
 
-新开终端后 `bw status` 会在该目录创建 `data.json`。原 C 盘位置已有的登录态不会自动迁移，需要在两个位置分别 `bw login`。
+```bash
+# macOS / Linux：写进 shell profile
+export BITWARDENCLI_APPDATA_DIR="$HOME/.local/share/bw-data"
+```
+
+新开终端后 `bw status` 会在该目录创建 `data.json`。原位置已有的登录态不会自动迁移，需要在两个位置分别 `bw login`。
 
 ## 登录、解锁与会话管理
 
@@ -293,11 +299,11 @@ $raw = & bw list items 2>$null | Out-String
 $items = ($raw -replace '[\x00-\x08\x0B\x0C\x0E-\x1F]', '') | ConvertFrom-Json
 ```
 
-PowerShell 字符串陷阱：载荷里的路径**必须用单引号 here-string**。双引号里的 `B:\ProgramData\restic\...` 会被当成变量展开（`$env:restic` 等），路径直接写坏：
+PowerShell 字符串陷阱：载荷里的路径**必须用单引号 here-string**。双引号里的 `D:\path\to\file` 会被当成变量展开（`$env:path` 等），路径直接写坏：
 
 ```powershell
 $body = @'
-Path: B:\ProgramData\restic\password.bin
+Path: D:\path\to\secret.bin
 '@   # 单引号 here-string，不展开
 ```
 
@@ -347,6 +353,48 @@ $item.folderId = $folderId
 
 两条纪律：改文件夹前先 `bw export` 一份备份；删除类操作（尤其是 `--permanent`）逐条列出计划让用户确认，不自动批量删。
 
+### 但上面这套写法对中文名不可用
+
+`bw get item | ConvertFrom-Json` → `ConvertTo-Json` → `bw encode` → `bw edit item` 这条 PowerShell 链路**会毁掉中文**：PowerShell 5.1 与 7 在无 BOM 的 UTF-8 脚本、以及管道字符串往返时都可能按 ANSI 解释，中文被替换成**字面的 `?`**（字符永久丢失，不是显示问题）。
+
+实测代价：一次批量改名里，全部中文名被写成 `??`。字符是**永久丢失**的，无法从条目本身还原——只能靠事前存的映射表或快照。
+
+**批量编辑含中文的条目的正确做法**（任何语言环境都稳）：
+
+1. 用 **Python** 处理全部 JSON 读写（`json.dumps(..., ensure_ascii=False)`，读写都显式 `encoding="utf-8"`）；
+2. 每条改动先生成 **base64 payload 文件**（`bw encode` 的等价物：`base64.b64encode(json_str.encode("utf-8"))`）；
+3. 生成一个**只含 ASCII、无中文字面量**的 `.ps1`，循环里只做一件事：
+
+```powershell
+$null = bw edit item $e.iid (Get-Content -Raw $e.payload) 2>&1
+if ($LASTEXITCODE -eq 0) { $ok++ } else { $fail++ }
+```
+
+中文字符全程只存在于 base64 payload 里，不经过 PowerShell 的任何字符串处理。
+
+**加速**：单条 `bw edit` 约 6–12 秒，几百条就要按小时算。拆成多个 worker（各自一份 manifest、条目集互不相交）并行跑可近似线性提速。并发只影响本地 `data.json` 缓存，服务端为准，收尾 `bw sync` 一次即可。
+
+**翻车了怎么办**：批量改动前把 `{id, old, new}` 映射表用 Python 存成 JSON。名字被写坏时，凭 id 从映射表取正确值重写即可。
+
+### 绝不要用「删除 + 重建」修条目
+
+`bw delete item --permanent` + `bw create item` 会**丢掉你没手动搬运的每一个字段**：密码、TOTP、自定义字段、收藏、reprompt、passwordHistory、附件、以及条目的原始 id / 创建时间。回收站救不回来（`--permanent` 直接跳过回收站）。典型后果：密码、卡号静默消失；而重建时凭乱码「猜」出来的名字几乎必然出错——**猜出的名字是错的，比留着乱码更糟**。
+
+**正确顺序**：
+
+1. 先用 `bw list items` 拿全量 JSON（含完整字段），存一份带日期的 dump；
+2. 改某个字段就**改字段**——`bw edit item <id> <完整item JSON>`，对象整体来回搬运，不重建；
+3. 只有在「条目 JSON 本身已无法解析、连 `bw get item` 都读不出」时才考虑重建，且重建前把 `bw get item` 的原始输出**原样存盘**，重建后逐字段比对。
+
+### 恢复源优先级（数据真丢了时按这个顺序找）
+
+1. **历史工作目录里的快照**——上一次批量任务留下的 `pre-*.json` / `post_*.json` / `items.json` 往往就是全量明文（含密码）。这些文件常被遗忘在临时目录里，翻出来常能完整复原「已经找不回」的名字、密码和卡号。
+2. `bw export --format json` 的历史导出文件。
+3. 系统备份 / restic 快照（注意：Bitwarden CLI 的 `data.json` 默认不在常见备份源里，要主动加）。
+4. `bw list items --trash`——只对软删除有效。
+
+**任何批量修改前，先 `bw list items` 存一份全量 dump 到带日期的文件**。这是唯一可靠的回退点，成本几秒。
+
 ## 生成密码
 
 ```powershell
@@ -379,8 +427,8 @@ bw send delete <id>
 ## 备份与导出
 
 ```powershell
-bw export --format encrypted_json --password "备份密码" --output B:\backups\bw-2026-10-15.json
-bw export --format json --output B:\backups\bw-plain.json
+bw export --format encrypted_json --password "备份密码" --output D:\backups\bw-2026-10-15.json
+bw export --format json --output D:\backups\bw-plain.json
 bw export --format csv
 bw export --format zip
 ```
@@ -447,9 +495,13 @@ bw import --passwordenv BW_BACKUP_PW encrypted_json .\backup.json   # 加密备�
 5. **`bw unlock --raw` 在 vault 已锁定时把错误打到 stderr 并以非零码退出**，赋值给 `$env:BW_SESSION` 前先 `bw unlock --check` 确认。注意它可能仍以 exit 0 返回**提示框文本**而非 key，所以不能只看退出码，要校验返回值形态。
 6. **`bw encode` 是把 stdin 做 base64**；PowerShell 里 base64 串含 `+` `/` `=`，一律用**单引号**包裹，双引号在某些上下文会被变量展开破坏。
 7. **`bw list items` 的 JSON 可能含裸控制字符**（某些条目名），直接喂 `ConvertFrom-Json` 会报 `unexpected character`。先 `-replace '[\x00-\x08\x0B\x0C\x0E-\x1F]', ''` 清洗。
-8. **双引号字符串里的 Windows 路径会被变量展开**。`"B:\ProgramData\restic\..."` 里的 `$env:restic` 之类会被替换掉，路径写坏。描述性文字用单引号 here-string `@' ... '@`。
+8. **双引号字符串里的 Windows 路径会被变量展开**。`"D:\path\to\file"` 里的 `$env:path` 之类会被替换掉，路径写坏。描述性文字用单引号 here-string `@' ... '@`。
 9. **`bw login` 在已登录状态会先要求 logout**；换账号前先 `bw logout`。
 10. **`data.json`（登录态、同步缓存）默认在 C 盘 `%APPDATA%\Bitwarden CLI\`**，见「数据目录」一节改 `BITWARDENCLI_APPDATA_DIR`。
 11. **`bw get exposed <url>` 和 `bw report` 默认会联网查 HIBP 泄露库**；`bw report password-health --no-check-exposed` 可跳过。
 12. **OpenSSH 私钥必须是 LF 换行**，CRLF 的会被 OpenSSH 拒绝加载；Windows 上恢复后还要收紧 ACL，否则报 `UNPROTECTED PRIVATE KEY FILE`。
 13. **带口令的 SSH 私钥无法无人值守校验**：`ssh-keygen -y -P ''` 只对无口令密钥有效。脚本要明确区分「校验通过」和「跳过校验」，别混为一谈。
+14. **PowerShell 会把中文名写成字面的 `?`**，字符永久丢失（详见「批量编辑」一节）。含中文的条目一律用 Python 读写、base64 payload + 最小化 `.ps1` 落盘。
+15. **`bw list items` 的输出并非总是合法 JSON**：条目名含裸引号等字符时，整份输出会在该处断串，报 `Expecting ',' delimiter`。**逐条 `bw get item` 仍可读该条目**。首选修复是把同一份内容用 `bw edit` 原样写回（多数情况输出随即恢复正常——这是 CLI 的序列化 bug，不是数据坏了）；**不要用「删除 + 重建」**，见「绝不要用『删除 + 重建』修条目」一节。
+16. **`EditCipherError: ... out of date`** = 本地缓存的 `revisionDate` 落后于服务端。先 `bw sync` 再改；只 sync 不够时重新 `bw get item` 取最新对象再改。
+17. **`(Get-Content -Raw 'x')` 这类 PowerShell 表达式只在 PowerShell 里被求值**。从 Python 直接 `subprocess.run([bw, 'edit', 'item', id, "(Get-Content -Raw '...')"])` 会把表达式当字面量传给 bw，报 `Error parsing the encoded request data`。
