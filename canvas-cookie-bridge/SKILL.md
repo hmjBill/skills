@@ -71,6 +71,17 @@ https://<学校>.instructure.com/api/v1
 
 任何发 `Authorization: Bearer` 的 HTTP 客户端都能接；MCP 型客户端把 API URL 指到桥即可。
 
+## 与 canvas-cli 官方 skill 的关系
+
+如果同时安装了 canvas-cli 上游自带的用法 skill（`npx skills add jjuanrivvera/canvas-cli`
+或 `canvas skills install` 装的那份），注意其中 OAuth / `canvas auth login` 的认证指引
+在「禁学生 token」的学校**走不通**：auth login 需要管理员签发的 developer key，必然失败。
+两个 skill 同时在场时，**认证一律以本 skill 为准**：
+
+- 实例接入：`canvas config add <名> --url http://127.0.0.1:8902` + 占位 token，不要跑 auth login。
+- 出现 401：不是重新 login，而是 `refresh-cookie.cmd` 刷 cookie。
+- 命令用法（courses/assignments/... 的参数与组合）仍以上游 skill 为准，两者不冲突。
+
 ## 日常运维
 
 | 症状 | 处理 |
