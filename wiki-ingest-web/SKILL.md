@@ -5,6 +5,10 @@ description: 从 URL 提取干净内容并摄入 AI-Wiki 笔记库
 
 # AI-Wiki 网页内容摄入
 
+> **使用边界**：本技能的产出需写入 AI-Wiki 时，应由 Wiki Agent 执行落库；Coding Agent 使用时应先把笔记草稿交给用户确认，再由用户或 Wiki Agent 归档。
+
+> 开始前先定位笔记库根（含 `.obsidian/` 或 `00_系统/` 的目录）；本文路径与实际不符时，先核对库内实况再操作。
+
 从用户提供的 URL 提取干净正文内容，转化为 AI-Wiki 笔记。
 
 ## 触发场景

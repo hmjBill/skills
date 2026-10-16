@@ -5,6 +5,10 @@ description: 检查 AI-Wiki 笔记库健康状况，验证 schema 合规和链�
 
 # AI-Wiki 健康检查
 
+> **使用边界**：本技能的检查报告需写入 AI-Wiki 时，应由 Wiki Agent 执行落库；Coding Agent 使用时应先把报告交给用户确认，再由用户或 Wiki Agent 归档。
+
+> 开始前先定位笔记库根（含 `.obsidian/` 或 `00_系统/` 的目录）；本文路径与实际不符时，先核对库内实况再操作。
+
 检查 AI-Wiki 笔记库的健康状况，验证 schema 合规性和链接完整性。只读操作，仅输出检查报告。
 
 ## 用途
