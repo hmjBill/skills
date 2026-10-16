@@ -137,7 +137,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [bitwarden-cli](bitwarden-cli/SKILL.md) | 用 Bitwarden 官方 CLI 管理个人密码库（查询、增删改、文件夹整理、生成密码、Send、备份导出） |
 | [restic-backup](restic-backup/SKILL.md) | 用 restic 做加密备份与仓库巡检（建仓、备份、快照比对、保留策略清理、完整性校验、恢复，含只读健康检查脚本） |
 | [openssh](openssh/SKILL.md) | OpenSSH 完整用法：作为客户端连接任意服务器（密钥、config 别名、跳板机、端口转发、文件传输、排障），以及部署加固 sshd 供他人连接 |
-| [canvas-cookie-bridge](canvas-cookie-bridge/SKILL.md) | 用本机只读 cookie 桥让 Canvas MCP 在学校禁用学生 token 时照常可用（读课程、作业、成绩、待办） |
+| [canvas-cookie-bridge](canvas-cookie-bridge/SKILL.md) | 用本机 cookie 桥让 canvas-cli 等 Bearer 型 Canvas 客户端在学校禁用学生 token 时照常可用（转发全方法、注入 CSRF、读课程作业成绩、cookie 生命周期管理） |
 
 ## 使用方式
 
