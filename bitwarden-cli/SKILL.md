@@ -70,6 +70,82 @@ bw sync            # 拉取服务端最新 vault；-f 强制全量
 - 用完可以 `bw lock`（销毁全部 session key）；彻底退出用 `bw logout`。
 - 开了 2FA 的账号：`bw login your@email.com --method 1` 之类按提示走；API key 登录（`--apikey`）是 CI 场景，个人本机用不到。
 
+### 判断 session 是否还有效：`bw unlock --check`
+
+**这是非交互场景唯一可靠的检查方式**，比 `bw status` 更直接：
+
+```powershell
+bw unlock --check        # 有效时输出 "Vault is unlocked!" 并 exit 0
+```
+
+`bw status` 显示 `locked` 有两种完全不同的原因，处理方式也不同：
+
+| 现象 | 含义 | 处理 |
+| ---- | ---- | ---- |
+| `bw status` → locked，但根本没设过 `BW_SESSION` | 从没解锁 | 正常，需要 unlock |
+| `bw status` → locked，但持久化的 `BW_SESSION` 已存在 | **那个 key 已失效** | 重新 unlock 并重新持久化 |
+
+### 让 Agent 免交互使用：持久化 session key
+
+Agent 反复调用 `bw` 时，每次都要人输主密码是不可接受的。做法是 unlock 一次，把 session key 持久化，之后所有新进程自动继承。
+
+**每次 `bw unlock` 都会作废之前所有 session key**（CLI 帮助原文：`After unlocking, any previous session keys will no longer be valid.`）。所以持久化不是一劳永逸的，**每次 unlock 之后都要重新写一遍**。
+
+Windows（用户级注册表，新进程自动继承）：
+
+```powershell
+# 设成你自己的 CLI 数据目录；不设则沿用默认（见「数据目录」一节）
+$env:BITWARDENCLI_APPDATA_DIR = '/path/to/Bitwarden CLI'
+[Environment]::SetEnvironmentVariable('BW_SESSION', (bw unlock --raw), 'User')
+```
+
+macOS / Linux（写进 shell profile）：
+
+```bash
+echo 'export BW_SESSION='"$(bw unlock --raw)" >> ~/.zshrc   # 或 ~/.bashrc
+```
+
+**关键限制：已经跑着的进程（包括当前这个 Agent 会话）拿不到新值。** Windows 的子进程从父进程的环境块继承，不重读注册表。所以：
+
+- 新开的终端 / 重启后的应用 → 能读到
+- 当前会话里的 Agent → 读不到
+
+绕法：**需要用 `bw` 的脚本不依赖进程环境变量，直接从持久化位置读回来**。这样不重启也能用：
+
+```powershell
+# Windows
+$sess = ([string](Get-ItemProperty 'HKCU:\Environment').BW_SESSION).Trim()
+if ($sess) { $env:BW_SESSION = $sess }
+bw unlock --check
+```
+
+脚本开头统一用这个模式，并且**在 vault 不可用时明确退出**，而不是让后续命令报一堆看不懂的错：
+
+```powershell
+if ([string]::IsNullOrWhiteSpace($sess)) {
+    Write-Host 'No persisted BW_SESSION. Run: bw unlock --raw' -ForegroundColor Red
+    exit 1
+}
+```
+
+### 组织结构：先建文件夹，再谈分类
+
+个人 vault 里**文件夹**（`bw create folder`）是主力分类机制；Tags 需要 Premium。多数人的 vault 长期停在「一个条目都不放文件夹」的状态，结果是条目堆在一起、找东西全靠搜索。
+
+设计分类前先看清现状（只读统计，不要打印条目内容）：
+
+```powershell
+$raw = & bw list items 2>$null | Out-String
+$items = ($raw -replace '[\x00-\x08\x0B\x0C\x0E-\x1F]', '') | ConvertFrom-Json
+@($items) | Group-Object type | ForEach-Object { "type=$($_.Name): $($_.Count)" }
+@($items) | Group-Object { if ($_.folderId) { 'in-folder' } else { 'no-folder' } } |
+    ForEach-Object { "$($_.Name): $($_.Count)" }
+```
+
+先按**用途**分文件夹（工作 / 个人 / 服务器 / 金融），而不是按网站类型分——用途决定你什么时候需要它。跨用途的账号再考虑 Tags。
+
+**注意**：`bw list items` 的完整 JSON 包含所有密码、TOTP seed 和备注，**只用来做计数和分组，绝不整体倒进对话或日志**。
+
 ## 查询
 
 ```powershell
@@ -114,6 +190,81 @@ $json = $item | ConvertTo-Json -Depth 10 -Compress
 $json | bw encode | bw create item
 ```
 
+### 条目类型（cipher type）：先认 type，再谈字段
+
+每条 vault 条目都有一个 `type`（cipher type）。字段结构**按 type 完全不同**，往错类型里塞字段会被静默丢弃——不报错，东西就是存不进去。
+
+| type | 类型 | 内容字段 |
+| ---- | ---- | -------- |
+| 1 | Login 登录项 | `login.{username,password,uris,totp}` |
+| 2 | SecureNote 安全笔记 | 见下方「安全笔记的真相」 |
+| 3 | Card 银行卡 | `card.*` |
+| 4 | Identity 身份信息 | `identity.*` |
+| 5 | SshKey SSH 密钥 | `sshKey.{privateKey,publicKey,keyFingerprint}` |
+
+**`bw get template item.sshKey` 会报不支持，但这不代表 CLI 不支持 SSH 密钥。** CLI 从 2024.12.0 起就完整支持 type=5，是 `bw get template` 的注册表落后于 cipher 类型。判断某类型是否支持，用 `bw get template item`（完整 item 模板）或直接试写，**不要拿 `item.<type>` 模板命令的返回值当证据**——这是个很容易踩的坑，会让人误判整个功能不存在。
+
+### 安全笔记的真相（type=2）
+
+安全笔记的**可取回内容存在顶层 `notes` 字段**，不是 `secureNote.notes`：
+
+```json
+{ "name": "...", "type": 2, "notes": "<内容>", "secureNote": { "type": 0 } }
+```
+
+两个后果，踩过就会白忙一场：
+
+1. 把内容写进 `secureNote.notes` → **每次写入都被静默丢弃**，命令返回成功、条目也建出来了，但内容是空的。
+2. `bw get password <id>` 对安全笔记**返回空**（它只服务于 Login 类型）。取内容要读条目的 `.notes`。
+
+正确建法：
+
+```powershell
+$item = [PSCustomObject]@{
+    name       = 'restic-repo-key'
+    notes      = $secret          # 内容放这里
+    type       = 2
+    secureNote = [PSCustomObject]@{ type = 0 }
+    fields     = @([PSCustomObject]@{ name = 'context'; value = $desc; type = 0 })
+} | ConvertTo-Json -Depth 12 -Compress
+```
+
+自定义字段（`fields`）用来放指纹、路径、恢复命令这类元数据——条目只能有一个 `notes`，元数据放这里。
+
+### SSH 密钥条目（type=5）
+
+```json
+{
+  "name": "ssh-key-<标识>",
+  "type": 5,
+  "sshKey": {
+    "privateKey":     "-----BEGIN OPENSSH PRIVATE KEY-----\n...",
+    "publicKey":      "ssh-ed25519 AAAA... comment",
+    "keyFingerprint": "SHA256:xxxx"
+  }
+}
+```
+
+字段名是 **`keyFingerprint`**（不是 `keyType` / `keyData`）。`publicKey` 和 `keyFingerprint` 都能从私钥推导出来，静止时可以不存；写全三条能让条目自解释、便于人工核对。
+
+几条与 OpenSSH 相关的硬约束：
+
+- **私钥必须是 LF 换行**。CRLF 的私钥 OpenSSH 直接拒绝加载，存进去等于废条目。
+- **Windows 上恢复后必须收紧 ACL**，否则 OpenSSH 报 `UNPROTECTED PRIVATE KEY FILE` 拒绝加载。
+- **带口令的私钥无法在无人值守场景校验**。`ssh-keygen -y -P ''` 只对无口令密钥有效；有口令密钥只能做逐字节比对。这点在自动化脚本里要说清楚，别把"校验跳过"当成"校验通过"。
+
+写入前先自检，坏格式宁可不写：
+
+```powershell
+$bytes = [IO.File]::ReadAllBytes($path)
+for ($i = 1; $i -lt $bytes.Length; $i++) {
+    if ($bytes[$i] -eq 10 -and $bytes[$i-1] -eq 13) { throw 'CRLF: OpenSSH would reject this key' }
+}
+if (([Text.Encoding]::UTF8.GetString($bytes)) -notmatch '-----BEGIN OPENSSH PRIVATE KEY-----') { throw 'not an OpenSSH key' }
+```
+
+完整脚本见 `scripts/store-ssh-key.ps1`，含写入后的往返校验（私钥/公钥/指纹逐项比对，无口令时再做一次 `ssh-keygen -y` 派生验证）。
+
 编辑的正确姿势是**先取全量、改字段、再整份编码回传**。直接传局部 JSON 会把没写的字段清掉：
 
 ```powershell
@@ -121,6 +272,25 @@ $item = bw get item <id> | ConvertFrom-Json
 $item.folderId = "<folderId>"          # 例如移动到 Development 文件夹
 $item.notes = "备注更新"
 ($item | ConvertTo-Json -Depth 10 -Compress) | bw encode | bw edit item <id>
+```
+
+**重建而非编辑**：条目结构写错时（比如把内容误放进了 `secureNote.notes`），再多次 `edit` 也修不回来——因为回读时那个字段已经不存在了。正确做法是 `bw delete item <id> --permanent` 后按正确结构重建。
+
+JSON 解析的坑：vault 里某些条目的名字含裸控制字符，`bw list items` 的输出直接喂给 `ConvertFrom-Json` 会解析失败（报 `unexpected character`）。批量统计前先清洗：
+
+```powershell
+$raw = & bw list items 2>$null | Out-String
+$items = ($raw -replace '[\x00-\x08\x0B\x0C\x0E-\x1F]', '') | ConvertFrom-Json
+```
+
+PowerShell 字符串陷阱：载荷里的路径**必须用单引号 here-string**。双引号里的 `B:\ProgramData
+estic\...` 会被当成变量展开（`$env:restic` 等），路径直接写坏：
+
+```powershell
+$body = @'
+Path: B:\ProgramData
+estic\password.bin
+'@   # 单引号 here-string，不展开
 ```
 
 删除与恢复：
@@ -236,14 +406,18 @@ bw import --passwordenv BW_BACKUP_PW encrypted_json .\backup.json   # 加密备�
 | 目的 | 命令 |
 |---|---|
 | 检查状态 | `bw status` |
+| 校验 session 是否有效 | `bw unlock --check` |
 | 登录 / 解锁 | `bw login <email>` / `$env:BW_SESSION = (bw unlock --raw)` |
+| 持久化 session（Win） | `[Environment]::SetEnvironmentVariable('BW_SESSION', (bw unlock --raw), 'User')` |
 | 拉取最新 | `bw sync` |
 | 搜索条目 | `bw list items --search <关键词>` |
-| 取密码 | `bw get password <id>` |
+| 取密码（仅 Login） | `bw get password <id>` |
+| 取安全笔记内容 | `(bw get item <id> \| ConvertFrom-Json).notes` |
 | 取 TOTP | `bw get totp <id>` |
-| 条目模板 | `bw get template item.login` |
+| 条目模板 | `bw get template item.login`（模板注册表可能落后，见「条目类型」一节） |
 | 建文件夹 | `'{"name":"X"}' \| bw encode \| bw create folder` |
 | 改条目 | `(bw get item <id> \| ConvertFrom-Json ...) \| ConvertTo-Json -Compress \| bw encode \| bw edit item <id>` |
+| 存 SSH 私钥（type=5） | 见 `scripts/store-ssh-key.ps1` |
 | 生成密码 | `bw generate -ulns --length 20` |
 | Send 分享 | `bw send "文本" -d 7 -a 3` |
 | 加密备份 | `bw export --format encrypted_json --password <pw> --output <file>` |
@@ -253,8 +427,16 @@ bw import --passwordenv BW_BACKUP_PW encrypted_json .\backup.json   # 加密备�
 ## 已知坑（2026.10.0 实测）
 
 1. **没有 `bw folders` 这个子命令**。文件夹操作一律走 `bw list folders` / `bw create folder` / `bw edit folder <id>` / `bw delete folder <id>`；敲错时 `bw folders --help` 会打印顶层总帮助，容易看懵。
-2. `bw unlock --raw` 在 vault 已锁定时把错误打到 stderr 并以非零码退出，赋值给 `$env:BW_SESSION` 前先 `bw status` 确认。
-3. `bw encode` 是把 stdin 做 base64；PowerShell 里 base64 串含 `+` `/` `=`，一律用**单引号**包裹，双引号在某些上下文会被变量展开破坏。
-4. `bw login` 在已登录状态会先要求 logout；换账号前先 `bw logout`。
-5. `data.json`（登录态、同步缓存）默认在 C 盘 `%APPDATA%\Bitwarden CLI\`，见「数据目录」一节改 `BITWARDENCLI_APPDATA_DIR`。
-6. `bw get exposed <url>` 和 `bw report` 默认会联网查 HIBP 泄露库；`bw report password-health --no-check-exposed` 可跳过。
+2. **`bw get template item.sshKey` 报不支持，但 CLI 完整支持 type=5 SSH 密钥**（2024.12.0 起）。模板注册表落后于 cipher 类型，别据此判断功能不存在——这条极易导致误判。
+3. **安全笔记的内容在顶层 `notes`，不是 `secureNote.notes`**。写错位置会被静默丢弃：命令成功、条目建出来了、内容却是空的。`bw get password` 对安全笔记也返回空。
+4. **每次 `bw unlock` 作废所有旧 session key**。持久化过的 `BW_SESSION` 会在下一次 unlock 后失效，需要重新写一遍。
+5. **`bw unlock --raw` 在 vault 已锁定时把错误打到 stderr 并以非零码退出**，赋值给 `$env:BW_SESSION` 前先 `bw unlock --check` 确认。注意它可能仍以 exit 0 返回**提示框文本**而非 key，所以不能只看退出码，要校验返回值形态。
+6. **`bw encode` 是把 stdin 做 base64**；PowerShell 里 base64 串含 `+` `/` `=`，一律用**单引号**包裹，双引号在某些上下文会被变量展开破坏。
+7. **`bw list items` 的 JSON 可能含裸控制字符**（某些条目名），直接喂 `ConvertFrom-Json` 会报 `unexpected character`。先 `-replace '[\x00-\x08\x0B\x0C\x0E-\x1F]', ''` 清洗。
+8. **双引号字符串里的 Windows 路径会被变量展开**。`"B:\ProgramData
+estic\..."` 里的 `$env:restic` 之类会被替换掉，路径写坏。描述性文字用单引号 here-string `@' ... '@`。
+9. **`bw login` 在已登录状态会先要求 logout**；换账号前先 `bw logout`。
+10. **`data.json`（登录态、同步缓存）默认在 C 盘 `%APPDATA%\Bitwarden CLI\`**，见「数据目录」一节改 `BITWARDENCLI_APPDATA_DIR`。
+11. **`bw get exposed <url>` 和 `bw report` 默认会联网查 HIBP 泄露库**；`bw report password-health --no-check-exposed` 可跳过。
+12. **OpenSSH 私钥必须是 LF 换行**，CRLF 的会被 OpenSSH 拒绝加载；Windows 上恢复后还要收紧 ACL，否则报 `UNPROTECTED PRIVATE KEY FILE`。
+13. **带口令的 SSH 私钥无法无人值守校验**：`ssh-keygen -y -P ''` 只对无口令密钥有效。脚本要明确区分「校验通过」和「跳过校验」，别混为一谈。
