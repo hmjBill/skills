@@ -5,6 +5,8 @@ description: 在 AI-Wiki 笔记库中搜索、创建和管理笔记
 
 # AI-Wiki 笔记库操作
 
+> **使用边界**：本技能的产出需写入 AI-Wiki 时，应由 Wiki Agent 执行落库；Coding Agent 使用时应先把笔记草稿交给用户确认，再由用户或 Wiki Agent 归档。
+
 在 AI-Wiki 笔记库中搜索、创建和管理笔记。
 
 与 wiki-* 系列的分工：内容导入与路由用 wiki-ingest，全库问答用 wiki-query，写作辅助用 wiki-write，周期复盘用 wiki-review；本技能提供通用的搜索、创建与维护操作。

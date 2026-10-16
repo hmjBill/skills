@@ -5,6 +5,10 @@ description: 将对话内容提炼为 AI-Wiki 持久笔记，按 PARA 结构归�
 
 # AI-Wiki 对话提炼
 
+> **使用边界**：本技能的产出需写入 AI-Wiki 时，应由 Wiki Agent 执行落库；Coding Agent 使用时应先把笔记草稿交给用户确认，再由用户或 Wiki Agent 归档。
+
+> 开始前先定位笔记库根（含 `.obsidian/` 或 `00_系统/` 的目录）；本文路径与实际不符时，先核对库内实况再操作。
+
 将对话内容提炼为 AI-Wiki 持久笔记，按 PARA 结构归档到正确目录。
 
 ## 用途

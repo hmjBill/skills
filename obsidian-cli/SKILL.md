@@ -5,6 +5,10 @@ description: 在 AI-Wiki 环境中使用 Obsidian CLI 操作笔记库
 
 # Obsidian CLI（AI-Wiki 适配版）
 
+> **使用边界**：本技能对 AI-Wiki 的写入操作（创建/修改笔记）应由 Wiki Agent 执行落库；Coding Agent 使用时应先把命令与目标笔记交给用户确认，再由用户或 Wiki Agent 执行。
+
+> 开始前先定位笔记库根（含 `.obsidian/` 或 `00_系统/` 的目录）；本文路径与实际不符时，先核对库内实况再操作。
+
 使用 `obsidian` CLI 与运行中的 Obsidian 实例交互。需要 Obsidian 处于打开状态。
 
 本技能在原 obsidian-cli 基础上增加了 AI-Wiki 笔记库的操作规范，确保 CLI 操作符合 AI-Wiki 的目录结构、模板系统和 frontmatter 约束。
