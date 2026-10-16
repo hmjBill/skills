@@ -1,118 +1,118 @@
-# Banner Sizes & Art Direction Styles Reference
+# 横幅尺寸与艺术方向风格参考
 
-## Complete Banner Sizes
+## 完整横幅尺寸
 
-### Social Media
-| Platform | Type | Size (px) | Aspect Ratio |
+### 社交媒体
+| 平台 | 类型 | 尺寸（px） | 宽高比 |
 |----------|------|-----------|--------------|
-| Facebook | Cover (desktop) | 820 × 312 | ~2.6:1 |
-| Facebook | Cover (mobile) | 640 × 360 | ~16:9 |
-| Facebook | Event cover | 1920 × 1080 | 16:9 |
-| Twitter/X | Header | 1500 × 500 | 3:1 |
-| Twitter/X | Ad banner | 800 × 418 | ~2:1 |
-| LinkedIn | Company cover | 1128 × 191 | ~6:1 |
-| LinkedIn | Personal banner | 1584 × 396 | 4:1 |
-| YouTube | Channel art | 2560 × 1440 | 16:9 |
-| YouTube | Safe area | 1546 × 423 | ~3.7:1 |
-| Instagram | Stories | 1080 × 1920 | 9:16 |
-| Instagram | Post | 1080 × 1080 | 1:1 |
-| Pinterest | Pin | 1000 × 1500 | 2:3 |
+| Facebook | 封面（桌面） | 820 × 312 | ~2.6:1 |
+| Facebook | 封面（移动端） | 640 × 360 | ~16:9 |
+| Facebook | 活动封面 | 1920 × 1080 | 16:9 |
+| Twitter/X | 页头 | 1500 × 500 | 3:1 |
+| Twitter/X | 广告横幅 | 800 × 418 | ~2:1 |
+| LinkedIn | 公司封面 | 1128 × 191 | ~6:1 |
+| LinkedIn | 个人横幅 | 1584 × 396 | 4:1 |
+| YouTube | 频道图 | 2560 × 1440 | 16:9 |
+| YouTube | 安全区域 | 1546 × 423 | ~3.7:1 |
+| Instagram | 故事 | 1080 × 1920 | 9:16 |
+| Instagram | 帖子 | 1080 × 1080 | 1:1 |
+| Pinterest | Pin 图 | 1000 × 1500 | 2:3 |
 
-### Web / Display Ads (Google Display Network)
-| Name | Size (px) | Notes |
+### 网页 / 展示广告（Google 展示广告网络）
+| 名称 | 尺寸（px） | 说明 |
 |------|-----------|-------|
-| Medium Rectangle | 300 × 250 | Highest CTR |
-| Leaderboard | 728 × 90 | Top of page |
-| Wide Skyscraper | 160 × 600 | Sidebar |
-| Half Page | 300 × 600 | Premium |
-| Large Rectangle | 336 × 280 | High performer |
-| Mobile Banner | 320 × 50 | Mobile default |
-| Large Mobile | 320 × 100 | Mobile hero |
-| Billboard | 970 × 250 | Desktop hero |
+| 中矩形 | 300 × 250 | 点击率最高 |
+| 横幅广告（Leaderboard） | 728 × 90 | 页面顶部 |
+| 宽摩天大楼 | 160 × 600 | 侧边栏 |
+| 半页 | 300 × 600 | 优质版位 |
+| 大矩形 | 336 × 280 | 表现出色 |
+| 移动横幅 | 320 × 50 | 移动端默认 |
+| 大号移动横幅 | 320 × 100 | 移动端首屏 |
+| 广告牌 | 970 × 250 | 桌面端首屏 |
 
-### Website
-| Type | Size (px) |
+### 网站
+| 类型 | 尺寸（px） |
 |------|-----------|
-| Full-width hero | 1920 × 600–1080 |
-| Section banner | 1200 × 400 |
-| Blog header | 1200 × 628 |
-| Email header | 600 × 200 |
+| 全宽英雄区 | 1920 × 600–1080 |
+| 区块横幅 | 1200 × 400 |
+| 博客页头 | 1200 × 628 |
+| 邮件页头 | 600 × 200 |
 
-### Print
-| Type | Size |
+### 印刷
+| 类型 | 尺寸 |
 |------|------|
-| Roll-up | 850mm × 2000mm |
-| Step-and-repeat | 8ft × 8ft |
-| Vinyl outdoor | 6ft × 3ft |
-| Trade show | 33in × 78in |
+| 易拉宝 | 850mm × 2000mm |
+| 重复背景墙（Step-and-repeat） | 8ft × 8ft |
+| 户外乙烯基横幅 | 6ft × 3ft |
+| 展会 | 33in × 78in |
 
-## 22 Art Direction Styles
+## 22 种艺术方向风格
 
-1. **Minimalist** — White space dominant, single focal element, 1-2 colors, clean sans-serif
-2. **Bold Typography** — Type IS the design; oversized, expressive letterforms fill canvas
-3. **Gradient / Color Wash** — Smooth transitions, mesh gradients, chromatic blends
-4. **Photo-Based** — Full-bleed photography with text overlay; hero lifestyle imagery
-5. **Illustrated / Hand-Drawn** — Custom illustrations, bespoke icons, artisan feel
-6. **Geometric / Abstract** — Shapes, lines, grids as primary visual elements
-7. **Retro / Vintage** — Distressed textures, muted palettes, serif type, halftone dots
-8. **Glassmorphism** — Frosted glass panels, blur backdrop, subtle border glow
-9. **3D / Sculptural** — Rendered objects, depth, shadows; product-centric
-10. **Neon / Cyberpunk** — Dark backgrounds, glowing neon accents, high contrast
-11. **Duotone** — Two-color photo treatment; bold brand color overlay on image
-12. **Editorial / Magazine** — Grid-heavy layouts, pull quotes, journalistic composition
-13. **Collage / Mixed Media** — Cut-paper textures, photo cutouts, layered elements
-14. **Retro Futurism** — Space-age nostalgia, chrome, gradients, optimism
-15. **Expressive / Anti-Design** — Chaotic layouts, mixed fonts, deliberate "wrong" composition
-16. **Digi-Cute / Kawaii** — Rounded shapes, pastel gradients, pixel art, playful characters
-17. **Tactile / Sensory** — Puffy/squishy textures, hyper-real materials, embossed feel
-18. **Data / Infographic** — Stats front-and-center, charts, numbers as heroes
-19. **Dark Mode / Moody** — Near-black backgrounds, rich jewel tones, high contrast
-20. **Flat / Solid Color** — Single background color, clean icons, no gradients
-21. **Nature / Organic** — Earthy tones, botanical motifs, sustainable brand feel
-22. **Motion-Ready / Kinetic** — Designed for animation; layered elements, loopable
+1. **极简** — 以留白为主，单一焦点元素，1-2 种颜色，干净的无衬线字体
+2. **粗体排版** — 文字即设计；超大、富有表现力的字形铺满画布
+3. **渐变 / 色洗** — 平滑过渡、网格渐变、色彩交融
+4. **照片风格** — 满幅摄影叠加文字；生活方式主视觉图
+5. **插画 / 手绘** — 定制插画、专属图标、手作质感
+6. **几何 / 抽象** — 以形状、线条、网格为主要视觉元素
+7. **复古 / 怀旧** — 做旧纹理、低饱和配色、衬线字体、半调网点
+8. **玻璃拟态** — 磨砂玻璃面板、背景模糊、细微边框光晕
+9. **3D / 雕塑感** — 渲染物体、景深、阴影；以产品为中心
+10. **霓虹 / 赛博朋克** — 深色背景、发光霓虹点缀、高对比度
+11. **双色调** — 双色照片处理；在图片上叠加醒目的品牌色
+12. **编辑 / 杂志风** — 重网格布局、摘引文字、新闻式构图
+13. **拼贴 / 混合媒介** — 剪纸纹理、照片剪贴、层叠元素
+14. **复古未来主义** — 太空时代怀旧感、镀铬、渐变、乐观气息
+15. **表现主义 / 反设计** — 混乱布局、混合字体、刻意"错误"的构图
+16. **数字萌系 / 卡哇伊** — 圆润形状、粉彩渐变、像素艺术、俏皮角色
+17. **触感 / 感官** — 蓬松/软糯纹理、超写实材质、浮雕质感
+18. **数据 / 信息图** — 数据居中展示、图表、数字作为主角
+19. **深色模式 / 情绪化** — 近黑背景、浓郁宝石色调、高对比度
+20. **扁平 / 纯色** — 单一背景色、简洁图标、无渐变
+21. **自然 / 有机** — 大地色系、植物图案、可持续品牌感
+22. **动效就绪 / 动态** — 为动画而设计；层叠元素、可循环播放
 
-## Design Principles
+## 设计原则
 
-### Visual Hierarchy (3-Zone Rule)
-- **Top**: Logo or main value prop
-- **Middle**: Supporting message + visuals
-- **Bottom**: CTA (button/QR/URL)
+### 视觉层级（三区法则）
+- **顶部**：Logo 或核心价值主张
+- **中部**：辅助信息 + 视觉元素
+- **底部**：CTA（按钮/二维码/网址）
 
-### Safe Zones
-- Critical content in central 70-80% of canvas
-- Avoid text/CTA within 50-100px of edges
-- YouTube: 1546 × 423px safe area inside 2560 × 1440
-- Meta/Instagram: central 80% to avoid UI chrome
+### 安全区域
+- 关键内容位于画布中间 70-80%
+- 文字/CTA 距边缘不少于 50-100px
+- YouTube：2560 × 1440 内设 1546 × 423px 安全区域
+- Meta/Instagram：中央 80% 以避开界面元素
 
-### CTA Rules
-- One CTA per banner
-- High contrast vs background
-- Bottom-right placement (terminal area)
-- Min 44px height for mobile tap targets
-- Action verbs: "Get", "Start", "Download", "Claim"
+### CTA 规则
+- 每个横幅一个 CTA
+- 与背景高对比
+- 置于右下角（终端区域）
+- 移动端点击目标最小高度 44px
+- 使用动作动词："Get"、"Start"、"Download"、"Claim"
 
-### Typography
-- Max 2 typefaces per banner
-- Min 16px body, ≥32px headline (digital)
-- Min 4.5:1 contrast ratio
-- Max 7 words/line, 3 lines for ads
+### 排版
+- 每个横幅最多 2 种字体
+- 正文最小 16px，标题 ≥32px（数字端）
+- 对比度至少 4.5:1
+- 每行最多 7 个单词，广告最多 3 行
 
-### Text-to-Image Ratio
-- Ads: under 20% text (Meta penalizes)
-- Social covers: 60/40 image-to-text
-- Print: 70pt+ headlines for 3-5m viewing distance
+### 文字与图像比例
+- 广告：文字低于 20%（Meta 会降权）
+- 社交封面：图 60 / 文 40
+- 印刷：3-5m 观看距离下标题不小于 70pt
 
-### Print Specs
-- 300 DPI minimum (150 DPI for large format)
-- 3-5mm bleed all sides
-- CMYK color mode
-- 1pt per foot viewing distance rule
+### 印刷规范
+- 最低 300 DPI（大幅面 150 DPI）
+- 四边 3-5mm 出血
+- CMYK 色彩模式
+- 每英尺观看距离 1pt 字号规则
 
-## Pinterest Research Queries
+## Pinterest 调研关键词
 
-Use these search queries on Pinterest for art direction references:
-- `[purpose] banner design [style]` (e.g., "social media banner minimalist")
-- `[platform] cover design inspiration` (e.g., "youtube channel art design")
-- `creative banner layout [industry]` (e.g., "creative banner layout tech startup")
-- `[style] graphic design 2026` (e.g., "gradient graphic design 2026")
-- `banner ad design [product type]` (e.g., "banner ad design saas")
+在 Pinterest 上用以下搜索词查找艺术方向参考：
+- `[用途] banner design [风格]`（例如 "social media banner minimalist"）
+- `[平台] cover design inspiration`（例如 "youtube channel art design"）
+- `creative banner layout [行业]`（例如 "creative banner layout tech startup"）
+- `[风格] graphic design 2026`（例如 "gradient graphic design 2026"）
+- `banner ad design [产品类型]`（例如 "banner ad design saas"）

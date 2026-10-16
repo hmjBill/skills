@@ -3,7 +3,7 @@ name: chatlog-keeper
 description: 导出本地 QQ 与微信聊天记录（会话目录、消息流、图片解密、密钥管理），全程本地处理不上传
 ---
 
-# Chatlog Keeper Skill
+# Chatlog Keeper 技能
 
 通过 [`chatlog-keeper`](https://github.com/labazhou2024/chatlog-keeper) 解密并导出**你自己**本机的 QQ / 微信聊天记录，产出 JSON + 一个自包含的 HTML 页面（按会话、按天分组的气泡样式）。全程离线，解密路径里没有任何网络代码，不上传、不采集、零遥测。
 
@@ -68,14 +68,14 @@ if (($cur -split ';') -notcontains $dir) {
 
 Windows 专属的 shifted 读取器不适用于 macOS / Linux，用常规 `uv tool install`：
 
-```powershell
+```bash
 git clone https://github.com/labazhou2024/chatlog-keeper.git "<持久目录>\chatlog-keeper"
 uv tool install --force "<持久目录>\chatlog-keeper"
 ```
 
 更新已有源码（不要用 `uv tool upgrade`，那会走 PyPI）：
 
-```powershell
+```bash
 git -C "<持久目录>\chatlog-keeper" pull --ff-only
 uv tool install --force "<持久目录>\chatlog-keeper"
 ```
@@ -84,7 +84,7 @@ macOS 另有 release 二进制 `chatlog-keeper-macos-arm64`。源码安装首次
 
 ### 通用源码安装（⚠️ 非 Windows 推荐路径）
 
-```powershell
+```bash
 git clone https://github.com/labazhou2024/chatlog-keeper.git "<持久目录>\chatlog-keeper"
 cd "<持久目录>\chatlog-keeper"
 python -m pip install .

@@ -36,15 +36,15 @@ disable-model-invocation: true
 **多上下文：** 仓库根目录的 `GLOSSARY-MAP.md` 指向每个上下文的 `GLOSSARY.md`，并记录它们之间的关系：
 
 ```md
-# Glossary Map
+# 词汇表地图
 
-## Contexts
+## 上下文
 
 - [Ordering](./src/ordering/GLOSSARY.md): 接收并跟踪客户订单
 - [Billing](./src/billing/GLOSSARY.md): 生成发票并处理付款
 - [Fulfillment](./src/fulfillment/GLOSSARY.md): 管理仓库拣货和发货
 
-## Relationships
+## 关系
 
 - **Ordering → Fulfillment**: Ordering 发出 `OrderPlaced` 事件；Fulfillment 消费它们开始拣货
 - **Fulfillment → Billing**: Fulfillment 发出 `ShipmentDispatched` 事件；Billing 消费它们生成发票
@@ -60,41 +60,41 @@ disable-model-invocation: true
 ```md
 # 通用语言
 
-## Order lifecycle
+## 订单生命周期
 
-| Term        | Definition                                              | Aliases to avoid      |
-| ----------- | ------------------------------------------------------- | --------------------- |
-| **Order**   | A customer's request to purchase one or more items      | Purchase, transaction |
-| **Invoice** | A request for payment sent to a customer after delivery | Bill, payment request |
+| Term       | Definition   | Aliases to avoid      |
+| ---------- | ------------ | --------------------- |
+| **Order**  | 客户购买一个或多个商品的请求 | Purchase, transaction |
+| **Invoice** | 交付后向客户发出的付款请求   | Bill, payment request |
 
-## People
+## 参与者
 
-| Term         | Definition                                  | Aliases to avoid       |
-| ------------ | ------------------------------------------- | ---------------------- |
-| **Customer** | A person or organization that places orders | Client, buyer, account |
-| **User**     | An authentication identity in the system    | Login, account         |
+| Term         | Definition   | Aliases to avoid      |
+| ------------ | ------------ | --------------------- |
+| **Customer** | 下单的个人或组织           | Client, buyer, account |
+| **User**     | 系统中的认证身份           | Login, account        |
 
-## Relationships
+## 关系
 
-- An **Invoice** belongs to exactly one **Customer**
-- An **Order** produces one or more **Invoices**
+- 一个 **Invoice** 恰好属于一个 **Customer**
+- 一个 **Order** 会产生一个或多个 **Invoice**
 
-## Example dialogue
+## 示例对话
 
-> **Dev:** "When a **Customer** places an **Order**, do we create the **Invoice** immediately?"
-> **Domain expert:** "No — an **Invoice** is only generated once a **Fulfillment** is confirmed. A single **Order** can produce multiple **Invoices** if items ship in separate **Shipments**."
-> **Dev:** "So if a **Shipment** is cancelled before dispatch, no **Invoice** exists for it?"
-> **Domain expert:** "Exactly. The **Invoice** lifecycle is tied to the **Fulfillment**, not the **Order**."
+> **开发：** "当 **Customer** 下了一个 **Order** 时，要立刻生成 **Invoice** 吗？"
+> **领域专家：** "不——要等 **Fulfillment** 确认后才生成 **Invoice**。如果商品分批 **Shipment**，一个 **Order** 可以产生多个 **Invoice**。"
+> **开发：** "那如果某个 **Shipment** 在发出前被取消，就没有对应的 **Invoice**？"
+> **领域专家：** "正是。**Invoice** 的生命周期绑定的是 **Fulfillment**，不是 **Order**。"
 
-## Flagged ambiguities
+## 已标记的歧义
 
-- "account" was used to mean both **Customer** and **User** — these are distinct concepts: a **Customer** places orders, while a **User** is an authentication identity that may or may not represent a **Customer**.
+- "account" 曾同时用来指 **Customer** 和 **User**——这是两个不同的概念：**Customer** 负责下单，**User** 则是系统中的认证身份，可能对应也可能不对应某个 **Customer**。
 ```
 
 ## 规则
 
 - **要明确。** 当同一概念存在多个词时，选择最好的一个并列出其他作为应避免的别名。
-- **明确标记冲突。** 如果术语在对话中被歧义使用，在"Flagged ambiguities"部分指出它并提供明确的建议。
+- **明确标记冲突。** 如果术语在对话中被歧义使用，在"已标记的歧义"部分指出它并提供明确的建议。
 - **只包括领域专家相关的术语。** 跳过模块或类的名称，除非它们在领域语言中有意义。
 - **保持定义紧密。** 最多一两句话。定义它*是什么*，而不是它*做什么*。
 - **展示关系。** 使用粗体术语名称并在明显的地方表达基数。
@@ -115,15 +115,15 @@ disable-model-invocation: true
 
 <example>
 
-## Example dialogue
+## 示例对话
 
-> **Dev:** "How do I test the **sync service** without Docker?"
+> **开发：** "不用 Docker 怎么测试 **sync service**？"
 
-> **Domain expert:** "Provide the **filesystem layer** instead of the **Docker layer**. It implements the same **Sandbox service** interface but uses a local directory as the **sandbox**."
+> **领域专家：** "用 **filesystem layer** 替代 **Docker layer**。它实现的是同一个 **Sandbox service** 接口，只是把本地目录当作 **sandbox**。"
 
-> **Dev:** "So **sync-in** still creates a **bundle** and unpacks it?"
+> **开发：** "那 **sync-in** 仍然会创建 **bundle** 并解包？"
 
-> **Domain expert:** "Exactly. The **sync service** doesn't know which layer it's talking to. It calls `exec` and `copyIn` — the **filesystem layer** just runs those as local shell commands."
+> **领域专家：** "正是。**sync service** 不知道自己面对的是哪一层。它调用 `exec` 和 `copyIn`——**filesystem layer** 只是把它们当作本地 shell 命令执行。"
 
 </example>
 
