@@ -7,12 +7,12 @@ description: 用 restic 做加密备份与仓库巡检：建仓、备份、快�
 
 restic 是去重、加密、版本化的备份工具，仓库可以是本地目录、S3/B2/SFTP/rclone 目标或自建 rest-server。本技能面向"已经有一个 restic 仓库，要日常备份、检查、清理、恢复"的场景，同时覆盖从零建仓。
 
-`scripts/restic-health.ps1` 是一个**只读**巡检脚本：检查仓库可读性、备份新鲜度、保留策略分组、完整性、密码文件 ACL、残留锁和磁盘余量，不修改仓库。Windows 上优先用它做日常巡检。
+`scripts/restic-health.ps1` 是一个**只读**巡检脚本：检查仓库可读性、备份新鲜度、保留策略分组、完整性、密码文件权限、残留锁和磁盘余量，不修改仓库。Windows / macOS / Linux 上都能跑（PowerShell 7+），本地和 S3/B2/SFTP/REST/rclone 后端都适用。
 
 ## 先立两条边界
 
 1. **restic 只有在你真的恢复过之后才算备份。** 每个仓库建好后至少做一次真实恢复（哪怕只是单文件），否则"备份成功"只是一句没被验证过的日志。
-2. **密码文件就是密钥本身。** 它和仓库放在一起时，任何能读到这个文件的人都能解开整个仓库。用 `RESTIC_PASSWORD_FILE` 或 `-p`，永远不要把密码写成命令行参数。
+2. **密码文件就是密钥本身。** 它和仓库放在一起时，任何能读到这个文件的人都能解开整个仓库。用 `RESTIC_PASSWORD_FILE` 或 `-p`，永远不要把密码写成命令行参数。密码文件权限要收紧——Windows 上不要让 `Users` / `Authenticated Users` 可读，POSIX 上必须是 `chmod 600`。
 
 ## 环境变量与调用姿势
 
@@ -32,7 +32,50 @@ export RESTIC_PASSWORD_FILE=/mnt/data/restic-repo/password.txt
 
 给了这两个变量后，所有命令直接写 `restic snapshots` 即可。对应的命令行开关是 `-r/--repo` 和 `-p/--password-file`。
 
-缓存默认落在 `%LocalAppData%\restic`。C 盘敏感或想让缓存可清理时挪走：
+### 三组互斥的环境变量（实测会直接报错）
+
+restic 把"仓库位置"和"密码来源"都做成了三选一，同时设置其中两个会立刻失败：
+
+| 用途 | 互斥的三个（设其一即可） | 冲突报错 |
+| ---- | ---------------------- | -------- |
+| 仓库位置 | `RESTIC_REPOSITORY` / `-r` / `RESTIC_REPOSITORY_FILE` | `Options -r and --repository-file are mutually exclusive` |
+| 密码来源 | `RESTIC_PASSWORD_FILE` / `-p` / `RESTIC_PASSWORD_COMMAND` | `Password file and command are mutually exclusive options` |
+
+脚本里如果从父进程继承了这些变量又临时改写，很容易撞上。稳妥做法是进入脚本先显式清掉不用的那个：
+
+```powershell
+Remove-Item Env:\RESTIC_REPOSITORY_FILE -ErrorAction SilentlyContinue
+$env:RESTIC_REPOSITORY = 'F:
+estic-repo'
+```
+
+`RESTIC_REPOSITORY_FILE` 适合多仓库切换：文件里放一行仓库位置，读的时候不会和 `-r` 打架（`local:` 前缀可写可不写，两种都实测可用）：
+
+```powershell
+Set-Content -Path C:
+estic\prod.repo -Value 'F:
+estic-repo' -NoNewline
+$env:RESTIC_REPOSITORY_FILE = 'C:
+estic\prod.repo'
+```
+
+### 不想落一个密码文件时：`RESTIC_PASSWORD_COMMAND`
+
+密码从命令输出读取，适合对接系统钥匙串、密码管理器或 1Password：
+
+```powershell
+# Windows：注意 type 是 cmd 内建命令，必须通过 cmd 调用，且整条命令要加引号
+$env:RESTIC_PASSWORD_COMMAND = 'cmd /c "type D:\secrets
+estic-pw.txt"'
+
+# macOS / Linux
+$env:RESTIC_PASSWORD_COMMAND = 'pass restic/main'
+```
+
+实测：`cmd /c type ...`（不加引号）会失败，报 `exit status 1`；`type ...` 单独写则报 `executable file not found in %PATH%`——因为 `type` 不是独立可执行文件。加引号的 `cmd /c "type ..."` 才正常工作。
+
+缓存默认落在 `%LocalAppData%
+estic`。C 盘敏感或想让缓存可清理时挪走：
 
 ```powershell
 $env:RESTIC_CACHE_DIR = 'B:\restic-cache'
@@ -64,6 +107,28 @@ Test-Path $env:RESTIC_PASSWORD_FILE   # 密码文件确实在
 
 **密码丢了 = 数据永久没了**，没有后门、没有找回。密码文件请和仓库分开存放，并确认它被纳入你自己的备份（但注意别造成"备份的密码解开备份本身"的循环依赖）。
 
+## 后端地址写法
+
+`--repo` 的值决定后端类型，本地路径之外的都要写 `<backend>:<地址>`：
+
+| 后端 | 写法 | 说明 |
+| ---- | ---- | ---- |
+| 本地目录 | `F:\restic-repo` 或 `/mnt/data/restic-repo` | 省略前缀即 local |
+| S3 / 兼容 S3 | `s3:s3.amazonaws.com/bucket/restic` | MinIO、DigitalOcean Spaces、Ceph RGW 等 S3 兼容服务用 `-o s3.bucket-lookup=path` |
+| Backblaze B2 | `b2:bucketname:path` | 需 `-o b2.connections=N` 之类调并发 |
+| SFTP | `sftp:user@host:/srv/restic-repo` | 需要 SSH 私钥可用 |
+| REST 服务 | `rest:https://user:pass@host:8000/` | 自建 rest-server |
+| rclone | `rclone:remote:path` | 需要 PATH 上有 rclone，`-o rclone.program=` 指定路径 |
+
+查看当前版本支持的后端参数和全部 feature flag：
+
+```powershell
+restic options      # 所有 -o key=value 扩展参数（各后端的并发、区域、超时等）
+restic features     # 实验性/稳定特性开关
+```
+
+新仓库默认用稳定格式。需要实验特性时按版本文档加 `-o` 或 feature flag，不要盲目照抄旧教程里的开关名——选项会随版本增删。
+
 ## 备份
 
 ```powershell
@@ -90,8 +155,13 @@ restic backup C:\data --exclude '**/node_modules' --exclude '**/*.log' --exclude
 - `--exclude-caches`：自动跳过带 `CACHEDIR.TAG` 的目录，比手写一长串缓存路径省事。
 - `--exclude-cloud-files`：跳过 OneDrive / iCloud 的"仅在线"占位文件，备份网盘目录时能避免把一堆 stub 当成正常文件。
 - `--iexclude`：忽略大小写的排除，等于 `-e` 的大小写不敏感版。
+- `--exclude-larger-than 100M`：跳过超大文件（录屏、镜像、模型权重这类另存专用仓库更合适）。
+- `--exclude-if-present .nobackup`：目录里存在 `.nobackup` 就整个跳过该目录内容，适合"我不想备份这个文件夹，放个标记文件就行"。
 - `--one-file-system`（`-x`）：不跨文件系统边界，备份根目录时防止意外吞进挂载点。
 - `--skip-if-unchanged`：和上次快照完全一致就不建新快照。
+- `--use-fs-snapshot`：调用 Windows VSS 做一致性快照，备份正在写入的数据库/虚拟机镜像时用；没有管理员权限会失败。
+- `--parent <快照>`：指定父快照，避免 restic 自己去找最新的那次，能省掉一次全量扫描。
+- `--stdin-from-command <命令>`：把命令的标准输出直接收进快照，不用先落临时文件。
 
 ### 退出码比日志更可信
 
@@ -191,6 +261,21 @@ restic forget --group-by host,tags --keep-tag config-daily --keep-daily 7 --prun
 
 脚本里解析 `forget --dry-run --json` 时注意：返回的是**按组的数组**，必须写成 `$json[0].remove` 而不是 `$json.remove`——后者会撞上 PowerShell 数组自带的 `.Remove()` 方法，拿到方法而不是数据。
 
+## 改密码与多密钥
+
+仓库可以有多个密钥，备份时用任意一个都能解开。轮换密码不会重写历史数据，只是新增密钥：
+
+```powershell
+restic key list                    # 现有密钥，注意 ID 和创建时间
+restic key add                     # 加一个密钥，返回新 ID（交互输入新密码）
+restic key passwd                  # 改主密码：新增密钥 + 删旧密钥
+restic key remove <key-id>         # 删掉某个密钥，至少要留一个
+```
+
+**`key passwd` 会立即让旧密钥失效。** 确认新密码能解开仓库后再删旧的那一步；如果有其他机器/定时任务在用旧密码，记得同步更新它们的密码文件或 `RESTIC_PASSWORD_COMMAND`。
+
+删密钥前先确认没有别的备份任务依赖它——多台机器共用一个仓库时尤其容易漏。
+
 ## 完整性校验
 
 ```powershell
@@ -266,7 +351,11 @@ pwsh -File .\scripts\restic-health.ps1 -Repository 'F:\restic-repo' -PasswordFil
 
 退出码：`0` 健康、`1` 有告警但仓库可读、`2` 仓库读不了（不存在 / 锁住 / 密码错）。
 
-脚本检查项：restic 可执行、密码文件 ACL 是否被本机组用户可读、快照数量与最新快照新鲜度（默认阈值 30 小时）、保留策略分组是否已经碎裂、完整性抽读、本地仓库的剩余空间和残留锁文件。
+脚本检查项：restic 可执行、密码文件权限（Windows 看 ACL，POSIX 看 mode）、快照数量与最新快照新鲜度（默认阈值 30 小时）、保留策略分组是否已经碎裂、完整性抽读、本地仓库的剩余空间和残留锁文件。
+
+每条 restic 调用都有超时保护（`-TimeoutSec`，默认 120 秒）。这条对**网络后端是必需的**：实测连一个不可达的 rest-server 时，restic 会带退避反复重试，不加限制能挂好几分钟——在 cron 或计划任务里就是一次静默卡死。超时后脚本会区分本地（磁盘忙）和远端（网络或凭据问题）给出提示。
+
+脚本在 Windows、macOS、Linux 上都能跑（PowerShell 7+），后端地址填本地路径或 `s3:` / `b2:` / `sftp:` / `rest:` / `rclone:` 都可以，网络后端会自动跳过本地专有的磁盘和锁文件检查。
 
 注意脚本按仓库约定保持 ASCII-only（Windows PowerShell 5.1 会把无 BOM 的 UTF-8 当 ANSI 读，中文字面量会让整个脚本解析失败），所以面向用户的中文说明在 SKILL.md 里而不是脚本里。
 
@@ -303,14 +392,20 @@ restic init --from-repo F:\restic-repo --copy-chunker-params   # 建目标时复
 
 | 症状 | 原因与处理 |
 | ---- | ---- |
+| `Options -r and --repository-file are mutually exclusive` | 同时设了 `RESTIC_REPOSITORY` 和 `RESTIC_REPOSITORY_FILE`，清掉一个 |
+| `Password file and command are mutually exclusive options` | 同时设了 `RESTIC_PASSWORD_FILE` 和 `RESTIC_PASSWORD_COMMAND`，清掉一个 |
+| `Resolving password failed: exec: "type": executable file not found` | Windows 上 `RESTIC_PASSWORD_COMMAND` 直接写 `type` 不行，要写成 `cmd /c "type ..."` |
 | `Fatal: All path filters must be absolute, starting with a forward slash` | 路径过滤器要写成 `/C:/Users/...`，不带冒号 |
 | `Wrong password` / 退出码 12 | `RESTIC_PASSWORD_FILE` 指向错文件，或文件末尾有多余空行/换行 |
 | 退出码 11，`repository is locked` | 上次进程被强杀留下锁。先确认没有 restic 在跑，再 `restic unlock` |
 | 退出码 3 | 部分源文件读不到（正被占用）。快照已生成，属可接受 |
 | 仓库一直变大，forget 删不动 | 分组被路径列表变化打散了，见上文分组陷阱 |
+| 备份/巡检在网络后端上卡住不动 | restic 对不可达主机带退避重试；给命令加超时或先确认网络/凭据 |
+| 换密码后别的机器解不开了 | `key passwd` 立刻作废旧密钥，其他机器的密码文件没同步更新 |
 | prune 很慢 | 正常，`--max-repack-size` 限量后可中断续跑 |
 | 磁盘写满导致 prune 失败 | `prune --max-repack-size 0` 先看看能回收多少，再考虑 `--unsafe-recover-no-free-space` |
 | 备份耗时突然变长 | 备份了缓存/依赖目录/大日志，用 `restic backup --dry-run` 看清单 |
 | `check` 报 pack 损坏 | 阶梯修复 `repair index` → `repair packs` → `check --read-data` |
+| 换了台机器备份变成"新主机" | 主机名变了就等于换了一组，用 `--host` 固定，或在 `forget` 时带上对应 `-H` |
 
 排查顺序按"低风险、低成本、高信息量"来：先 `restic snapshots` 确认仓库能读，再 `restic check` 看结构，最后才上 `--read-data` 全量校验。
