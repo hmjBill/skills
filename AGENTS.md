@@ -4,7 +4,7 @@ Agent Skills 收集与汉化仓库；无构建系统、无测试、无 CI，改�
 
 ## 仓库形状
 
-- 72 个顶层 skill 目录，全部含 `SKILL.md`；许多 skill 还有按需加载的 `references/`、`scripts/`、`assets/`（如 `tdd/tests.md`、`prototype/UI.md`、`mermaid-visualizer/references/`）。
+- 74 个顶层 skill 目录，全部含 `SKILL.md`；许多 skill 还有按需加载的 `references/`、`scripts/`、`assets/`（如 `tdd/tests.md`、`prototype/UI.md`、`mermaid-visualizer/references/`）。
 - 新增/移除 skill 时，同步更新 `README.md`（分类/数量）、`ATTRIBUTIONS.md`（来源/许可证）和本文件的条目数。
 - 部分 skill 带 `agents/openai.yaml`（Codex 专有元数据，其他宿主忽略，保留即可）。
 - 面向用户的安装/缺失提示指向本仓库或本地 skill 目录；上游 GitHub 链接只用于 `ATTRIBUTIONS.md` 等来源归属。
@@ -15,7 +15,7 @@ Agent Skills 收集与汉化仓库；无构建系统、无测试、无 CI，改�
 - UTF-8 **无 BOM**（BOM 会让 Codex 判为缺 frontmatter）；frontmatter 第一行必须直接是 `---`。
 - `name` 只能匹配 `^[a-z0-9]+(-[a-z0-9]+)*$`，且必须与目录名完全一致。
 - `description` 用未加引号的短中文；OpenCode 只读 `name`/`description`，description 一旦被 YAML 解析成非字符串（列表/数字），该技能会**静默消失**（不报错）。
-- 不新增 `metadata` 及 `hidden`/`argument-hint` 等扩展字段：本地宿主静默忽略，claude.ai 上传/Skills API 打包只接受规范字段、多余键硬失败；仓库既有的少量 `argument-hint`、`disable-model-invocation` 为有意保留。
+- 不新增 `metadata` 及 `hidden`/`argument-hint` 等扩展字段：本地宿主静默忽略，claude.ai 上传/Skills API 打包只接受规范字段、多余键硬失败；仓库既有的少量 `argument-hint`、`disable-model-invocation`，以及 `license`（banner-design、design、design-system、ui-styling、frontend-design，来自上游原样保留；canvas-cli）和 `allowed-tools`（agent-browser、canvas-cli）为有意保留，不要当残留删除。
 - 标题和正文使用中文（不要缺 H1）；代码块、命令、路径、变量、wikilink、占位符、专有名词保持原样；`references/` 附件同样要求汉化（代码块除外）。
 - 所有 `.sh` 必须 LF（`.gitattributes` 已声明 `*.sh text eol=lf`）；CRLF 会让 Git Bash 报 `bad interpreter`。
 
