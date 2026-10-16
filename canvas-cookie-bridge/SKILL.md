@@ -71,6 +71,45 @@ https://<学校>.instructure.com/api/v1
 
 任何发 `Authorization: Bearer` 的 HTTP 客户端都能接；MCP 型客户端把 API URL 指到桥即可。
 
+## canvas-cli 常用命令（读课程/作业/成绩）
+
+canvas-cli v1.15.3 命令面很大（见文末一行），下面只列本机最常用的读命令。
+`canvas config add` 指向桥之后直接用，不需要 `auth login`。
+
+| 目的 | 命令 | 核对状态 |
+| --- | --- | --- |
+| 列出我的课程 | `canvas courses list` | README 已核对 |
+| 看单个课程 | `canvas courses get <id>` | 子命令名已核对，参数见 `--help` |
+| 某课程作业清单 | `canvas assignments list --course-id <course-id>` | README 已核对（含 `--course-id`） |
+| 单个作业详情 | `canvas assignments get` | 子命令名已核对，flag 见 `--help` |
+| 查提交 | `canvas submissions get` | 子命令名已核对，flag 见 `--help` |
+| 成绩 | `canvas grades history`、`canvas grades feed` | 子命令名已核对，参数见 `--help` |
+
+补充说明：
+
+- `submissions` 组还有 `list`、`grade`、`bulk-grade`、`comments`；`grades` 组还有 `columns`。
+  `grade` / `bulk-grade` 是教师侧，学生会话走桥也不会成功。
+- 输出格式默认 table，可在配置 `default_output_format` 改成 `json` / `yaml` / `csv`
+  （README 只给了这个配置项名，命令行 flag 名以 `canvas <group> --help` 为准）。
+- 上游 skill 用 `--dry-run` 预览写操作；不确定某命令会改什么时先加它。
+
+### 写操作护栏：`canvas agent guard`
+
+Agent 可能发出 `courses delete`、`sections crosslist`、`enrollments conclude` 这类不可逆命令。
+`canvas agent guard` 生成权限规则与 PreToolUse 钩子，硬拦不可逆操作、对写操作要求确认。
+**要动写操作前先装上**：
+
+```powershell
+# 只看会生成什么，不落盘
+canvas agent guard --host opencode
+# 写入当前项目（配置 + 钩子脚本）
+canvas agent guard --host opencode --write
+# 最严：create/update/grade 也一并要求确认
+canvas agent guard --host opencode --all-writes --write
+```
+
+`--host` 支持 `claude-code`、`codex`、`opencode`；升级 canvas 后重新生成以覆盖新命令。
+
 ## 与 canvas-cli 官方 skill 的关系
 
 如果同时安装了 canvas-cli 上游自带的用法 skill（`npx skills add jjuanrivvera/canvas-cli`
@@ -130,3 +169,6 @@ Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' `
 
 写操作是否被学校接受**尚未用真 cookie 实测**（取 cookie 需重启日常浏览器）；
 bridge 对 canvas-cli 的方法透传、CSRF 注入、Bearer 剥除、分页跟随已用 mock 上游验证通过。
+
+命令面以 `canvas --help` 与本机 `B:\Program Files\canvas-cli\README.md` 为准：canvas-cli 共
+93 个命令组 / 540+ 命令（README 记 v1.15.3），本文只摘最常用的几条，不要全量枚举。

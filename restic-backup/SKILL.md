@@ -7,6 +7,8 @@ description: 用 restic 做加密备份与仓库巡检：建仓、备份、快�
 
 restic 是去重、加密、版本化的备份工具，仓库可以是本地目录、S3/B2/SFTP/rclone 目标或自建 rest-server。本技能面向"已经有一个 restic 仓库，要日常备份、检查、清理、恢复"的场景，同时覆盖从零建仓。
 
+本技能面向 restic 0.17–0.19。0.19 的行为变更要点：`backup` 的 exclude 规则不再作用于命令行显式给出的路径本身，只作用于该路径下的内容；`restore` 新增 `--ownership-by-name`（按快照里记录的属主恢复文件属主，属 POSIX 相关能力）；`check` 支持用 `--tag` / `--host` / `--path` 过滤要校验的快照。
+
 `scripts/restic-health.ps1` 是一个**只读**巡检脚本：检查仓库可读性、备份新鲜度、保留策略分组、完整性、密码文件权限、残留锁和磁盘余量，不修改仓库。Windows / macOS / Linux 上都能跑（PowerShell 7+），本地和 S3/B2/SFTP/REST/rclone 后端都适用。
 
 ## 先立两条边界
@@ -45,18 +47,14 @@ restic 把"仓库位置"和"密码来源"都做成了三选一，同时设置其
 
 ```powershell
 Remove-Item Env:\RESTIC_REPOSITORY_FILE -ErrorAction SilentlyContinue
-$env:RESTIC_REPOSITORY = 'F:
-estic-repo'
+$env:RESTIC_REPOSITORY = 'F:\restic-repo'
 ```
 
 `RESTIC_REPOSITORY_FILE` 适合多仓库切换：文件里放一行仓库位置，读的时候不会和 `-r` 打架（`local:` 前缀可写可不写，两种都实测可用）：
 
 ```powershell
-Set-Content -Path C:
-estic\prod.repo -Value 'F:
-estic-repo' -NoNewline
-$env:RESTIC_REPOSITORY_FILE = 'C:
-estic\prod.repo'
+Set-Content -Path C:\restic\prod.repo -Value 'F:\restic-repo' -NoNewline
+$env:RESTIC_REPOSITORY_FILE = 'C:\restic\prod.repo'
 ```
 
 ### 不想落一个密码文件时：`RESTIC_PASSWORD_COMMAND`
@@ -65,8 +63,7 @@ estic\prod.repo'
 
 ```powershell
 # Windows：注意 type 是 cmd 内建命令，必须通过 cmd 调用，且整条命令要加引号
-$env:RESTIC_PASSWORD_COMMAND = 'cmd /c "type D:\secrets
-estic-pw.txt"'
+$env:RESTIC_PASSWORD_COMMAND = 'cmd /c "type D:\secrets\restic-pw.txt"'
 
 # macOS / Linux
 $env:RESTIC_PASSWORD_COMMAND = 'pass restic/main'
@@ -74,14 +71,15 @@ $env:RESTIC_PASSWORD_COMMAND = 'pass restic/main'
 
 实测：`cmd /c type ...`（不加引号）会失败，报 `exit status 1`；`type ...` 单独写则报 `executable file not found in %PATH%`——因为 `type` 不是独立可执行文件。加引号的 `cmd /c "type ..."` 才正常工作。
 
-缓存默认落在 `%LocalAppData%
-estic`。C 盘敏感或想让缓存可清理时挪走：
+缓存默认落在 `%LocalAppData%\restic`。C 盘敏感或想让缓存可清理时挪走：
 
 ```powershell
 $env:RESTIC_CACHE_DIR = 'B:\restic-cache'
 ```
 
 `RESTIC_CACHE_DIR` 指向一个不存在的目录时 restic 会自动创建，实测可用；缓存不是数据，删掉只是下次变慢。
+
+`restic cache --cleanup` 能清掉已经没有快照引用的缓存条目（`forget` 删掉快照后缓存不会自己收缩），加 `--keep-duration 30d` 可以把最近用过的部分留下。
 
 ## 建仓
 
@@ -197,6 +195,26 @@ restic diff latest~1 latest             # latest~1 = 上一个快照
 
 `diff` 的首字母含义：`+` 新增、`-` 删除、`M` 内容变更、`U` 元数据变更、`T` 类型变更（如变成符号链接）、`?` **位损坏**（内容变了但元数据没变，这种最值得警惕）。
 
+想按内容而不是按路径找东西用 `find`：给它 blob / pack / tree / 快照 ID，它会列出内容相同的其他 blob，也就是去重候选：
+
+```powershell
+restic find --blob <blob-id>       # 内容相同的其他 blob
+restic find --tree <tree-id>       # 同一棵树被存了几份
+```
+
+## 体积统计与版本维护
+
+```powershell
+restic version                     # 版本字符串，脚本第一件事就是探它
+restic stats                       # 默认按 restore-size 统计
+restic stats --mode raw-data       # 仓库实际占用
+restic stats --group-by host,tags  # 只统计某一组，快很多
+```
+
+三种 `--mode` 含义不同，别拿不同模式的数字互比：`restore-size` 是恢复出来的体积（含元数据，硬链接只算一份），`files-by-contents` 只算去重后的文件内容，`raw-data` 是压缩后真正占盘的数据（含索引与树）。巡检脚本用的是 `stats --mode raw-data`，因为它要回答的是"仓库到底占了多少盘"。
+
+`self-update` 能把官方发行版二进制升到最新稳定版，默认不降级。用包管理器装的（Homebrew / apt / winget）请走包管理器升级，混用会互相覆盖。
+
 ## Windows 路径陷阱（实测）
 
 这是 Windows 上最容易把人卡住的地方：**快照内部的路径是 `/C:/Users/...` 形式，不带盘符冒号。**
@@ -238,6 +256,8 @@ restic prune --max-repack-size 4G        # 重写 4G 后就停，中断安全，
 restic prune --max-unused 5%             # 容忍 5% 未用数据就跳过（默认值）
 restic prune --dry-run
 ```
+
+`rewrite` 和 `prune` 不是一回事：它是在重写快照时把快照里本该被排除的数据剔除掉，用来回收入库时误收的垃圾，而不是删快照；0.19 起支持 `--include` 限定只重写匹配的快照。它属于改写快照的操作，动手前先把仓库整个复制一份，和 `repair` / `recover` 是同一级别的风险。
 
 ### 分组陷阱：`--group-by` 决定保留策略是否真的生效
 
@@ -324,6 +344,8 @@ restic restore latest --target C:\somewhere --delete --dry-run -vv
 
 其他有用开关：`--overwrite if-newer` / `if-changed` / `never` 控制覆盖策略（默认 `always`），`--include` / `--exclude` 精确圈定范围，`-i` / `-e` 与 `--iexclude` 分别是大小写敏感与不敏感版本。
 
+不想把文件落到磁盘上，可以用 `restic mount <快照ID>` 把快照挂成一个本地目录直接浏览（Linux / macOS 走 FUSE）。**Windows 没有原生支持**，得自己装 FUSE 驱动（如 WinFSP）；装不了就退回 `ls` / `dump`，或者恢复到临时目录再看。
+
 ### Windows 上的无害报错
 
 恢复时可能看到：
@@ -337,7 +359,7 @@ Fatal: There were 1 errors
 
 ## 日常巡检脚本
 
-`scripts/restic-health.ps1` 只读巡检，不动仓库：
+`scripts/restic-health.ps1` 只读巡检，不动仓库。下面的命令**在技能目录下运行**（脚本按相对路径引用）：
 
 ```powershell
 pwsh -File .\scripts\restic-health.ps1 -Repository 'F:\restic-repo' -PasswordFile 'F:\restic-repo\password.txt'

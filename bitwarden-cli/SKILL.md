@@ -3,7 +3,7 @@ name: bitwarden-cli
 description: 用 Bitwarden 官方 CLI(bw) 管理个人密码库的查询、增删改、文件夹整理、生成密码、Send 分享与备份导出，Windows 优先，供 OpenCode、Hermes、Claude Code 等 Agent 调用
 ---
 
-# Bitwarden CLI Skill
+# Bitwarden CLI 技能
 
 用 Bitwarden 官方命令行工具 `bw` 管理**你自己的** Bitwarden 密码库：查询条目、新增 / 编辑 / 删除、文件夹整理、生成密码、附件、Send 分享、备份导出与恢复。面向在 Windows 11 上把批量整理类任务交给 AI Agent（OpenCode / Hermes / Claude Code）的场景。
 
@@ -15,6 +15,7 @@ description: 用 Bitwarden 官方 CLI(bw) 管理个人密码库的查询、增�
 ## 为什么是 CLI + 本技能，而不是官方 MCP
 
 - 官方 Bitwarden MCP 的个人密码库功能本身就是在包装 `bw` CLI，功能不比 CLI 多；导入 / 导出、批量脚本组合、文件夹整理这类活只有 CLI 能干。
+- 官方 MCP 本质上包装的就是 CLI 的 `bw serve`——`bw serve` 把本地 vault 暴露成 REST 接口（默认端口 8087），MCP 在其上再包一层工具。真需要 MCP 形态时，从 CLI 起 `bw serve` 即可；本项目仍选直接调 CLI，少一层进程和端口管理。
 - MCP 真正独有的价值是组织管理 API（企业库、成员、集合权限）。个人库场景用不到。
 - 两者不互斥：真到需要组织 API 时再叠 MCP，本技能的 `bw` 命令照样复用。
 
@@ -69,6 +70,7 @@ bw sync            # 拉取服务端最新 vault；-f 强制全量
 - 未解锁时大多数命令直接报 `Vault is locked`，先 unlock 再操作。
 - 用完可以 `bw lock`（销毁全部 session key）；彻底退出用 `bw logout`。
 - 开了 2FA 的账号：`bw login your@email.com --method 1` 之类按提示走；API key 登录（`--apikey`）是 CI 场景，个人本机用不到。
+- 自建服务端（如自托管 Vaultwarden）：`bw config server <url>` 切换服务器地址。**这条会直接覆盖原有服务器配置**，官方云账号不要顺手执行；换回官方写 `bw config server https://api.bitwarden.com`。
 
 ### 判断 session 是否还有效：`bw unlock --check`
 
@@ -161,6 +163,8 @@ bw get password <id>      # 只要密码
 bw get username <id>      # 只要用户名
 bw get totp <id>          # 只要当前 TOTP 验证码
 bw get notes <id>         # 只要备注
+bw get uri <id>           # 只要 URI（第一条）
+bw get field <id> <字段名>  # 只要自定义字段（fields），与写字段的 `bw edit` 配套
 bw get exposed github.com # 查该 URL 是否出现在已知泄露库
 
 bw get template item          # 拿条目 JSON 模板（create/edit 的骨架）
@@ -174,7 +178,7 @@ bw report password-health     # 密码健康报告（强度 0-4 等）
 
 ## 新增、编辑、删除
 
-`create` / `edit` 的载荷是 **base64 编码后的 JSON**。PowerShell 里用编码管道最稳：
+`create` / `edit` 的载荷是 **base64 编码后的 JSON**。PowerShell 里用编码管道最稳：`bw encode` 负责编码，`bw decode` 是它的反向（把 base64 解回 JSON，载荷写错时用来对照原始输入）：
 
 ```powershell
 # 新建文件夹
@@ -274,6 +278,12 @@ $item.notes = "备注更新"
 ($item | ConvertTo-Json -Depth 10 -Compress) | bw encode | bw edit item <id>
 ```
 
+文件夹本身有简写命令，不用取回再改（载荷同样是 base64 编码后的 JSON）：
+
+```powershell
+'{"name":"Development"}' | bw encode | bw edit folder <id>
+```
+
 **重建而非编辑**：条目结构写错时（比如把内容误放进了 `secureNote.notes`），再多次 `edit` 也修不回来——因为回读时那个字段已经不存在了。正确做法是 `bw delete item <id> --permanent` 后按正确结构重建。
 
 JSON 解析的坑：vault 里某些条目的名字含裸控制字符，`bw list items` 的输出直接喂给 `ConvertFrom-Json` 会解析失败（报 `unexpected character`）。批量统计前先清洗：
@@ -283,20 +293,18 @@ $raw = & bw list items 2>$null | Out-String
 $items = ($raw -replace '[\x00-\x08\x0B\x0C\x0E-\x1F]', '') | ConvertFrom-Json
 ```
 
-PowerShell 字符串陷阱：载荷里的路径**必须用单引号 here-string**。双引号里的 `B:\ProgramData
-estic\...` 会被当成变量展开（`$env:restic` 等），路径直接写坏：
+PowerShell 字符串陷阱：载荷里的路径**必须用单引号 here-string**。双引号里的 `B:\ProgramData\restic\...` 会被当成变量展开（`$env:restic` 等），路径直接写坏：
 
 ```powershell
 $body = @'
-Path: B:\ProgramData
-estic\password.bin
+Path: B:\ProgramData\restic\password.bin
 '@   # 单引号 here-string，不展开
 ```
 
 删除与恢复：
 
 ```powershell
-bw delete item <id>          # 软删除，进 trash，可恢复
+bw delete item <id>          # 软删除，进回收站（默认保留 30 天），可恢复
 bw delete item <id> --permanent   # 永久删除，不可恢复
 bw restore item <id>         # 从 trash / archive 恢复
 bw delete folder <id>
@@ -414,14 +422,20 @@ bw import --passwordenv BW_BACKUP_PW encrypted_json .\backup.json   # 加密备�
 | 取密码（仅 Login） | `bw get password <id>` |
 | 取安全笔记内容 | `(bw get item <id> \| ConvertFrom-Json).notes` |
 | 取 TOTP | `bw get totp <id>` |
+| 读自定义字段 | `bw get field <id> <字段名>` |
 | 条目模板 | `bw get template item.login`（模板注册表可能落后，见「条目类型」一节） |
+| 解码载荷 | `bw decode`（`bw encode` 的反向） |
 | 建文件夹 | `'{"name":"X"}' \| bw encode \| bw create folder` |
 | 改条目 | `(bw get item <id> \| ConvertFrom-Json ...) \| ConvertTo-Json -Compress \| bw encode \| bw edit item <id>` |
+| 重命名文件夹 | `'{"name":"X"}' \| bw encode \| bw edit folder <id>` |
 | 存 SSH 私钥（type=5） | 见 `scripts/store-ssh-key.ps1` |
 | 生成密码 | `bw generate -ulns --length 20` |
 | Send 分享 | `bw send "文本" -d 7 -a 3` |
 | 加密备份 | `bw export --format encrypted_json --password <pw> --output <file>` |
 | 恢复 | `bw import <format> <file>` |
+| 软删除（回收站保留 30 天） | `bw delete item <id>` |
+| 永久删除 | `bw delete item <id> --permanent` |
+| 切换自建服务器 | `bw config server <url>`（会覆盖原有服务器配置） |
 | 锁定 | `bw lock` / `bw logout` |
 
 ## 已知坑（2026.10.0 实测）
@@ -433,8 +447,7 @@ bw import --passwordenv BW_BACKUP_PW encrypted_json .\backup.json   # 加密备�
 5. **`bw unlock --raw` 在 vault 已锁定时把错误打到 stderr 并以非零码退出**，赋值给 `$env:BW_SESSION` 前先 `bw unlock --check` 确认。注意它可能仍以 exit 0 返回**提示框文本**而非 key，所以不能只看退出码，要校验返回值形态。
 6. **`bw encode` 是把 stdin 做 base64**；PowerShell 里 base64 串含 `+` `/` `=`，一律用**单引号**包裹，双引号在某些上下文会被变量展开破坏。
 7. **`bw list items` 的 JSON 可能含裸控制字符**（某些条目名），直接喂 `ConvertFrom-Json` 会报 `unexpected character`。先 `-replace '[\x00-\x08\x0B\x0C\x0E-\x1F]', ''` 清洗。
-8. **双引号字符串里的 Windows 路径会被变量展开**。`"B:\ProgramData
-estic\..."` 里的 `$env:restic` 之类会被替换掉，路径写坏。描述性文字用单引号 here-string `@' ... '@`。
+8. **双引号字符串里的 Windows 路径会被变量展开**。`"B:\ProgramData\restic\..."` 里的 `$env:restic` 之类会被替换掉，路径写坏。描述性文字用单引号 here-string `@' ... '@`。
 9. **`bw login` 在已登录状态会先要求 logout**；换账号前先 `bw logout`。
 10. **`data.json`（登录态、同步缓存）默认在 C 盘 `%APPDATA%\Bitwarden CLI\`**，见「数据目录」一节改 `BITWARDENCLI_APPDATA_DIR`。
 11. **`bw get exposed <url>` 和 `bw report` 默认会联网查 HIBP 泄露库**；`bw report password-health --no-check-exposed` 可跳过。

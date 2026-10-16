@@ -55,6 +55,35 @@ pip install -e .
 wechat-cli --version
 ```
 
+## 全局选项与环境变量
+
+对所有查询类子命令生效（`init` 不加载配置，密钥固定读写 `~/.wechat-cli/`，这两个开关对它无效）：
+
+| 选项 / 环境变量 | 说明 |
+|---|---|
+| `--config <路径>` | 指定 `config.json` 路径，默认 `~/.wechat-cli/config.json` |
+| `WECHAT_CLI_CONFIG` | 同上的环境变量写法；命令行 `--config` 优先 |
+
+**数据目录找不到时怎么用**（头号坑）：查询命令报「未找到微信数据目录。请运行: wechat-cli init」，或 `init` 之后查询仍找不到数据库，都是自动检测失败（多账号、非默认安装位置最常见）。两条解法：
+
+```bash
+# A. 直接改默认配置里的 db_dir（最省事，键名别写错）
+#    ~/.wechat-cli/config.json : {"db_dir": "C:/.../xwechat_files/<wxid>/db_storage"}
+
+# B. 另存一份配置，用 --config 指过去
+wechat-cli sessions --config "D:/tools/wechat-cli/config.json"
+```
+
+```powershell
+# PowerShell 写法
+$env:WECHAT_CLI_CONFIG = "D:\tools\wechat-cli\config.json"
+wechat-cli sessions
+```
+
+> ⚠️ `config.json` 放在 `~/.wechat-cli/` 之外时，`keys_file`、`decrypted_dir` 等路径默认按**配置文件所在目录**推导，而不是 `~/.wechat-cli/`。另存配置必须同时写明 `"keys_file": "C:/Users/<用户>/.wechat-cli/all_keys.json"`，否则会报找不到密钥文件。
+
+**`--limit` 上限**：只有 `search` 有硬上限 **500**，超过直接报错退出（`错误: limit 不能大于 500`，退出码 2），**不会自动截断**，要更多结果就配 `--offset` 分页。`history`、`export` 不受此限制（`export --limit` 默认 500）；`sessions`、`contacts`、`unread`、`favorites` 的 `--limit` 也不校验上限。
+
 ## 初始化（首次必须）
 
 确保微信已登录运行，然后执行：
@@ -65,9 +94,17 @@ wechat-cli init
 
 `init` 会：
 
-1. 自动检测微信数据目录（兼容新版 `xwechat_files/<wxid>/db_storage` 与旧版 `WeChat Files`）
+1. 自动检测微信数据目录（兼容新版 `xwechat_files/<wxid>/db_storage` 与旧版 `WeChat Files`；检测不到见下）
 2. 从微信进程内存提取加密密钥
 3. 保存到 `~/.wechat-cli/all_keys.json`
+
+自动检测失败（多微信账号、非默认安装位置最常见）时，用 `--db-dir` 显式指定，指向 `db_storage` 那一层目录：
+
+```bash
+wechat-cli init --db-dir "C:/Users/<用户>/Documents/xwechat_files/<wxid>/db_storage"
+```
+
+目录不存在会直接报错退出。指定结果会写进 `~/.wechat-cli/config.json` 的 `db_dir`，之后所有查询命令共用，无需逐条再传。
 
 微信更新后若功能异常，用 `--force` 重新提取：
 
@@ -187,7 +224,11 @@ wechat-cli search "报告" --type file                  # 只搜文件
 ```bash
 wechat-cli contacts --query "李"                     # 搜索联系人
 wechat-cli contacts --detail "张三"                   # 联系人详情（昵称、备注、微信号、个性签名等）
+wechat-cli contacts --query "李" --limit 20          # 限制返回数量（默认 50）
+wechat-cli contacts --query "李" --format text        # 纯文本
 ```
+
+选项：`--query`, `--detail`, `--limit`, `--format json|text`
 
 ### members — 群成员
 
@@ -202,7 +243,10 @@ wechat-cli members "AI交流群" --format text          # 纯文本
 wechat-cli stats "AI交流群"                          # 消息总数、类型分布、发言 Top 10、24h 活跃分布
 wechat-cli stats "AI交流群" --format text            # 纯文本
 wechat-cli stats "AI交流群" --start-time "2026-01-01"
+wechat-cli stats "AI交流群" --start-time "2026-01-01" --end-time "2026-01-31"   # 指定时间范围
 ```
+
+选项：`--start-time`, `--end-time`（均为 `YYYY-MM-DD [HH:MM[:SS]]`）, `--format json|text`
 
 ### export — 导出聊天记录
 
@@ -221,9 +265,13 @@ wechat-cli favorites                                 # 所有收藏
 wechat-cli favorites --type article                  # 收藏的文章
 wechat-cli favorites --type text                     # 收藏的文本
 wechat-cli favorites --query "关键词"                 # 搜索收藏
+wechat-cli favorites --limit 50                      # 限制数量（默认 20）
+wechat-cli favorites --limit 5 --format text         # 纯文本输出
 ```
 
 类型：`text`, `image`, `article`, `card`, `video`
+
+选项：`--limit`, `--type`, `--query`, `--format json|text`
 
 ### unread — 未读会话
 
