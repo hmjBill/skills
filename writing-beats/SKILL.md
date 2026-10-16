@@ -3,6 +3,8 @@ name: writing-beats
 description: 逐节推进叙事：为原始素材选择起点，每节只依赖已 grounding 的概念。
 ---
 
+# 逐节写作
+
 ## 流程
 
 用户已经提供（或将提供）一份原始材料的 markdown 文件。

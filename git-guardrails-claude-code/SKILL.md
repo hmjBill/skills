@@ -19,7 +19,7 @@ description: 设置 Claude Code 钩子，在危险 Git 命令（push、reset --h
 
 ## 前置依赖
 
-- **jq**：钩子用 jq 解析 stdin 传入的 JSON。jq 缺失时钩子会以退出码 2 阻止该次 git 命令（fail-closed），而不是静默放行。安装方式：`winget install jqlang.jq`（Windows）、`scoop install jq`（Windows）、`brew install jq`（macOS）。
+- **jq**：钩子用 jq 解析 stdin 传入的 JSON。jq 缺失时钩子会以退出码 2 阻止该次 git 命令（fail-closed），而不是静默放行。安装方式：`winget install jqlang.jq`（Windows）、`scoop install jq`（Windows）、`brew install jq`（macOS）、`sudo apt install jq`（Debian/Ubuntu）或 `sudo dnf install jq`（Fedora/RHEL）。
 - **Windows**：钩子是 `.sh` 脚本，需要 Git Bash 执行（安装 Git for Windows 即自带）。
 
 ## 步骤
