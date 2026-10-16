@@ -126,6 +126,7 @@
 | bitwarden-cli | 原创；驱动 Bitwarden 官方 CLI（npm `@bitwarden/cli`，源码见 [bitwarden/clients](https://github.com/bitwarden/clients)） | MIT（原创）/ GPL-3.0（依赖） |
 | canvas-cookie-bridge | 原创；驱动 [vishalsachdev/canvas-mcp](https://github.com/vishalsachdev/canvas-mcp)（MCP 服务端） | MIT（原创）/ MIT（依赖） |
 | restic-backup | 原创；驱动 [restic/restic](https://github.com/restic/restic)（备份 CLI） | MIT（原创）/ BSD-2-Clause（依赖） |
+| openssh-server | 原创；驱动 Windows 内置 OpenSSH 可选功能（`Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0`，[Microsoft OpenSSH in Windows](https://learn.microsoft.com/windows-server/administration/openssh/openssh-server-configuration)） | MIT（原创）/ MIT（依赖） |
 
 ## 未溯源的 Skills
 
