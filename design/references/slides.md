@@ -1,42 +1,42 @@
-# Slides Reference
+# 幻灯片参考
 
-Strategic HTML presentation design with Chart.js data visualization, design tokens, responsive layouts, and copywriting formulas.
+战略级 HTML 演示文稿设计，结合 Chart.js 数据可视化、设计令牌、响应式布局与文案公式。
 
-## Usage
+## 用法
 
-Activate the `design` skill and specify slides task, e.g. "create a pitch deck".
+激活 `design` 技能并指定幻灯片任务，例如"创建一份路演演示文稿"。
 
-## Knowledge Base
+## 知识库
 
-| Topic | File | Purpose |
+| 主题 | 文件 | 用途 |
 |-------|------|---------|
-| Creation Guide | `references/slides-create.md` | Step-by-step slide creation workflow |
-| Layout Patterns | `references/slides-layout-patterns.md` | Slide layout templates and grid systems |
-| HTML Template | `references/slides-html-template.md` | Base HTML structure for presentations |
-| Copywriting | `references/slides-copywriting-formulas.md` | AIDA, PAS, FAB for slide content |
-| Strategies | `references/slides-strategies.md` | Contextual strategies by presentation type |
+| 创建指南 | `references/slides-create.md` | 分步幻灯片创建工作流 |
+| 布局模式 | `references/slides-layout-patterns.md` | 幻灯片布局模板与网格系统 |
+| HTML 模板 | `references/slides-html-template.md` | 演示文稿的基础 HTML 结构 |
+| 文案 | `references/slides-copywriting-formulas.md` | 用于幻灯片内容的 AIDA、PAS、FAB |
+| 策略 | `references/slides-strategies.md` | 按演示类型划分的场景化策略 |
 
-## When to Use
+## 何时使用
 
-- Marketing presentations and pitch decks
-- Data-driven slides with Chart.js visualizations
-- Strategic slide design with layout patterns
-- Copywriting-optimized presentation content
-- Investor decks, sales presentations, team updates
+- 营销演示与路演文稿
+- 使用 Chart.js 可视化的数据型幻灯片
+- 结合布局模式的战略性幻灯片设计
+- 经文案优化的演示内容
+- 投资人路演、销售演示、团队汇报
 
-## Key Features
+## 核心特性
 
-- **Chart.js Integration**: Bar, line, pie, doughnut, radar charts
-- **Design Tokens**: Consistent spacing, colors, typography
-- **Responsive**: Works on desktop and mobile
-- **Copywriting**: Built-in AIDA, PAS, FAB formulas
-- **Layout Patterns**: Hero, split, grid, comparison, timeline
+- **Chart.js 集成**：柱状图、折线图、饼图、环形图、雷达图
+- **设计令牌**：一致的间距、颜色与排版
+- **响应式**：桌面端与移动端均可用
+- **文案**：内置 AIDA、PAS、FAB 公式
+- **布局模式**：标题页、分栏、网格、对比、时间线
 
-## Workflow
+## 工作流
 
-1. Parse presentation type from user request
-2. Load `references/slides-create.md` for creation guide
-3. Select layout patterns from `references/slides-layout-patterns.md`
-4. Apply copywriting formulas from `references/slides-copywriting-formulas.md`
-5. Use HTML template from `references/slides-html-template.md`
-6. Apply strategy from `references/slides-strategies.md`
+1. 从用户请求解析演示类型
+2. 加载 `references/slides-create.md` 获取创建指南
+3. 从 `references/slides-layout-patterns.md` 选择布局模式
+4. 应用 `references/slides-copywriting-formulas.md` 中的文案公式
+5. 使用 `references/slides-html-template.md` 中的 HTML 模板
+6. 应用 `references/slides-strategies.md` 中的策略

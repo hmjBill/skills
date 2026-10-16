@@ -508,10 +508,8 @@ python scripts/search.py "AI search tool modern minimal" --design-system -p "AI 
 ### 步骤 3：补充详细搜索（如需要）
 
 ```bash
-# UI-UX 专家
 python scripts/search.py "minimalism dark mode" --domain style
 
-# UI-UX 专家
 python scripts/search.py "search loading animation" --domain ux
 ```
 
@@ -530,10 +528,8 @@ python scripts/search.py "list performance navigation" --stack react-native
 `--design-system` 标志支持两种输出格式：
 
 ```bash
-# UI-UX 专家
 python scripts/search.py "fintech crypto" --design-system
 
-# UI-UX 专家
 python scripts/search.py "fintech crypto" --design-system -f markdown
 ```
 

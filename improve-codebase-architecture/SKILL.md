@@ -47,9 +47,9 @@ disable-model-invocation: true
 - **解决方案**：用平实中文描述将会改变什么
 - **收益**：用局部性和杠杆效应来解释，以及测试将如何改进
 - **Before / After 图**：并排、手工绘制，展示浅层与深化
-- **推荐强度**：`Strong`、`Worth exploring`、`Speculative` 之一，渲染为徽章
+- **推荐强度**：`Strong（扎实）`、`Worth exploring（值得探索）`、`Speculative（推测性）` 之一，渲染为徽章
 
-报告以 **Top recommendation**（首要推荐）部分结尾：你会先处理哪个候选，为什么。
+报告以 **首选建议（Top recommendation）** 部分结尾：你会先处理哪个候选，为什么。
 
 **领域词汇用 `GLOSSARY.md`，架构词汇用 `/codebase-design`。** 如果 `GLOSSARY.md` 定义了"Order"，请谈论"Order intake 模块"，而不是"FooBarHandler"，也不是"Order 服务"。
 

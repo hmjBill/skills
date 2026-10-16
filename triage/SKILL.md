@@ -49,10 +49,10 @@ description: 通过分诊角色驱动的状态机对 Issue 与外部 PR 分诊�
 
 维护者调用 triage 技能并用自然语言描述他们想要的。解释请求并采取行动。示例：
 
-- "Show me anything that needs my attention"
-- "Let's look at #42"（issue 或 PR）
-- "Move #42 to ready-for-agent"
-- "What's ready for agents to pick up?"
+- "把需要我关注的都列出来"
+- "看看 #42"（issue 或 PR）
+- "把 #42 移到 ready-for-agent"
+- "有哪些是 agent 可以直接接手的？"
 
 ## 显示需要关注的内容
 
@@ -95,17 +95,17 @@ description: 通过分诊角色驱动的状态机对 Issue 与外部 PR 分诊�
 ## Needs-info 模板
 
 ```markdown
-## Triage Notes
+## 分诊笔记（Triage Notes）
 
-**What we've established so far:**
+**我们已经确认的内容（What we've established so far）：**
 
-- point 1
-- point 2
+- 要点 1
+- 要点 2
 
-**What we still need from you (@reporter):**
+**还需要你补充的信息（What we still need from you, @reporter）：**
 
-- question 1
-- question 2
+- 追问 1
+- 追问 2
 ```
 
 将在追问期间解决的所有内容捕获在"established so far"下，这样工作不会丢失。问题必须具体且可操作，不是"请提供更多信息"。

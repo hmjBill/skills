@@ -126,14 +126,14 @@ node scripts/validate-tokens.cjs --dir src/
 在技能目录下运行：
 
 ```bash
-# 设计系统
+# 策略检索：自动识别领域（deck 结构 + 叙事弧）
 python scripts/search-slides.py "investor pitch"
 
-# 设计系统
+# 按领域定向检索：复制公式（-d copy）与图表类型（-d chart）
 python scripts/search-slides.py "problem agitation" -d copy
 python scripts/search-slides.py "revenue growth" -d chart
 
-# 设计系统
+# 上下文推荐：位置组合（--position/--total）+ 情感弧衔接（--prev-emotion）
 python scripts/search-slides.py "problem slide" --context --position 2 --total 9
 python scripts/search-slides.py "cta" --context --position 9 --prev-emotion frustration
 ```

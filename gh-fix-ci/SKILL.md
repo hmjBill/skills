@@ -3,7 +3,7 @@ name: gh-fix-ci
 description: 调试 GitHub Actions 中失败的 PR 检查，分析日志并制定修复方案
 ---
 
-# Gh Pr Checks 修复计划
+# gh PR 检查修复计划
 
 ## 概述
 
