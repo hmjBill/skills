@@ -132,14 +132,16 @@ python scripts/cip/render-html.py --brand "TopGroup" --industry "consulting" --i
 
 22 种艺术方向风格，覆盖社交、广告、网页、印刷。使用 `frontend-design`、`ai-artist`、`ai-multimodal`、`chrome-devtools` 技能。
 
+> 可选外部技能：`ai-artist`、`ai-multimodal`、`chrome-devtools` 不在本仓库内（`frontend-design`、`ui-ux-pro-max` 在本仓库内）。如未安装，跳过依赖它们的步骤（AI 视觉生成、截图导出），核心 HTML/CSS 设计流程不受影响。
+
 加载 `references/banner-sizes-and-styles.md` 获取完整的尺寸和风格参考。
 
 ### Banner：工作流程
 
 1. **收集需求** — 目的、平台、内容、品牌、风格、数量（向用户确认）
 2. **研究** — 激活 `ui-ux-pro-max`，浏览 Pinterest 获取参考
-3. **设计** — 使用 `frontend-design` 创建 HTML/CSS 横幅，使用 `ai-artist`/`ai-multimodal` 生成视觉元素
-4. **导出** — 通过 `chrome-devtools` 以精确尺寸截图为 PNG
+3. **设计** — 使用 `frontend-design` 创建 HTML/CSS 横幅，使用 `ai-artist`/`ai-multimodal` 生成视觉元素（可选外部技能，未安装则跳过这一步，改用手头可用的图像生成方式或纯 CSS 图形）
+4. **导出** — 通过 `chrome-devtools` 以精确尺寸截图为 PNG（可选外部技能，未安装则跳过这一步，改用浏览器或 Playwright 截图）
 5. **展示** — 并排显示所有选项，根据反馈迭代
 
 ### Banner：快速尺寸参考
@@ -217,6 +219,8 @@ python scripts/icon/generate.py --prompt "user profile" --sizes "16,24,32,48" --
 
 多平台社交图片设计：HTML/CSS → 截图导出。使用 `ui-ux-pro-max`、`brand`、`design-system`、`chrome-devtools` 技能。
 
+> 可选外部技能：`chrome-devtools` 不在本仓库内。如未安装，跳过依赖它的步骤（截图导出与导出后目视检查），核心 HTML/CSS 设计流程和 Playwright 截图不受影响。
+
 加载 `references/social-photos-design.md` 获取尺寸、模板、最佳实践。
 
 ### Social Photos：工作流程
@@ -226,7 +230,7 @@ python scripts/icon/generate.py --prompt "user profile" --sizes "16,24,32,48" --
 3. **构思** — 形成 3-5 个概念并向用户展示
 4. **设计** — `brand` → `design-system` → 随机选用 `ui-ux-pro-max` 或 `frontend-design`；每个想法 × 尺寸的 HTML
 5. **导出** — `chrome-devtools` 或 Playwright 以精确 px 截图（2x deviceScaleFactor）
-6. **验证** — 使用 Chrome MCP 或 `chrome-devtools` 技能目视检查导出的设计；修复布局/样式问题并重新导出
+6. **验证** — 使用 Chrome MCP 或 `chrome-devtools` 技能目视检查导出的设计；修复布局/样式问题并重新导出（`chrome-devtools` 为可选外部技能，未安装则跳过这一步）
 7. **报告** — 设计决策摘要到 `plans/reports/`
 8. **组织** — 整理输出文件和报告（按项目约定归档）
 
@@ -306,3 +310,5 @@ pip install google-genai pillow
 
 **外部子技能：** brand、design-system、ui-styling
 **相关技能：** frontend-design、ui-ux-pro-max、ai-multimodal、chrome-devtools
+
+> `frontend-design`、`ui-ux-pro-max` 在本仓库内；`ai-multimodal`、`chrome-devtools` 为可选外部技能，不在本仓库内，未安装则跳过依赖它们的步骤，核心设计流程不受影响。

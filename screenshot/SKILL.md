@@ -32,26 +32,28 @@ bash <path-to-skill>/scripts/ensure_macos_permissions.sh
 
 为避免多次沙箱授权提示，尽可能将 preflight 与 capture 合并为一个命令：
 
+Python 解释器：Windows 用 `python`；macOS/Linux 若 `python` 不存在则用 `python3`。下文命令统一写 `python`。
+
 ```bash
 bash <path-to-skill>/scripts/ensure_macos_permissions.sh && \
-python3 <path-to-skill>/scripts/take_screenshot.py --app "Codex"
+python <path-to-skill>/scripts/take_screenshot.py --app "Codex"
 ```
 
 对于代理/AI 助手的检查执行，请将输出保存在临时目录：
 
 ```bash
 bash <path-to-skill>/scripts/ensure_macos_permissions.sh && \
-python3 <path-to-skill>/scripts/take_screenshot.py --app "<App>" --mode temp
+python <path-to-skill>/scripts/take_screenshot.py --app "<App>" --mode temp
 ```
 
 使用随附脚本，避免重复推导各操作系统特定命令。
 
 ## macOS 与 Linux（Python 辅助脚本）
 
-从仓库根目录运行该辅助脚本：
+在技能目录下运行（`<path-to-skill>` 替换为本技能所在目录）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py
+python <path-to-skill>/scripts/take_screenshot.py
 ```
 
 常见用法：
@@ -59,55 +61,55 @@ python3 <path-to-skill>/scripts/take_screenshot.py
 - 默认位置（用户只说“截个图”）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py
+python <path-to-skill>/scripts/take_screenshot.py
 ```
 
 - 临时位置（代理/AI 助手视觉检查）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py --mode temp
+python <path-to-skill>/scripts/take_screenshot.py --mode temp
 ```
 
 - 显式位置（用户提供了路径或文件名）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py --path output/screen.png
+python <path-to-skill>/scripts/take_screenshot.py --path output/screen.png
 ```
 
 - 按应用名抓取应用/窗口（仅 macOS；支持子串匹配；会抓取所有匹配窗口）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py --app "Codex"
+python <path-to-skill>/scripts/take_screenshot.py --app "Codex"
 ```
 
 - 指定应用内的窗口标题（仅 macOS）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py --app "Codex" --window-name "Settings"
+python <path-to-skill>/scripts/take_screenshot.py --app "Codex" --window-name "Settings"
 ```
 
 - 在截图前列出匹配窗口 id（仅 macOS）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py --list-windows --app "Codex"
+python <path-to-skill>/scripts/take_screenshot.py --list-windows --app "Codex"
 ```
 
 - 像素区域（x,y,w,h）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py --mode temp --region 100,200,800,600
+python <path-to-skill>/scripts/take_screenshot.py --mode temp --region 100,200,800,600
 ```
 
 - 焦点/活动窗口（仅抓取最前窗口；使用 `--app` 可抓取该应用的全部窗口）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py --mode temp --active-window
+python <path-to-skill>/scripts/take_screenshot.py --mode temp --active-window
 ```
 
 - 指定窗口 id（在 macOS 上可用 --list-windows 发现 id）：
 
 ```bash
-python3 <path-to-skill>/scripts/take_screenshot.py --window-id 12345
+python <path-to-skill>/scripts/take_screenshot.py --window-id 12345
 ```
 
 脚本会为每次截图输出一个路径。若匹配到多个窗口或显示器，会输出多个路径（每行一个），并附加如 `-w<windowId>` 或 `-d<display>` 的后缀。请使用图像查看工具按顺序查看每个路径，仅在有需要或被要求时再处理图像。
@@ -118,7 +120,7 @@ python3 <path-to-skill>/scripts/take_screenshot.py --window-id 12345
 
 ```bash
 bash <path-to-skill>/scripts/ensure_macos_permissions.sh && \
-python3 <path-to-skill>/scripts/take_screenshot.py --app "<App>" --mode temp
+python <path-to-skill>/scripts/take_screenshot.py --app "<App>" --mode temp
 ```
 
 - “Figma 设计和实际实现不一致”：先用 Figma MCP/skill 抓取设计图，再用此 skill 抓取运行中的应用（通常保存到临时目录），并在做任何处理前先比较原始截图。

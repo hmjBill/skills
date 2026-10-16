@@ -97,7 +97,7 @@ MaxAuthTries 3
 MaxSessions 10
 
 # 只允许指定账号（换成你的用户名）
-AllowUsers hmjBill
+AllowUsers <用户名>
 
 X11Forwarding no
 AllowAgentForwarding no
@@ -418,25 +418,25 @@ Get-WinEvent -LogName 'System' -MaxEvents 20 | Where-Object Message -match sshd
 # 1. loopback 通 + 公钥能登录：期望打印用户名、主机名和 SSH_LOGIN_OK，exit=0
 & "$env:WINDIR\OpenSSH\ssh.exe" -i "$env:USERPROFILE\.ssh\id_ed25519" `
     -p 22 -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=NUL `
-    -o ConnectTimeout=10 'hmjBill@127.0.0.1' 'whoami && hostname && echo SSH_LOGIN_OK'
+    -o ConnectTimeout=10 '<用户名>@127.0.0.1' 'whoami && hostname && echo SSH_LOGIN_OK'
 
 # 2. 负向测试：密码认证必须被拒。期望 Permission denied，exit=255
 & "$env:WINDIR\OpenSSH\ssh.exe" -p 22 -o BatchMode=yes `
     -o PreferredAuthentications=password -o PubkeyAuthentication=no `
     -o StrictHostKeyChecking=no -o UserKnownHostsFile=NUL `
-    -o ConnectTimeout=10 'hmjBill@127.0.0.1' 'echo SHOULD_NOT_WORK'
+    -o ConnectTimeout=10 '<用户名>@127.0.0.1' 'echo SHOULD_NOT_WORK'
 
 # 3. 真实网段：确认防火墙放行真的生效（loopback 绕过防火墙，测不到）
 & "$env:WINDIR\OpenSSH\ssh.exe" -i "$env:USERPROFILE\.ssh\id_ed25519" `
     -p 22 -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=NUL `
-    -o ConnectTimeout=10 'hmjBill@192.168.0.5' 'echo LAN_OK'
+    -o ConnectTimeout=10 '<用户名>@192.168.0.5' 'echo LAN_OK'
 ```
 
 ```bash
 # Linux / macOS：同样三条，把 -i 和路径换成 Unix 风格
 ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 \
-    'hmjBill@127.0.0.1' 'whoami && hostname && echo SSH_LOGIN_OK'
+    '<用户名>@127.0.0.1' 'whoami && hostname && echo SSH_LOGIN_OK'
 ```
 
 **验收标准**：第 1 条 exit=0 且打印 `SSH_LOGIN_OK`；第 2 条 exit=255 且是 `Permission denied`。

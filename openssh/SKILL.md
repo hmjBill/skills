@@ -163,7 +163,7 @@ Host *
 # ---- 普通服务器：最简形式 ----
 Host myserver
     HostName 192.168.1.10
-    User hmjBill
+    User <用户名>
 
 # ---- 指定密钥和端口 ----
 Host vps
@@ -405,7 +405,7 @@ ssh -S /tmp/ssh-myserver-%r@%h:%p myserver
 ```sshconfig
 Host myserver
     HostName 192.168.1.10
-    User hmjBill
+    User <用户名>
     ControlMaster auto
     ControlPath ~/.ssh/cm/%r@%h:%p
     ControlPersist 10m
@@ -566,11 +566,11 @@ sudo systemsetup -setremotelogin on
 ```bash
 # 1. 公钥能登录，期望 exit=0 且打印 SSH_LOGIN_OK
 ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes -o ConnectTimeout=10 \
-    'hmjBill@127.0.0.1' 'whoami && echo SSH_LOGIN_OK'
+    '<用户名>@127.0.0.1' 'whoami && echo SSH_LOGIN_OK'
 
 # 2. 密码认证必须被拒，期望 exit=255 且 Permission denied
 ssh -o BatchMode=yes -o PreferredAuthentications=password -o PubkeyAuthentication=no \
-    -o ConnectTimeout=10 'hmjBill@127.0.0.1' 'echo SHOULD_NOT_WORK'
+    -o ConnectTimeout=10 '<用户名>@127.0.0.1' 'echo SHOULD_NOT_WORK'
 ```
 
 再**用真实网段 IP** 连一次——loopback 绕过防火墙，测不出放行范围。

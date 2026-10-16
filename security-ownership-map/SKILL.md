@@ -22,6 +22,8 @@ pip install networkx
 
 本文件中的命令都在技能目录（本文件所在目录）下运行，脚本使用相对路径 `scripts/...`。
 
+命令块按 Windows PowerShell 7 写（换行用反引号加空格结尾续行）；macOS/Linux 用 bash 时把续行符换成 `\` 即可。
+
 ## 工作流
 
 1. 确定仓库范围与时间窗口（可选 `--since/--until`）。
@@ -35,10 +37,10 @@ pip install networkx
 
 如果希望在共变更聚类中排除类似 `Kbuild` 的 Linux 构建胶水文件，可传入：
 
-```bash
-python scripts/run_ownership_map.py \
-  --repo /path/to/linux \
-  --out ownership-map-out \
+```powershell
+python scripts/run_ownership_map.py `
+  --repo /path/to/linux `
+  --out ownership-map-out `
   --cochange-exclude "**/Kbuild"
 ```
 
@@ -46,11 +48,11 @@ python scripts/run_ownership_map.py \
 
 在技能目录下运行（被分析的仓库通过 `--repo` 指定）：
 
-```bash
-python scripts/run_ownership_map.py \
-  --repo . \
-  --out ownership-map-out \
-  --since "12 months ago" \
+```powershell
+python scripts/run_ownership_map.py `
+  --repo . `
+  --out ownership-map-out `
+  --since "12 months ago" `
   --emit-commits
 ```
 
@@ -58,21 +60,21 @@ python scripts/run_ownership_map.py \
 
 示例（覆盖共变更排除项）：
 
-```bash
-python scripts/run_ownership_map.py \
-  --repo . \
-  --out ownership-map-out \
-  --cochange-exclude "**/Cargo.lock" \
-  --cochange-exclude "**/.github/**" \
+```powershell
+python scripts/run_ownership_map.py `
+  --repo . `
+  --out ownership-map-out `
+  --cochange-exclude "**/Cargo.lock" `
+  --cochange-exclude "**/.github/**" `
   --no-default-cochange-excludes
 ```
 
 默认会计算社区。若要禁用：
 
-```bash
-python scripts/run_ownership_map.py \
-  --repo . \
-  --out ownership-map-out \
+```powershell
+python scripts/run_ownership_map.py `
+  --repo . `
+  --out ownership-map-out `
   --no-communities
 ```
 
@@ -127,7 +129,7 @@ python scripts/query_ownership.py --data-dir ownership-map-out community --id 3
 
 运行以下命令，以有界输出回答常见安全所有权问题：
 
-```bash
+```powershell
 # 孤儿敏感代码：无人或少人维护的敏感文件
 python scripts/query_ownership.py --data-dir ownership-map-out summary --section orphaned_sensitive_code
 
@@ -151,18 +153,18 @@ python scripts/query_ownership.py --data-dir ownership-map-out cochange --file p
 python scripts/query_ownership.py --data-dir ownership-map-out community --id 3
 
 # 社区维护者（最近）
-python scripts/community_maintainers.py \
-  --data-dir ownership-map-out \
-  --file network/card.c \
-  --since 2025-01-01 \
+python scripts/community_maintainers.py `
+  --data-dir ownership-map-out `
+  --file network/card.c `
+  --since 2025-01-01 `
   --top 5
 
 # 社区维护者（按日历季度分桶）
-python scripts/community_maintainers.py \
-  --data-dir ownership-map-out \
-  --file network/card.c \
-  --since 2025-01-01 \
-  --bucket quarter \
+python scripts/community_maintainers.py `
+  --data-dir ownership-map-out `
+  --file network/card.c `
+  --since 2025-01-01 `
+  --bucket quarter `
   --top 5
 ```
 
