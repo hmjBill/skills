@@ -13,11 +13,19 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// Paths
-const BRAND_GUIDELINES = 'docs/brand-guidelines.md';
-const DESIGN_TOKENS_JSON = 'assets/design-tokens.json';
-const DESIGN_TOKENS_CSS = 'assets/design-tokens.css';
+// Paths — resolved from this skill's directory, so the script works from any cwd
+const SKILL_DIR = path.resolve(__dirname, '..');
+const BRAND_GUIDELINES = path.join(SKILL_DIR, 'docs', 'brand-guidelines.md');
+const DESIGN_TOKENS_JSON = path.join(SKILL_DIR, 'assets', 'design-tokens.json');
+const DESIGN_TOKENS_CSS = path.join(SKILL_DIR, 'assets', 'design-tokens.css');
 const GENERATE_TOKENS_SCRIPT = path.resolve(__dirname, '..', '..', 'design-system', 'scripts', 'generate-tokens.cjs');
+
+/**
+ * Skill-relative form of a path, for readable console output
+ */
+function rel(absolutePath) {
+  return path.relative(SKILL_DIR, absolutePath).split(path.sep).join('/');
+}
 
 /**
  * Extract color info from brand guidelines markdown
@@ -211,7 +219,7 @@ function main() {
   console.log('🔄 Syncing brand guidelines → design tokens\n');
 
   // Read brand guidelines
-  const guidelinesPath = path.resolve(process.cwd(), BRAND_GUIDELINES);
+  const guidelinesPath = BRAND_GUIDELINES;
   if (!fs.existsSync(guidelinesPath)) {
     console.error(`❌ Brand guidelines not found: ${guidelinesPath}`);
     process.exit(1);
@@ -226,7 +234,7 @@ function main() {
   console.log(`   Accent: ${colors.accent.name} (${colors.accent.base})\n`);
 
   // Read existing tokens
-  const tokensPath = path.resolve(process.cwd(), DESIGN_TOKENS_JSON);
+  const tokensPath = DESIGN_TOKENS_JSON;
   let tokens = {};
   if (fs.existsSync(tokensPath)) {
     tokens = JSON.parse(fs.readFileSync(tokensPath, 'utf-8'));
@@ -244,24 +252,24 @@ function main() {
 
   // Write updated tokens
   fs.writeFileSync(tokensPath, JSON.stringify(tokens, null, 2));
-  console.log(`✅ Updated: ${DESIGN_TOKENS_JSON}`);
+  console.log(`✅ Updated: ${rel(DESIGN_TOKENS_JSON)}`);
 
   // Regenerate CSS via the design-system skill script (resolved relative to this file)
-  const generateScript = GENERATE_TOKENS_SCRIPT;
-  if (!fs.existsSync(generateScript)) {
-    console.error(`❌ design-system script not found: ${generateScript}`);
-    console.error('   Install the design-system skill (or fix the path) and re-run to regenerate CSS.');
+  if (!fs.existsSync(GENERATE_TOKENS_SCRIPT)) {
+    console.error(`❌ 未找到 design-system 技能脚本：${GENERATE_TOKENS_SCRIPT}`);
+    console.error('   重新生成 CSS 需要同时安装 design-system 技能；如已安装请检查路径后重试。');
     process.exitCode = 1;
-  } else {
-    try {
-      execSync(`node "${generateScript}" --config ${DESIGN_TOKENS_JSON} -o ${DESIGN_TOKENS_CSS}`, {
-        cwd: process.cwd(),
-        stdio: 'inherit'
-      });
-      console.log(`✅ Regenerated: ${DESIGN_TOKENS_CSS}`);
-    } catch (e) {
-      console.error('⚠️  Failed to regenerate CSS:', e.message);
-    }
+    return;
+  }
+
+  try {
+    execSync(`node "${GENERATE_TOKENS_SCRIPT}" --config "${DESIGN_TOKENS_JSON}" -o "${DESIGN_TOKENS_CSS}"`, {
+      cwd: SKILL_DIR,
+      stdio: 'inherit'
+    });
+    console.log(`✅ Regenerated: ${rel(DESIGN_TOKENS_CSS)}`);
+  } catch (e) {
+    console.error('⚠️  Failed to regenerate CSS:', e.message);
   }
 
   console.log('\n✨ Brand sync complete!');
