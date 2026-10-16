@@ -126,46 +126,85 @@ Get-Content "$env:USERPROFILE\.ssh\id_ed25519_hmjBill.pub" -Raw |
 
 ## 主机密钥 ACL：最容易踩的坑
 
-**Windows OpenSSH 的 StrictModes 会检查 ACL 与属主两样，光改权限不够。**
-权限是 `SYSTEM:(F)` 但**属主是你的用户账号**时，sshd 依然判定 `too open` 并**丢弃全部主机密钥**，
-最后报 `sshd: no hostkeys available -- exiting.`
+**Windows OpenSSH 的 StrictModes 同时检查属主和 DACL，两者都要对，缺一个就全盘拒绝。**
+只要有一把主机密钥被判不合格，sshd 就丢弃它；全部不合格时报
+`sshd: no hostkeys available -- exiting.`，事件日志里只剩 7034，什么原因都不写。
 
-正确做法是用 .NET ACL API 同时设属主和访问控制项，`icacls` 的 `/grant:r` 和 `/setowner` 都做不到：
+实测确认的要求（2026.10 在 Windows 11 build 26200 + OpenSSH 9.5p2 上验证）：
+
+| 对象 | 属主 | 访问控制项 |
+| --- | --- | --- |
+| `ssh_host_*_key`（私钥） | `SYSTEM` | `SYSTEM:(F)` **和** `BUILTIN\Administrators:(F)` |
+| `ssh_host_*_key.pub`（公钥） | `Administrators` | 同上 |
+| `sshd_config`、`administrators_authorized_keys` | `Administrators` | 同上 |
+| `C:\ProgramData\ssh` 目录 | `Administrators` | 同上，带 `(OI)(CI)` 让子文件继承 |
+
+**两个常见误解，都会导致密钥被拒：**
+
+1. **只给 SYSTEM 一条不够。** 很多人（包括按直觉加固的自己）会「收紧」到只有 SYSTEM 能读，
+   结果 sshd 报 `too open` / `bad permissions`。规则是 **SYSTEM 与 Administrators 必须同时有完全控制**，
+   多一条少一条都不行。
+2. **属主错了也不行。** 私钥属主必须是 SYSTEM。属主是普通用户账号时同样被判过松。
+
+用 .NET ACL API 一次设完，别用 `icacls`：
 
 ```powershell
-$SYS = 'S-1-5-18'        # NT AUTHORITY\SYSTEM
-$acl = Get-Acl 'C:\ProgramData\ssh\ssh_host_ed25519_key'
-$acl.SetAccessRuleProtection($true, $false)      # 关继承，同时丢弃继承来的 ACE
-foreach ($r in @($acl.Access)) { [void]$acl.RemoveAccessRule($r) }
-$acl.SetOwner((New-Object System.Security.Principal.SecurityIdentifier($SYS)))
-$acl.AddAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule(
-    (New-Object System.Security.Principal.SecurityIdentifier($SYS)), 'FullControl', 'Allow')))
-Set-Acl -Path 'C:\ProgramData\ssh\ssh_host_ed25519_key' -AclObject $acl
+$SYS = New-Object System.Security.Principal.SecurityIdentifier('S-1-5-18')        # SYSTEM
+$ADM = New-Object System.Security.Principal.SecurityIdentifier('S-1-5-32-544')      # Administrators
+
+function Set-FullAcl([string]$path, [string]$ownerSid, [bool]$isDir) {
+    $acl = Get-Acl $path
+    $acl.SetAccessRuleProtection($true, $false)     # 关继承，同时丢弃继承来的 ACE
+    foreach ($r in @($acl.Access)) { [void]$acl.RemoveAccessRule($r) }
+    $acl.SetOwner((New-Object System.Security.Principal.SecurityIdentifier($ownerSid)))
+    if ($isDir) {
+        $inherit = [System.Security.AccessControl.InheritanceFlags]'ContainerInherit, ObjectInherit'
+    } else {
+        $inherit = [System.Security.AccessControl.InheritanceFlags]::None
+    }
+    foreach ($sid in @($SYS, $ADM)) {
+        [void]$acl.AddAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule(
+            $sid, 'FullControl', $inherit,
+            [System.Security.AccessControl.PropagationFlags]::None, 'Allow')))
+    }
+    Set-Acl -Path $path -AclObject $acl
+}
+
+# 私钥属主 SYSTEM
+foreach ($n in 'ssh_host_rsa_key','ssh_host_ecdsa_key','ssh_host_ed25519_key') {
+    Set-FullAcl "C:\ProgramData\ssh\$n" 'S-1-5-18' $false
+}
+# 其余属主 Administrators
+foreach ($n in 'sshd_config','administrators_authorized_keys',
+                'ssh_host_rsa_key.pub','ssh_host_ecdsa_key.pub','ssh_host_ed25519_key.pub') {
+    Set-FullAcl "C:\ProgramData\ssh\$n" 'S-1-5-32-544' $false
+}
+Set-FullAcl 'C:\ProgramData\ssh' 'S-1-5-32-544' $true
 ```
 
-两个关键点：
+### 为什么不用 icacls
 
-1. **属主必须设成 SYSTEM**（服务以 `LocalSystem` 运行，而 `LocalSystem` **不是** Administrators 组成员，
-   只给 Administrators 权限服务就读不到文件）。
-2. **属主 + 访问项要一次设完**。先 `icacls` 再 `Set-Acl` 会出现属主被重置回原值的情况。
+`icacls` 的组合命令有两个陷阱，都会静默产出错误 ACL：
 
-`sshd_config` 和 `administrators_authorized_keys` 不受同一条限制（Windows 允许 SYSTEM + Administrators 共存），
-但仍然要去掉继承来的 `Authenticated Users`/`Users`，否则配置对所有已认证用户可读。
+1. **`/reset` 之后接 `/inheritance:r` 会留下空 DACL**（SDDL 变成 `D:PAI`，一条权限都没有）。
+   此时连提权管理员都读不到文件，后续 `/grant` 也会报「拒绝访问」而加不进去。
+2. **`/grant:r` 是「替换」不是「追加」**。`/grant SYSTEM:(F) Administrators:(F)` 写成 `/grant:r` 时，
+   第二条会把第一条顶掉，最后只剩 Administrators 一条——正好触发 `too open`。
 
-验证权限是否过关，**以 SYSTEM 身份跑**才有意义（你以自己身份跑永远看不到那个警告）：
+排查时直接看 SDDL，一眼就知道有没有坏：
 
 ```powershell
-# 用计划任务以 SYSTEM 跑 sshd -t 并抓 stderr，这是唯一能看到 StrictModes 真实报错的方法
-$wrap = "$env:TEMP\probe.cmd"
-Set-Content -Encoding ASCII -Value "@echo off`r`n`"$env:WINDIR\System32\OpenSSH\sshd.exe`" -t -f C:\ProgramData\ssh\sshd_config 2> `"$env:TEMP\err.txt`"`r`necho %ERRORLEVEL% > `"$env:TEMP\rc.txt`""
-Register-ScheduledTask -TaskName SshdProbe `
-    -Action (New-ScheduledTaskAction -Execute $wrap -WorkingDirectory 'C:\ProgramData\ssh') `
-    -Settings (New-ScheduledTaskSettingsSet -ExecutionTimeLimit (New-TimeSpan -Minutes 1)) `
-    -User SYSTEM -RunLevel Highest -Force
-Start-ScheduledTask -TaskName SshdProbe
-Start-Sleep -Seconds 6
-Get-Content "$env:TEMP\err.txt"   # 空 = 密钥被接受
-Unregister-ScheduledTask -TaskName SshdProbe -Confirm:$false
+Get-Acl 'C:\ProgramData\ssh\sshd_config' | Select-Object Owner, Sddl
+# 正常： O:BAG:...D:PAI(A;;FA;;;SY)(A;;FA;;;BA)
+# 坏掉： O:BAG:...D:PAI              <- 没有任何 ACE
+```
+
+验证是否过关，直接跑语法检查即可（**必须在服务停止时**，见下）：
+
+```powershell
+& "$env:WINDIR\System32\OpenSSH\sshd.exe" -t -f C:\ProgramData\ssh\sshd_config
+# exit=0 且无输出 = 全部接受
+# 有 UNPROTECTED PRIVATE KEY / no hostkeys available = ACL 仍不对
 ```
 
 ## 防火墙放行范围
@@ -333,8 +372,10 @@ Get-Service ssh-agent   # 对照：同目录同家族的 ssh-agent 能跑吗
 | 症状 | 原因 | 动作 |
 | --- | --- | --- |
 | `Start-Service` 报「无法启动」，日志只有 7034 | sshd 死前没写日志 | 用计划任务以 SYSTEM 跑，抓 stderr |
-| stderr 报 `no hostkeys available` | 主机密钥 ACL 或属主不对 | 用 .NET API 设属主为 SYSTEM + 单一 ACE |
-| stderr 报 `too open` 但 ACL 看着没问题 | 只改了 DACL 没改属主 | `SetOwner` + `SetAccessRuleProtection` 一次做完 |
+| stderr 报 `no hostkeys available` | 主机密钥 ACL 或属主不对 | 用 .NET API 设「属主 SYSTEM + SYSTEM 和 Administrators 都有 (F)」 |
+| stderr 报 `too open` 但 ACL 看着没问题 | 只改了一半（少了 Administrators，或属主没改） | 按上面那张表逐项核对，看 SDDL |
+| `sshd_config: Permission denied` | 该文件的 DACL 是空的（SDDL 为 `D:PAI`） | `icacls /reset` 接 `/inheritance:r` 造成，用 .NET API 重建 |
+| 写完配置读回来还是旧内容 | sshd 运行时锁着 `sshd_config` | 先 `Stop-Service sshd` 再写，写完再启动 |
 | 公钥放对了却登不进去 | 你是管理员，sshd 读的是共享文件 | 公钥写进 `C:\ProgramData\ssh\administrators_authorized_keys` |
 | `Permission denied (publickey,...)` 且私钥能读 | 属主是 SYSTEM，服务外读不到属主信息 | 确认 `sshd_config` 里 `AllowUsers` 拼写、用户名与本机一致 |
 | `Bad key, bad permissions` | 用户侧 `~/.ssh` 或私钥权限过松 | 私钥去掉继承，只留本人 |
@@ -357,19 +398,29 @@ Get-Service ssh-agent   # 对照：同目录同家族的 ssh-agent 能跑吗
 
 ## 已知坑（2026.10 实测）
 
-1. **StrictModes 同时查属主和 DACL**，只用 `icacls /grant:r` 改不出可用的权限。
-   `icacls /setowner` 也会失败（报「处理 0 个文件」）。必须用 .NET 的 `SetOwner` + `SetAccessRuleProtection`。
-2. **`LocalSystem` 不是 Administrators 组成员**。把密钥只给 Administrators，服务就读不到；
-   只给 SYSTEM 又会因属主问题被拒。正确是「属主 SYSTEM + 唯一 ACE 是 SYSTEM」。
-3. **`lookup_sid() failed: 1332` 是噪音**，与启动失败无关（实测删掉全部 ProfileList 孤儿 SID 后照样报）。
-4. **`.ps1` 里混进 bash 语法会静默失败**。写 `<<<` 这类重定向符，PowerShell 解析失败且不生成日志文件，
+1. **StrictModes 查属主 + DACL 两者，且 SYSTEM 与 Administrators 必须同时有完全控制。**
+   「收紧到只有 SYSTEM」是错的，会触发 `too open` / `bad permissions`。用 .NET 的
+   `SetOwner` + `SetAccessRuleProtection` + 逐条 `AddAccessRule` 一次建好。
+2. **`icacls /reset` 接 `/inheritance:r` 会产生空 DACL**（SDDL 变成 `D:PAI`），
+   连提权管理员都读不到，而且此时 `icacls` 自己都改不动（报「拒绝访问」）。
+   看到 `sshd_config: Permission denied` 且你确实是管理员，先查 SDDL。
+3. **`icacls /grant:r` 是替换不是追加**，一次写两条 ACE 时后一条会顶掉前一条。
+   要两条都在就用 .NET API，或分两次 `/grant`。
+4. **sshd 运行时会锁住 `sshd_config`**，此时 `WriteAllText` 不报错但内容写不进去
+   （读回来还是旧内容，或字节数对不上）。改配置前先 `Stop-Service sshd`。
+5. **`lookup_sid() failed: 1332` 是噪音**，与启动失败无关（实测删掉全部 ProfileList 孤儿 SID 后照样报）。
+6. **`.ps1` 里混进 bash 语法会静默失败**。写 `<<<` 这类重定向符，PowerShell 解析失败且不生成日志文件，
    表现为「脚本什么都没做」。日志文件没生成 = 解析错误，不是运行时错误。
-5. **`Start-Process -Verb RunAs` + `-RedirectStandardError` 抓不到服务进程的输出**，
+7. **`Start-Process -Verb RunAs` + `-RedirectStandardError` 抓不到服务进程的输出**，
    因为 SCM 启动的进程不继承重定向句柄。绕法是计划任务 + cmd 包装。
-6. **别把「进程没出现」当成「sshd 崩了」**。观察整个启动过程若一次都没见到 `sshd.exe`，
+8. **别把「进程没出现」当成「sshd 崩了」**。观察整个启动过程若一次都没见到 `sshd.exe`，
    说明它在创建时就失败了，此时报错信息只能靠计划任务复现。
-7. **loopback 测试绕过防火墙**，测不出放行范围。必须用真实网段 IP 再连一次。
-8. **`-i` 传 MSYS 路径给 Windows 版 ssh.exe 会失败**，用 `C:\...` 形式。
+9. **loopback 测试绕过防火墙**，测不出放行范围。必须用真实网段 IP 再连一次。
+10. **`-i` 传 MSYS 路径给 Windows 版 ssh.exe 会失败**，用 `C:\...` 形式。
+11. **做对照实验后恢复文件要核对字节数**。恢复错了不会报错，只是配置悄悄变回默认——
+    用 `git status`/字节数/`Get-Content` 三重确认，别信「restore 完成」的日志。
+12. **Windows 默认配置里 `PasswordAuthentication` 是被注释的，即「启用」**。
+    `#PasswordAuthentication yes` 里的注释不是关闭，删掉注释项前要确认当前实际值。
 
 ## macOS / Linux 对照
 
