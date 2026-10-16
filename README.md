@@ -6,7 +6,7 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（72 个，均含 SKILL.md）
+## 收录条目（73 个，均含 SKILL.md）
 
 ### 开发与架构
 
@@ -138,6 +138,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [restic-backup](restic-backup/SKILL.md) | 用 restic 做加密备份与仓库巡检（建仓、备份、快照比对、保留策略清理、完整性校验、恢复，含只读健康检查脚本） |
 | [openssh](openssh/SKILL.md) | OpenSSH 完整用法：作为客户端连接任意服务器（密钥、config 别名、跳板机、端口转发、文件传输、排障），以及部署加固 sshd 供他人连接 |
 | [canvas-cookie-bridge](canvas-cookie-bridge/SKILL.md) | 用本机 cookie 桥让 canvas-cli 等 Bearer 型 Canvas 客户端在学校禁用学生 token 时照常可用（转发全方法、注入 CSRF、读课程作业成绩、cookie 生命周期管理） |
+| [canvas-cli](canvas-cli/SKILL.md) | Canvas LMS 终端客户端用法（课程/作业/成绩/文件/分析；含禁 token 学校的 cookie 桥认证适配，上游 jjuanrivvera/canvas-cli 本地修复版） |
 
 ## 使用方式
 
