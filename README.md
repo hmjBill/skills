@@ -24,7 +24,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 
 | Skill | 说明 |
 |-------|------|
-| [grill-with-docs](grill-with-docs/SKILL.md) | 结合项目文档进行追问 |
+| [grill-with-docs](grill-with-docs/SKILL.md) | 按轮拷问方案，并同步 GLOSSARY.md / ADR |
 | [prototype](prototype/SKILL.md) | 快速原型开发 |
 | [qa](qa/SKILL.md) | 质量保证与测试 |
 | [review](review/SKILL.md) | 代码审查 |

@@ -99,7 +99,7 @@ disable-model-invocation: true
 [关于布局的一行摘要 — "single-context" 或 "multi-context"]。见 `docs/agents/domain.md`。
 ```
 
-只当 `triage` 已安装且部分 B 运行过时，才包含 `### Triage labels` 子块并写入 `docs/agents/triage-labels.md`；否则两者都省略。
+只当 `triage` 已安装且部分 B 运行过时，才包含 `### Triage labels` 子块并写入 `docs/agents/triage-labels.md`；否则两者都省略。若部分 B 运行在 GitHub 或 GitLab 上，还要逐条检查并在跟踪器中创建尚缺的标签（`gh label create` / `glab label create`）；否则首次 triage 会因标签不存在而失效。
 
 然后使用此 skill 文件夹中的种子模板作为起点写入 docs 文件：
 
