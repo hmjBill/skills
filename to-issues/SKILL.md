@@ -7,7 +7,7 @@ description: 将计划、规格或对话拆分为一组带阻塞关系的垂直�
 
 将计划、规格或对话拆分为一组 **issue**：垂直切片（tracer bullet），每个 issue 声明**阻塞**它的其他 issue。
 
-问题跟踪器和分类标签词汇应该已提供给你 — 如果没有，使用 setup-matt-pocock-skills skill。
+问题跟踪器和分类标签词汇应该已提供给你 — 如果没有，告诉用户运行 `setup-matt-pocock-skills` 技能（该技能为用户调用，你不能直接加载）。
 
 ## 流程
 
@@ -62,7 +62,7 @@ description: 将计划、规格或对话拆分为一组带阻塞关系的垂直�
 - **本地 markdown 跟踪器** → 在 `.scratch/<feature-slug>/issues/<NN>-<slug>.md` 下每个 issue 写一个文件，从 `01` 起按依赖顺序（阻塞者在前）编号。每个文件的"被阻塞于"列出它依赖的编号/标题。使用下面的本地 issue 模板：一个 issue 一个文件，绝不写单个合并文件。
 - **其他跟踪器** → 按 `docs/agents/issue-tracker.md` 中的说明执行。
 
-如果 `docs/agents/issue-tracker.md` 不存在，先使用 setup-matt-pocock-skills skill 生成配置。
+如果 `docs/agents/issue-tracker.md` 不存在，告诉用户运行 `setup-matt-pocock-skills` 技能生成配置（该技能为用户调用，你不能直接加载）。
 
 除非另有指示，用 `ready-for-agent` 分类标签发布；这些 issue 在构造上就是 agent 可领取的。
 

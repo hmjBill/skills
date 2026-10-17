@@ -41,7 +41,7 @@ description: 通过分诊角色驱动的状态机对 Issue 与外部 PR 分诊�
 
 每个分类的 issue 应恰好携带一个类别角色和一个状态角色。如果状态角色冲突，在做任何事情之前标记并询问维护者。
 
-这些是规范角色名称 — 问题跟踪器中使用的实际标签字符串可能不同。映射应该已提供给你 — 如果没有，使用 setup-matt-pocock-skills 技能生成。
+这些是规范角色名称 — 问题跟踪器中使用的实际标签字符串可能不同。映射应该已提供给你 — 如果没有，告诉用户运行 `setup-matt-pocock-skills` 技能生成（该技能为用户调用，你不能直接加载）。
 
 状态转换：未标签的 issue 通常首先进入 `needs-triage`；从那里它可以移动到 `needs-info`、`ready-for-agent`、`ready-for-human` 或 `wontfix`。一旦报告者回复，`needs-info` 返回到 `needs-triage`。维护者可以随时覆盖 — 标记看起来不寻常的转换并在继续之前询问。
 
@@ -76,7 +76,7 @@ description: 通过分诊角色驱动的状态机对 Issue 与外部 PR 分诊�
 
 3. **验证主张（Verify the claim）。** 在任何追问之前，确认主张站得住脚。对 bug，按报告者的步骤复现。对 PR，确认 diff 确实做到了它声称的事：checkout 该 PR，运行相关测试或命令。报告结果 — 确认（附代码路径）、验证失败或细节不足（强烈的 `needs-info` 信号）。经过确认的验证使 agent brief 强得多。
 
-4. **追问（如需要）。** 如果请求需要详细阐述，依次调用 `grill-with-docs` 与 `ubiquitous-language` 技能，一轮一个问题地把它问成型；决策落定时，同步锐化领域术语并内联更新 `GLOSSARY.md` / ADR。
+4. **追问（如需要）。** 如果请求需要详细阐述，调用 `grill-with-docs` 技能按设计树逐轮追问，把它问成型；术语由 `grill-with-docs` 内联写入 `GLOSSARY.md`，不要再用 `ubiquitous-language` 重复写一遍。只有需要从历史对话批量补录术语时，才单独调用 `ubiquitous-language`。
 
 5. **应用结果：**
    - `ready-for-agent` — 发布 agent brief 评论（[AGENT-BRIEF.md](AGENT-BRIEF.md)）。

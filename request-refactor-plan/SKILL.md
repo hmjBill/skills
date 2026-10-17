@@ -21,7 +21,7 @@ description: 通过用户访谈创建详细的重构计划和微小提交，然�
 
 7. 将实现分解为微小 commits 的计划。记住 Martin Fowler 的建议："使每个重构步骤尽可能小，以便您始终可以看到程序工作。"
 
-8. 将重构计划归档到项目问题跟踪器。优先读取项目的 `docs/agents/issue-tracker.md`（由 setup-matt-pocock-skills 生成），按其中约定的跟踪器执行：GitHub 使用 `gh issue create` 创建 issue，本地 markdown 跟踪器写入约定的文件；文件缺失时先使用 setup-matt-pocock-skills skill 生成。默认先将计划给用户确认，确认后再发布。使用以下模板作为 issue 描述：
+8. 将重构计划归档到项目问题跟踪器。优先读取项目的 `docs/agents/issue-tracker.md`（由 setup-matt-pocock-skills 生成），按其中约定的跟踪器执行：GitHub 使用 `gh issue create` 创建 issue，本地 markdown 跟踪器写入约定的文件；文件缺失时告诉用户运行 `setup-matt-pocock-skills` 技能生成。默认先将计划给用户确认，确认后再发布。使用以下模板作为 issue 描述：
 
 <refactor-plan-template>
 

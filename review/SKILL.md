@@ -12,7 +12,7 @@ description: 沿两轴审查自固定点（提交、分支、标签或合并基�
 
 两个轴通过宿主提供的子代理机制（如 Task/task）作为**并行子代理**运行，因此不会相互污染上下文；宿主不支持并行时顺序执行。随后此技能聚合两边的发现。
 
-问题跟踪器应已提供给你。如果 `docs/agents/issue-tracker.md` 缺失，先使用 `setup-matt-pocock-skills` 技能生成。
+问题跟踪器应已提供给你。如果 `docs/agents/issue-tracker.md` 缺失，告诉用户运行 `setup-matt-pocock-skills` 技能生成（该技能为用户调用，你不能直接加载）。
 
 ## 流程
 
@@ -48,7 +48,7 @@ description: 沿两轴审查自固定点（提交、分支、标签或合并基�
 - `GLOSSARY.md`、`GLOSSARY-MAP.md`、每个上下文的 `GLOSSARY.md`（词汇表）
 - `docs/adr/`（架构决策是标准）
 - `.editorconfig`、`eslint.config.*`、`biome.json`、`prettier.config.*`、`tsconfig.json`（机器强制的标准——记下它们，但不要重新检查工具已经检查的内容）
-- 仓库根目录或 `docs/` 下的 `STYLE.md`、`STANDARDS.md`、`STYLEGUIDE.md` 或类似文件
+- 仓库根目录或 `docs/` 下的 `STYLE.md`、`STANDARDS.md`、`CODING_STANDARDS.md`、`STYLEGUIDE.md` 或类似文件
 
 收集文件列表。**标准**子代理将读取它们。
 

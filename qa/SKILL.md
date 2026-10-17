@@ -52,7 +52,7 @@ description: 交互式 QA 会话，用户以对话方式报告 Bug 或问题，�
 
 - GitHub：使用 `gh issue create` 创建 issues。
 - 本地 markdown 跟踪器：写入 `docs/agents/issue-tracker.md` 约定的文件。
-- 其他跟踪器：按该文件中的说明执行；文件缺失时先使用 setup-matt-pocock-skills skill 生成。
+- 其他跟踪器：按该文件中的说明执行；文件缺失时告诉用户运行 `setup-matt-pocock-skills` 技能生成。
 
 默认先将 issue 草稿给用户确认，确认后再创建并分享 URL。
 

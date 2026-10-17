@@ -8,7 +8,7 @@
 - 仓库根目录的 **`GLOSSARY-MAP.md`**（如存在）— 它指向每个上下文对应的 `GLOSSARY.md`。阅读与当前主题相关的每一个。
 - **`docs/adr/`** — 阅读涉及你即将工作区域的 ADR。在多上下文仓库中，还要检查 `src/<context>/docs/adr/` 中的上下文级决策。
 
-如果这些文件不存在，**静默继续**。不要指出其缺失，也不要建议预先创建。词汇表与 ADR 由相关技能（`ubiquitous-language`、`grill-with-docs`）在术语或决策真正确定时按需创建。
+如果这些文件不存在，**静默继续**。不要指出其缺失，也不要建议预先创建。词汇表由 `ubiquitous-language` 或 `grill-with-docs` 在术语真正确定时按需创建；ADR 由 `grill-with-docs` 在决策通过三关时按需创建。
 
 ## 文件结构
 
