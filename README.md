@@ -6,7 +6,7 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（74 个，均含 SKILL.md）
+## 收录条目（75 个，均含 SKILL.md）
 
 ### 开发与架构
 
@@ -140,6 +140,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [canvas-cookie-bridge](canvas-cookie-bridge/SKILL.md) | 用本机 cookie 桥让 canvas-cli 等 Bearer 型 Canvas 客户端在学校禁用学生 token 时照常可用（转发全方法、注入 CSRF、读课程作业成绩、cookie 生命周期管理） |
 | [canvas-cli](canvas-cli/SKILL.md) | Canvas LMS 终端客户端用法（课程/作业/成绩/文件/分析；含禁 token 学校的 cookie 桥认证适配，上游 jjuanrivvera/canvas-cli 本地修复版） |
 | [himalaya](himalaya/SKILL.md) | 用 himalaya 命令行收发管理邮件（读取、搜索、撰写发送、回复转发、附件、多账户与 IMAP/SMTP/Maildir 配置，含 v1→v2 迁移参考） |
+| [telegram-cli](telegram-cli/SKILL.md) | 用 tg 命令行驱动 Telegram 个人账号（收发消息、读历史、全局搜索、群组与频道管理、媒体上传下载、实时监听新消息），面向 AI Agent 的结构化 JSON 输出 |
 
 ## 使用方式
 
