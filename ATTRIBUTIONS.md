@@ -129,6 +129,7 @@
 | restic-backup | 原创；驱动 [restic/restic](https://github.com/restic/restic)（备份 CLI） | MIT（原创）/ BSD-2-Clause（依赖） |
 | openssh | 原创；驱动各平台内置 OpenSSH 客户端（`ssh` / `scp` / `sftp`）与服务端（Windows `OpenSSH.Server` 可选功能、`/etc/ssh/sshd_config`） | MIT（原创）/ MIT（依赖） |
 | himalaya | 原创；驱动 [pimalaya/himalaya](https://github.com/pimalaya/himalaya)（邮件 CLI，原 soywod/himalaya），基于上游官方文档（README/CHANGELOG/MIGRATION/config.sample.toml，v2.2.1）研究整理 | MIT（原创）/ MIT OR Apache-2.0（依赖） |
+| telegram-cli | 原创；驱动 [gotd/cli](https://github.com/gotd/cli)（Telegram CLI，底层 [gotd/td](https://github.com/gotd/td)），基于上游源码（cmd/tg/ 各命令实现、README、CLAUDE.md，v0.11.0）研究整理，并用 `tg docs` 生成的命令树校对参数 | MIT（原创）/ MIT（依赖） |
 
 ## 未溯源的 Skills
 
