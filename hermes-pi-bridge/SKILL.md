@@ -162,9 +162,9 @@ macOS / Linux 等价写法：
 cp -r hermes-pi-bridge "${HERMES_HOME:-$HOME/.hermes}/skills/"
 ```
 
-装完重启 Hermes。技能按 `description` 自动匹配加载，也可用 `skill_view(name='hermes-pi-bridge')`
-显式读取。放在 Hermes 主目录下时，curator 会在长期未使用后自动归档它；需要长期常驻就挂到
-`external_dirs` 下。
+装完重启 Hermes。用 `/hermes-pi-bridge` 触发，技能也会按 `description` 自动匹配加载，
+或用 `skill_view(name='hermes-pi-bridge')` 显式读取。放在 Hermes 主目录下时，curator 会在
+长期未使用后自动归档它；需要长期常驻就挂到 `external_dirs` 下。
 
 ## 深入了解协议
 
