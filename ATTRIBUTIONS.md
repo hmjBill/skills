@@ -76,13 +76,14 @@
 | defuddle | https://github.com/kepano/obsidian-skills | MIT |
 | obsidian-cli | https://github.com/kepano/obsidian-skills | MIT |
 
-### Tutor Skills 系列（已适配 AI-Wiki）
+### Tutor Skills 系列（本地重写为跨机通用版）
 
 | Skill | 来源仓库 | 许可证 |
 |-------|---------|--------|
 | tutor | https://github.com/bevibing/tutor-skills | MIT |
 
 注：tutor-setup 已合并到 wiki-ingest（learn 模式）。
+注：tutor 正文与 `references/quiz-rules.md` 已由本地重写（去掉库结构绑定，补齐出题规则），来源指最初的上游。
 
 ### Scholar Skill 系列（已适配 AI-Wiki）
 
