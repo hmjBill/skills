@@ -116,12 +116,12 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 
 ### 学习与科研
 
-以下 Skills 已适配 AI-Wiki 结构。
+`scholar-skill` 已适配 AI-Wiki 结构；`tutor` 为跨机通用版，不绑定库结构，材料由使用者现场指定。
 
 | Skill | 说明 |
 |-------|------|
 | [scholar-skill](scholar-skill/SKILL.md) | 学术论文深度阅读，输出到 AI-Wiki 读书和资源目录 |
-| [tutor](tutor/SKILL.md) | 基于 AI-Wiki 学习笔记进行交互式测验和知识巩固 |
+| [tutor](tutor/SKILL.md) | 交互式测验与知识巩固：零提示出题、难度递进、错题回原文，材料可为笔记库、PDF、网页或粘贴文本 |
 
 ### 环境 / 工具
 
