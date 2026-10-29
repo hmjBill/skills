@@ -12,7 +12,13 @@ description: 沿两轴审查自固定点（提交、分支、标签或合并基�
 
 两个轴通过宿主提供的子代理机制（如 Task/task）作为**并行子代理**运行，因此不会相互污染上下文；宿主不支持并行时顺序执行。随后此技能聚合两边的发现。
 
-问题跟踪器应已提供给你。如果 `docs/agents/issue-tracker.md` 缺失，告诉用户运行 `setup-matt-pocock-skills` 技能生成（该技能为用户调用，你不能直接加载）。
+问题跟踪器按以下顺序确定，不要因为缺少配置而停下：
+
+- 项目存在 `docs/agents/issue-tracker.md` → 按其中说明的跟踪器执行。
+- 该文件不存在，远程是 GitHub → 默认用 `gh issue`（`gh issue list` / `gh issue view` / `gh issue create`）作为跟踪器。
+- 该文件不存在，且没有 GitHub 远程或 `gh` 不可用 → 不阻塞流程：把 issue 以 Markdown 形式输出在回复中，由用户决定落地位置。
+
+`setup-matt-pocock-skills` 只是“已安装时可用来生成这份配置”的可选提示，不是前置要求；它为用户调用，你不能直接加载。
 
 ## 流程
 
@@ -44,7 +50,7 @@ description: 沿两轴审查自固定点（提交、分支、标签或合并基�
 
 按此顺序查找原始规范：
 
-1. Commit 消息中的 issue 引用（`#123`、`Closes #45`、GitLab `!67` 等）——通过 `docs/agents/issue-tracker.md` 中的工作流程获取。
+1. Commit 消息中的 issue 引用（`#123`、`Closes #45`、GitLab `!67` 等）——通过 `docs/agents/issue-tracker.md` 中的工作流程获取；该文件缺失且远程是 GitHub 时，改用 `gh issue view <编号>` 获取；既无该文件又无 GitHub 远程（或 `gh` 不可用）时，把引用编号原样记入报告并注明“未能获取 issue 正文”，不要臆造需求内容。
 2. 用户作为参数传递的路径。
 3. `docs/`、`specs/` 或 `.scratch/` 下与分支名或功能匹配的规范文件。
 4. 如果什么都没找到，问用户规范在哪里。如果他们说没有，**规范**子代理将跳过并报告"无规范可用"。

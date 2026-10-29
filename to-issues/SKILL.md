@@ -7,7 +7,13 @@ description: 将计划、规格或对话拆分为一组带阻塞关系的垂直�
 
 将计划、规格或对话拆分为一组 **issue**：垂直切片（tracer bullet），每个 issue 声明**阻塞**它的其他 issue。
 
-问题跟踪器和分类标签词汇应该已提供给你 — 如果没有，告诉用户运行 `setup-matt-pocock-skills` 技能（该技能为用户调用，你不能直接加载）。
+问题跟踪器和分类标签词汇按以下顺序确定，不要因为缺少配置而停下：
+
+- 项目存在 `docs/agents/issue-tracker.md` → 按其中说明的跟踪器与标签词汇执行。
+- 该文件不存在，远程是 GitHub → 默认用 `gh issue`（`gh issue list` / `gh issue view` / `gh issue create`）作为跟踪器。
+- 该文件不存在，且没有 GitHub 远程或 `gh` 不可用 → 不阻塞流程：把 issue 以 Markdown 形式输出在回复中，由用户决定落地位置。
+
+`setup-matt-pocock-skills` 只是“已安装时可用来生成这份配置”的可选提示，不是前置要求；它为用户调用，你不能直接加载。
 
 ## 流程
 
@@ -56,13 +62,13 @@ description: 将计划、规格或对话拆分为一组带阻塞关系的垂直�
 
 ### 5. 将 issues 发布到配置的跟踪器
 
-发布已批准的 issue。**如何发布**取决于项目 `docs/agents/issue-tracker.md`（由 setup-matt-pocock-skills 生成）中配置的跟踪器；issue 内容相同，只是阻塞边的形态不同：
+发布已批准的 issue。**如何发布**优先取决于项目 `docs/agents/issue-tracker.md` 中配置的跟踪器（该文件通常由 setup-matt-pocock-skills 生成）；该文件不存在时按本节末尾的默认规则选择跟踪器。issue 内容相同，只是阻塞边的形态不同：
 
 - **GitHub** → 使用 `gh issue create` 逐条创建 issue，按依赖顺序（阻塞者在前）发布，以便阻塞边能引用真实标识符。平台支持原生阻塞/子 issue 关系（如 GitHub issue dependencies）时优先使用原生方式；否则把每个 issue 的"被阻塞于"指向阻塞它的 issue。除非另有指示，应用 `ready-for-agent` 分类标签。
 - **本地 markdown 跟踪器** → 在 `.scratch/<feature-slug>/issues/<NN>-<slug>.md` 下每个 issue 写一个文件，从 `01` 起按依赖顺序（阻塞者在前）编号。每个文件的"被阻塞于"列出它依赖的编号/标题。使用下面的本地 issue 模板：一个 issue 一个文件，绝不写单个合并文件。
 - **其他跟踪器** → 按 `docs/agents/issue-tracker.md` 中的说明执行。
 
-如果 `docs/agents/issue-tracker.md` 不存在，告诉用户运行 `setup-matt-pocock-skills` 技能生成配置（该技能为用户调用，你不能直接加载）。
+如果 `docs/agents/issue-tracker.md` 不存在，按默认规则选择跟踪器：远程是 GitHub 时用 `gh issue`；没有 GitHub 远程或 `gh` 不可用时，把每个 issue 以 Markdown 形式输出在回复中，由用户决定落地位置——此时不要自行创建本地文件，也不要声称已发布。可以顺带提示用户：`setup-matt-pocock-skills` 已安装时可用来生成该配置文件，但这不是前置要求。
 
 除非另有指示，用 `ready-for-agent` 分类标签发布；这些 issue 在构造上就是 agent 可领取的。
 
