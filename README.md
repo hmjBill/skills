@@ -6,7 +6,7 @@
 
 Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自动执行专业工作流。每个 Skill 由一个目录表示，核心文件通常为 `SKILL.md`。
 
-## 收录条目（76 个，均含 SKILL.md）
+## 收录条目（77 个，均含 SKILL.md）
 
 ### 开发与架构
 
@@ -31,6 +31,12 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [scaffold-exercises](scaffold-exercises/SKILL.md) | 搭建练习脚手架 |
 | [tdd](tdd/SKILL.md) | 测试驱动开发（TDD） |
 | [triage](triage/SKILL.md) | 问题分类与分流 |
+
+### 工作流与复盘
+
+| Skill | 说明 |
+|-------|------|
+| [lifting-loops](lifting-loops/SKILL.md) | 找出用户反复充当 Agent 手动环节的地方（重试/判好坏/批准/搬上下文/起任务/替它干），用台账与提案把人从中抬出来 |
 
 ### UI / UX / 设计
 
