@@ -29,6 +29,13 @@ description: 找出用户反复充当 Agent 手动环节的地方（重试、判
 
 默认写在技能目录内的 `private/`，已被 `.gitignore` 排除。需要放到不同步的位置时，执行前设置环境变量 `LIFTING_LOOPS_PRIVATE` 指向该目录，脚本会改用这个路径。
 
+本机 pi 宿主的固定命令（技能目录经符号链接接入，数据目录由上面的环境变量指定）：
+
+```bash
+cd ~/.pi/agent/skills/lifting-loops
+uv run --no-project python scripts/digest.py scan
+```
+
 ## 写权限
 
 - 可自由写入 `private/`。
