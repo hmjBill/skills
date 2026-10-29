@@ -9,6 +9,8 @@ import { fileURLToPath } from "node:url";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 // 不是 skill 的顶层目录
 const NON_SKILL_DIRS = new Set([".git", ".github", "node_modules", "scripts", "prompts"]);
+// 点开头目录（.pi/ 等本机 Agent 状态，已被全局 gitignore 忽略）一律不是 skill。
+const isNonSkillDir = (name) => NON_SKILL_DIRS.has(name) || name.startsWith(".");
 const NAME_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const SKIP_WALK = new Set([".git", "node_modules"]);
 const errors = [];
@@ -68,7 +70,7 @@ function checkSkill(dirName) {
 
 // 1) 每个顶层目录必须是 skill（少数基础设施目录除外）
 for (const entry of readdirSync(ROOT, { withFileTypes: true })) {
-  if (!entry.isDirectory() || NON_SKILL_DIRS.has(entry.name)) continue;
+  if (!entry.isDirectory() || isNonSkillDir(entry.name)) continue;
   checkSkill(entry.name);
 }
 
@@ -85,7 +87,7 @@ if (existsSync(readmePath)) {
   const m = /收录条目（(\d+)\s*个/.exec(readme);
   if (m) {
     const actual = readdirSync(ROOT, { withFileTypes: true }).filter(
-      (e) => e.isDirectory() && !NON_SKILL_DIRS.has(e.name) && statSync(join(ROOT, e.name)).isDirectory(),
+      (e) => e.isDirectory() && !isNonSkillDir(e.name) && statSync(join(ROOT, e.name)).isDirectory(),
     ).length;
     if (Number(m[1]) !== actual) err("README.md", `收录条目写 ${m[1]} 个，实际 ${actual} 个`);
   }
