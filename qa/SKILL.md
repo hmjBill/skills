@@ -48,11 +48,18 @@ description: 交互式 QA 会话，用户以对话方式报告 Bug 或问题，�
 
 ### 4. 提交 issue(s) 到问题跟踪器
 
-优先读取项目的 `docs/agents/issue-tracker.md`（由 setup-matt-pocock-skills 生成），按其中约定的跟踪器执行：
+优先读取项目的 `docs/agents/issue-tracker.md`（通常由 setup-matt-pocock-skills 生成），按其中约定的跟踪器执行：
 
 - GitHub：使用 `gh issue create` 创建 issues。
 - 本地 markdown 跟踪器：写入 `docs/agents/issue-tracker.md` 约定的文件。
-- 其他跟踪器：按该文件中的说明执行；文件缺失时告诉用户运行 `setup-matt-pocock-skills` 技能生成。
+- 其他跟踪器：按该文件中的说明执行。
+
+该文件缺失时按以下默认规则选择跟踪器，不要因为缺少配置而停下：
+
+- 远程是 GitHub → 默认用 `gh issue`（`gh issue create`）作为跟踪器。
+- 没有 GitHub 远程或 `gh` 不可用 → 不阻塞流程：把每个 issue 以 Markdown 形式输出在回复中，由用户决定落地位置——此时不要自行创建本地文件，也不要声称已发布。
+
+`setup-matt-pocock-skills` 只是“已安装时可用来生成这份配置”的可选提示，不是前置要求；它为用户调用，你不能直接加载。
 
 默认先将 issue 草稿给用户确认，确认后再创建并分享 URL。
 
