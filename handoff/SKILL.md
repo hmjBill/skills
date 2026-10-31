@@ -41,6 +41,8 @@ argument-hint: "What will the next session be used for?"
 
 另加“建议技能（suggested skills）”小节，列出下一个 agent 应接手的技能名（按当前宿主的技能调用约定）。
 
+可复制的完整模板见 [references/template.md](references/template.md)。
+
 ## 5. 脱敏与引用
 
 不写 API key、密码、PII、token。不复制已存在于其他 artifact（AI-Wiki 中的 PRD、issue、diff）的内容，改为通过路径或 URL 引用。
