@@ -97,7 +97,7 @@ Skill 是一段预置指令，AI 编程助手加载后可在特定场景下自�
 | [handoff](handoff/SKILL.md) | 项目交接 |
 | [obsidian-vault](obsidian-vault/SKILL.md) | AI-Wiki 笔记库搜索、创建和管理 |
 | [pdf](pdf/SKILL.md) | PDF 文件处理 |
-| [to-prd](to-prd/SKILL.md) | 将需求整理为项目文档归档到 AI-Wiki |
+| [to-prd](to-prd/SKILL.md) | 将需求整理为仓库内的功能需求文档（`docs/prd/`），含行为边界、测试 seam 与验收判据 |
 | [ubiquitous-language](ubiquitous-language/SKILL.md) | 统一语言建模 |
 | [writing-beats](writing-beats/SKILL.md) | 写作节奏 |
 | [writing-fragments](writing-fragments/SKILL.md) | 写作片段 |
