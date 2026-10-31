@@ -56,7 +56,7 @@ seam 定不下来，说明需求还没想清，先回去澄清，不要硬写。
 - 引用既有代码用路径，不复制代码段
 - 不写实现细节（那是 ADR / 技术文档的事）
 - 不写 Wiki 专用字段（frontmatter、双链、导航表），那些属于 Wiki 侧
-- **PRD 进 git**：它是仓库内容，不是本地账本（对比 `PLANS.md` 不进 git）
+- **PRD 不进 git**：与 `GOAL.md` 同属 AI 产物，全局 gitignore 已忽略 `docs/prd/`，pre-commit 还会拦 `git add -f`。它留在本地供实现与验收对照；要对外交付时另写公开文档，不要直接外发 PRD。进不进 git 一律以全局 `AGENTS.md` 的「AI 产物与版本控制」为准，本技能不下自己的结论。
 
 ## 完成后
 
